@@ -1,0 +1,236 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: #f9f1f4;
+}
+.margin-top-for-fixed{
+    margin-top: 15vh;
+}
+.page-container{
+    background-color: #f9f1f4;
+}
+.fixed{
+    position: fixed;
+}   
+.short-header{
+    height: 10vh;
+    padding-top: 20px;
+    margin-top: 0%;
+    top: 0;
+}
+.bg-white{
+    background-color: white;
+}
+
+/* menu de navegación */
+.phrase-section{
+    height: 4vh;
+    width: 100%;
+    /*  flex para distribuir los elementos de la web*/
+    display: flex;
+    /* alinear con flex horizontalmente */
+    justify-content: center;
+    /* alinear con flex verticalmente */
+    align-items: center;
+    background-color: #efd7e5;
+    
+}
+
+header{
+    padding: 20px;
+    height: 10vh;
+    position: static;
+    width: 100%;
+    background-color: transparent;
+    max-width: 96.4vw;
+    transition: ease-in-out 300ms;
+
+    &:hover{
+        background-color: white;
+    }
+    
+    nav{
+        height: 80%;
+        padding-top: 10px;
+
+        ul{    
+            height: 40%;
+            display: flex; 
+            justify-content: space-evenly;
+            align-items: center;
+
+            li{
+                list-style: none;
+                padding: 5px 0px 5px 0px;
+
+                a{
+                    text-decoration: none;
+                    color: black;
+                }
+            }
+        }
+
+        ul:nth-child(1){
+            li:nth-child(1){
+                width: 20%;
+                padding-right: 20px;
+                padding-left: 20px;
+                text-transform: capitalize;
+            }
+
+            li:nth-child(2){
+                width: 20%;
+                text-align: center;
+
+                h1{
+                    font-size: 26px;
+                }
+
+                h2{
+                    font-size: 10px;
+                }
+            }
+
+            li:nth-child(3){
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                width: 13%;
+                gap: 5px;
+                padding-right: 20px;
+                padding-left: 125px;
+            }
+        
+        }
+
+        ul:nth-child(2){
+            width: 35%;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        /* estilos en general para los enlaces */
+        ul:nth-child(2) li {
+            height: 30px;
+            border-radius: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+            transition: ease-in-out 300ms;
+
+            a{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
+        }
+
+        ul:nth-child(2) li:hover{
+            background-color: #f9f1f4;
+
+        }
+
+        .upper-line{
+            justify-content: space-between;
+
+        }
+    }
+
+  
+    /*icono whatsapp*/
+    #floating-button{
+        position: fixed;
+        bottom: 4%;
+        right: 2%;
+        width: 50px;
+        height: 50px;
+        font-size: 30px;
+    }
+}
+
+/*Margen top*/
+.outlet-container{
+    padding-top: 22vh;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #f9f1f4;
+}
+
+/* footer */
+
+footer {
+
+    background-color: #f9f1f4;
+    padding-top: 20vh;
+
+    a{
+        text-decoration: none;
+        color: black;
+    }
+
+
+    div:nth-child(1){
+
+        div:nth-child(1){
+            margin: 0 auto;
+            display: grid;
+            margin-top: 30px;
+            width: 20%;
+            justify-content: space-evenly;
+            grid-template-columns: auto auto auto auto;
+        }
+
+        div:nth-child(2){
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+    }
+}
+
+/* paginas */
+
+/* Login */
+
+.section-login{
+    width: 30%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    div{
+        display: flex;
+        flex-direction: column;
+
+        input{
+            height: 30px;
+            outline: none;
+            padding: 5px;
+
+        }
+
+        input[type="submit"]{
+            border: 1px solid black;
+            background-color: transparent;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover{
+            background-color: #393939;
+            color: white;
+        }
+
+       
+
+    }
+
+
+}
