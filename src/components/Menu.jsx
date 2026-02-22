@@ -15,8 +15,8 @@ function Menu({isTransparent, bgWhite, fixed}) {
       <header id="header" className={`${bgWhite == true ? 'bg-white' : ''} ${ isTransparent == true ? '' : 'short-header' } ${ fixed == true ? 'fixed' : 'page-container' }`}>
         <nav>
           <ul className="upper-line">
-            <li>
-              <p>colombia</p>
+            <li >
+              <img src="/flag/flag-of-colombia.png" alt="bandera de colombia" />
             </li>
 
             <li>
