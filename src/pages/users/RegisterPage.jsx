@@ -1,22 +1,10 @@
+import { Link } from "react-router-dom"
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { registerUser } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 
 //funcion de flecha
 const RegisterPage = () => {
-  // primero nombremos las variables 
-  // useState para una variable de estado 
-  //(variable y funcion) y la funcion modifica la variable 
-  const [tipoDocumento,  setTipoDocumento] = useState('')
-  const [numeroDocumento,  setNumeroDocumento] = useState('')
-  const [nombres,  setNombres] = useState('')
-  const [apellidos,  setApellidos] = useState('')
-  const [telefono,  setTelefono] = useState('')
-  const [direaccion,  setDireccion] = useState('')
-  const [correo,  setCorreo] = useState('')
-  const [contrasena,  setContrasena] = useState('')
-  const [terms,  setTerms] = useState(false)
 
   // configuracion de la página
   const navigate = useNavigate();
@@ -25,9 +13,22 @@ const RegisterPage = () => {
   const [error, setError] = useState('')
   //error del front 
   const [fieldErrors, setFieldErrors] = useState({})
+  
+  // primero nombremos las variables 
+  // useState para una variable de estado 
+  //(variable y funcion) y la funcion modifica la variable 
+  const [tipoDocumento,  setTipoDocumento] = useState('')
+  const [numeroDocumento,  setNumeroDocumento] = useState('')
+  const [nombres,  setNombres] = useState('')
+  const [apellidos,  setApellidos] = useState('')
+  const [telefono,  setTelefono] = useState('')
+  const [direccion,  setDireccion] = useState('')
+  const [correo,  setCorreo] = useState('')
+  const [contrasena,  setContrasena] = useState('')
+  const [terms,  setTerms] = useState(false)
 
   // válidar campos
-  function validateFields() {
+  function validateFields(){
     const errors = {};
 
     // Tipo documento
@@ -59,7 +60,7 @@ const RegisterPage = () => {
     }
 
     // Dirección
-    if (direaccion.trim().length < 5) {
+    if (direccion.trim().length < 5) {
       errors.direccion = "La dirección no es válida";
     }
 
@@ -70,10 +71,10 @@ const RegisterPage = () => {
     }
 
     // Contraseña
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     if (!passwordRegex.test(contrasena)) {
       errors.contrasena =
-        "La contraseña debe tener mínimo 8 caracteres, una mayúscula y un número";
+        "La contraseña debe tener mínimo 6 caracteres, una mayúscula y un número";
     }
 
     // Términos
@@ -101,7 +102,7 @@ const RegisterPage = () => {
       if(validation) return
 
       //llama la funcion del auth services
-      const res = await registerUser(nombres, apellidos, tipoDocumento, numeroDocumento, telefono, direaccion, correo, contrasena)
+      const res = await registerUser(nombres, apellidos, tipoDocumento, numeroDocumento, telefono, direccion, correo, contrasena)
 
       //si no es respuesta valida no manda la ejecucion y corta la ejecución
       if(!res.valid){
@@ -134,11 +135,11 @@ const RegisterPage = () => {
 
           <div>
               <select name="tipo_documento" id=""  onChange={(e) => {setTipoDocumento(e.target.value)}}>
-                <option value="" disabled selected hidden></option>
-                <option value="cc">Cédula de ciudadanía</option>
-                <option value="pep">Permiso Especial de Permanencia</option>
-                <option value="ce">Cédula de extranjería</option>
-                <option value="p">Pasaporte</option>
+                <option defaultValue="" disabled selected hidden></option>
+                <option defaultValue="cc">Cédula de ciudadanía</option>
+                <option defaultValue="pep">Permiso Especial de Permanencia</option>
+                <option defaultValue="ce">Cédula de extranjería</option>
+                <option defaultValue="p">Pasaporte</option>
               </select>
               <label htmlFor="">Seleccione tipo documento</label>
               {fieldErrors?.tipoDocumento && <p className="form-input-error">{fieldErrors?.tipoDocumento}</p>}
@@ -201,6 +202,19 @@ const RegisterPage = () => {
             {fieldErrors?.terms && <p className="form-input-error">{fieldErrors?.terms}</p>}
           </div>
 
+          {/* error al enviar el formulario */}
+          {
+            typeof error !== "string"
+              ? Object.entries(error).map(([field, messages]) =>
+                  messages.map((message, index) => (
+                    <p key={`${field}-${index}`} className="form-input-error">
+                      {message}
+                    </p>
+                  ))
+                )
+              : error !== "" && <p className="form-input-error">{error}</p>
+          }
+          
           <div>
             <input type="submit" value={loading ? 'Cargando...' : 'Crear cuenta'} disabled={loading} />
           </div>
