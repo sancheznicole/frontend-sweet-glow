@@ -7,6 +7,7 @@ h1{
     font-family: Heading;
     color: #3a3a3a; 
     font-weight: lighter;
+    
 }
 
 *{
@@ -286,11 +287,18 @@ footer {
                 width: fit-content;
                 margin: 0 auto;
             }
+            
+            p{
+                Link{
+                    color: black;
+                }
+            }
         }
 }
 
 /* titulo de iniciar sesión y crear cuenta*/
-.section-login h1, .section-register h1{
+.section-login h1, .section-register h1, .section-profile h1{
+    text-transform: uppercase;
     text-align: center;
     color: #b3848f;
     font-size: 33px;
@@ -413,11 +421,27 @@ footer {
                 text-align: center;
             }
     }
+}
 
-   
+.section-profile{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
+    div:nth-child(2){
+        height: 13vh;
+        width: 40vh;
+        padding: 18px;
+        border-radius: 8px;
+        border: solid 1px #e7dae2;
+    }
 
-    
-
+    a{
+        color: black;
+        margin-top: 20px;
+    }
 
 }
+
