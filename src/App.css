@@ -7,7 +7,6 @@ h1{
     font-family: Heading;
     color: #3a3a3a; 
     font-weight: lighter;
-    
 }
 
 *{
@@ -104,7 +103,8 @@ header{
                 text-align: center;
 
                 h1{
-                    font-size: 26px;
+                    font-size: 25px;
+                    height: 38px;
                 }
 
                 h2{
@@ -121,13 +121,19 @@ header{
                 padding-right: 20px;
                 padding-left: 125px;
             }
-        
         }
 
         ul:nth-child(2){
-            width: 35%;
+            width: 50%;
             margin: 0 auto;
-            margin-top: 20px;
+            margin-top: 22px;
+
+            .link-panel-administrativo:hover{
+                background-color: #b3848f;
+                a{
+                    color: white;
+                }
+            }
         }
 
         /* estilos en general para los enlaces */
@@ -148,12 +154,10 @@ header{
 
         ul:nth-child(2) li:hover{
             background-color: #f9f1f4;
-
         }
 
         .upper-line{
             justify-content: space-between;
-
         }
     }
 
@@ -186,28 +190,33 @@ footer {
     margin-bottom: 25px;
 
     a{
-        text-decoration: none;
         color: black;
     }
 
 
-    div:nth-child(1){
+    div{
 
-        div:nth-child(1){
+        .container-icons{
             margin: 0 auto;
-            display: grid;
-            margin-top: 30px;
-            width: 20%;
+            display: flex;
             justify-content: space-evenly;
-            grid-template-columns: auto auto auto auto;
+            margin-top: 30px;
+            width: 17%; 
+            gap: 20px;
         }
 
-        div:nth-child(2){
+        .container-links{
+            margin-top: 20px;
             display: flex;
             justify-content: center;
             gap: 20px;
-            flex-direction: column;
+            grid-template-columns: auto auto auto auto;
             align-items: center;
+        }
+
+        p{
+            margin-top: 20px;
+            text-align: center;
         }
         
     }
@@ -297,7 +306,7 @@ footer {
 }
 
 /* titulo de iniciar sesión y crear cuenta*/
-.section-login h1, .section-register h1, .section-profile h1{
+.section-login h1, .section-register h1, .div-profile h1{
     text-transform: uppercase;
     text-align: center;
     color: #b3848f;
@@ -356,14 +365,12 @@ footer {
             }
 
             div:nth-child(2), div:nth-child(3), div:nth-child(4), div:nth-child(5){
-                grid-column: span 1;
-                
+                grid-column: span 1; 
             }
 
             div:nth-child(1), div:nth-child(6),  div:nth-child(7),  div:nth-child(8),  div:nth-child(9), div:nth-child(10), div:nth-child(11), div:nth-child(12){
                 grid-column: span 2;
             }
-
 
             input:focus + label,
             select:focus + label,
@@ -424,24 +431,121 @@ footer {
 }
 
 .section-profile{
+    width: 42%;
+}
+
+.section-profile a{
+    color: #393939;
+}
+
+.div-profile{
+    color: #393939;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    div:nth-child(2){
-        height: 13vh;
-        width: 40vh;
-        padding: 18px;
-        border-radius: 8px;
-        border: solid 1px #e7dae2;
-    }
-
-    a{
-        color: black;
-        margin-top: 20px;
-    }
-
 }
 
+.div-profile h1{
+    margin-bottom: 8px;
+}
+
+.div-profile a{
+    color: #393939;
+}
+
+.profile-no-uptade{
+    height: 15vh;
+    width: 60vh;
+    padding: 18px;
+    border-radius: 8px;
+    border: solid 1px #e7dae2;
+}
+
+button{
+    color: #b3848f;
+    height: 40px;
+    width: 100%;
+    border: 1px solid #b3848f;
+    background-color: transparent;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+    button:hover{
+        border: 1px solid #b3848f;
+        background-color: #b3848f;
+        color: white;
+        }
+
+.section-profile{
+    color: #393939;
+    width: 32%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    form{
+            display: block;
+            width: 100%;
+
+            div{
+                display: flex;
+                flex-direction: column;
+            }
+
+            label{
+                color: #393939;
+                margin-top: 8px;
+                padding-left: 5px;
+            }
+
+            input{
+                width: 95%;
+                height: 30px;
+                padding: 5px;
+                padding-left: 15px;
+                border-radius: 4px;
+                border: transparent;
+                outline: none;
+                font-size: 13px;
+            }
+
+            input[type="submit"]{
+                color: #393939;
+                height: 40px;
+                width: 100%;
+                border: 1px solid #393939;
+                background-color: transparent;
+                cursor: pointer;
+                margin-top: 20px;
+                font-size: 14px;
+            }
+
+            input[type="submit"]:hover{
+                border: 1px solid #393939;
+                background-color: #393939;
+                color: white;
+            }
+
+            
+        }
+}
+
+/* PANEL ADMINISTRATIVO */
+
+/*.link-panel-administrativo{
+    font-family: Heading;
+    color: #3a3a3a; 
+    font-weight: lighter;
+    font-size: 25px;
+    border: 1px solid red;
+    position: absolute;
+
+}*/

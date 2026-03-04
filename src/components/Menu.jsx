@@ -21,7 +21,6 @@ function Menu({isTransparent, bgWhite, fixed}) {
           <ul className="upper-line">
             <li >
               <img src="/flag/flag-of-colombia.png" alt="bandera de colombia" />
-              {user?.id_rol === 1 && <Link to={"/admin"}>Panel administrativo</Link>}
             </li>
 
             <li>
@@ -62,6 +61,7 @@ function Menu({isTransparent, bgWhite, fixed}) {
           </ul>
 
           <ul>
+              <li className="link-panel-administrativo"> {user?.id_rol === 1 && <Link to={"/admin"}>Panel administrativo</Link>}</li>
               <li><Link to={"/categories"}>Categorias</Link></li>
               {/* <li><Link to={"/"}> <CategoriasMenu titulo={"Lista de categorias"}></CategoriasMenu> </Link></li>} */}
               <li><Link to={"/blog"}>Blog</Link></li>
