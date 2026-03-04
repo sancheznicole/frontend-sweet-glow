@@ -5,7 +5,7 @@ const HomePage = () => {
 
   return (
     <div className='page-container'>
-      Hola ¡{user?.nombres}!
+      <p></p>
     </div>
   )
 }

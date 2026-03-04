@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { meUpdate } from "../../services/authService";
+import { userUpdate } from "../../services/authService";
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(false)
@@ -17,7 +17,7 @@ const ProfilePage = () => {
   const [direccion,  setDireccion] = useState('')
   const [correo,  setCorreo] = useState('')
 
-  const [mostrarDatos,  setMostrarDatos] = useState(false)  
+  const [mostrarDatos,  setMostrarDatos] = useState(false)   
 
   function validateFields(){
     const errors = {};
@@ -65,7 +65,7 @@ const ProfilePage = () => {
       
       if(validation) return
 
-      const res = await meUpdate(nombres, apellidos, correo, telefono, direccion, user?.id_usuario)
+      const res = await userUpdate(nombres, apellidos, correo, telefono, direccion, user?.id_usuario)
 
       if(!res.valid){
         setError(res.error)
@@ -94,9 +94,11 @@ const ProfilePage = () => {
 
   return (
     <div className='page-container'>
-        <section className='section-login section-profile' >
+        <section className='section-profile div-profile'>
           <div>
-            <h1>Hola {user?.nombres}</h1>
+            <h1>
+              {mostrarDatos ? "EDITA TU PERFIL" : `HOLA ${user.nombres.toUpperCase()}`}
+            </h1>
           </div>
   
           {mostrarDatos ? (
@@ -150,7 +152,8 @@ const ProfilePage = () => {
             </div>
         </form>
           ) : (
-            <div>
+            
+            <div className='profile-no-uptade'>
               <strong><p>{user?.nombres} {user?.apellidos}</p></strong>
               <p>{user?.tipo_documento}</p> 
               <p>{user?.num_documento}</p>

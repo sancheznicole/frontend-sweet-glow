@@ -77,8 +77,69 @@ export async function getUserData(token) {
     }  
 }
 
-//funcion para usar en update del me 
-export async function meUpdate(
+// _______________________________________________________________________________
+
+
+// funcion para sacar todos los usuarios
+// función para sacar un usuario
+// funcion para crear un usuario
+//funcion para usar en update del usuario
+// funcion para eliminar un usuario
+
+export async function getAllUsuarios(page, limit) {
+    try {
+        const res = await axios.get(`${API_URL}/usuarios?page=${page}&limit=${limit}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, users: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function getUser(id_usuario) {
+    try {
+        const res = await axios.get(`${API_URL}/users/${id_usuario}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, user: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function createUser(nombres, apellidos, tipo_documento, num_documento,
+    telefono, direccion, correo, contrasena, id_rol = "2") {
+    try {
+        const payload = { nombres, apellidos, tipo_documento, num_documento,
+        telefono, direccion, correo, contrasena, id_rol }
+
+        const res = await axios.post(`${API_URL}/users`, payload)
+
+        if(res?.status != 201){
+            return { valid: false, error: res.data?.errors }
+        }
+
+        return { valid: true }
+    } 
+
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+    
+}
+
+export async function userUpdate(
     nombres, apellidos, correo, telefono, direccion, id_usuario, id_rol = "2"
 ) {
     //try para manejo de errores, lo que esta adentro del try es lo q vamos a intentar ejecutar
@@ -106,4 +167,21 @@ export async function meUpdate(
     catch (error) {
         return { valid: false, error: error?.message }
     }
+}
+
+export async function deleteRole(id_usuario) {
+    try {
+        const res = await axios.delete(`${API_URL}/users/${id_usuario}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+    
 }
