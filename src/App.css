@@ -19,7 +19,7 @@ h1{
     font-size: 33px;
     margin-bottom: 25px;
     font-family: Heading;
-    }
+}
 
 *{
     margin: 0;
@@ -141,10 +141,7 @@ header{
             margin-top: 22px;
 
             .link-panel-administrativo:hover{
-                background-color: #b3848f;
-                a{
-                    color: white;
-                }
+                background-color: #efd7e5;
             }
         }
 
@@ -587,36 +584,48 @@ button{
 }
 /* PANEL ADMINISTRATIVO */
 
-.contenedor-links-admin{
-    display: grid;
-    grid-template-columns: auto auto auto ;
+.section-links-admin{
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-.link-administrar-roles, .link-administrar-usuarios, 
-.link-administrar-categorias, .link-administrar-marcas,
-.link-administrar-referencia-productos, .link-administrar-guia-regalos,
-.link-administrar-productos {
-    border: solid 1px #e7dae2;
-    width: 90%;
+.section-links-admin h1{
+    text-transform: uppercase;
+    text-align: center;
+    color: #424242;
+    font-size: 25px;
+    margin-bottom: 40px;
+    font-family: Heading;
+}
+
+.links-administración{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    width: 80%;
+    gap: 15px; 
+}
+
+.links-administración div{
     height: 8vh;
-    background-color: #e7dae2;
-    margin-bottom: 20px;
+    border: solid 1px #efd7e5;
     border-radius: 6px;
     transition: all 300ms;
+}
 
-    &:hover{
-        background-color: #dbcfd6;
-    }
+.links-administración div:hover{
+    background-color: #efd7e5;
+    border: solid 1px #efd7e5;
+}
 
-    a{
-        text-decoration: none;
-        color: #393939;
-        font-family: Heading;
-        font-weight: lighter;
-        display: block;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        line-height: 8vh;
-    }
+.links-administración a{
+    text-decoration: none;
+    color: #393939;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 8vh;
 }

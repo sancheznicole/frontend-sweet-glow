@@ -5,7 +5,7 @@ const AboutUsPage = () => {
     <div className='page-container'>
       <section className='section-sobre-nosotros'>
         <div>
-          <img src="/icons/icon-sweet-glow.jpg" alt="" />
+          <img src="/icons/icon.png" alt="" />
         </div>
 
         <h1>sobre nosotros</h1>

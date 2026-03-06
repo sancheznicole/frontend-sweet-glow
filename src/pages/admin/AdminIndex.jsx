@@ -3,33 +3,69 @@ import { Link } from "react-router-dom"
 const AdminIndex = () => {
     return (
         <div className='page-container'> 
-            <section className='contenedor-links-admin'>
-                <div className="link-administrar-roles">
-                    <Link to={"/admin/roles"}>Administrar roles</Link>
-                </div>
+            <section className='section-links-admin'>
+                <h1>Centro de administración</h1>
+                
+                <div className="links-administración">
+                    <div>
+                        <Link to={"/admin/roles"}>Administrar roles</Link>
+                    </div>
 
-                <div className="link-administrar-usuarios">
-                    <Link to={"/admin/users"}>Administrar usuarios</Link>
-                </div>
+                    <div>
+                        <Link to={"/admin/users"}>Administrar usuarios</Link>
+                    </div>
 
-                <div className="link-administrar-categorias">
-                    <Link to={"/admin/categories"}>Administrar categorias</Link>
-                </div>
+                    <div>
+                        <Link to={"/admin/"}>Administrar categorias</Link>
+                    </div>
 
-                <div className="link-administrar-marcas">
-                    <Link to={"/admin/brands"}>Administrar marcas</Link>
-                </div>
+                    <div>
+                        <Link to={"/admin/"}>Administrar marcas</Link>
+                    </div>
 
-                <div className="link-administrar-referencia-productos">
-                    <Link to={"/admin/brands"}>Administrar referencia productos</Link>
-                </div>
+                    <div>
+                        <Link to={"/admin/"}>Administrar referencia productos</Link>
+                    </div>
 
-                <div className="link-administrar-guia-regalos">
-                    <Link to={"/admin/brands"}>Administrar guia regalos</Link>
-                </div>
+                    <div>
+                        <Link to={"/admin/"}>Administrar guia regalos</Link>
+                    </div>
 
-                <div className="link-administrar-productos">
-                    <Link to={"/admin/brands"}>Administrar productos</Link>
+                    <div>
+                        <Link to={"/admin/"}>Administrar productos</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar imagenes</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar tarjetas regalo</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar factura pedidos</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar carritos</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar inscripciones regalo</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar premios</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar premiados</Link>
+                    </div>
+
+                    <div>
+                        <Link to={"/admin/"}>Administrar reseñas</Link>
+                    </div>
                 </div>
             </section>
         </div>
