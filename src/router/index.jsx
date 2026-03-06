@@ -21,6 +21,8 @@ import SearchPage from "../pages/searcher/SearchPage"
 import CartPage from "../pages/cart/CartPage"
 import TermsPage from "../pages/terms/termsPage"
 import PrivacyPoliciesPage from "../pages/terms/PrivacyPoliciesPage"
+import ReturnsPolicyPage from "../pages/terms/ReturnsPolicyPage"
+import CustomerServicePage from "../pages/terms/CustomerServicePage"
 import AdminIndex from "../pages/admin/AdminIndex"
 import RolesIndex from "../pages/admin/roles/RolesIndex"
 
@@ -80,6 +82,10 @@ export const router = createBrowserRouter([
       { path: 'terms', element: <TermsPage/> },
 
       { path: 'privacy-policies', element: <PrivacyPoliciesPage /> },
+
+      { path: 'shipping-and-returns-policy', element: <ReturnsPolicyPage /> },
+
+      { path: 'customer-Service', element: <CustomerServicePage /> },
 
     ],
   },
