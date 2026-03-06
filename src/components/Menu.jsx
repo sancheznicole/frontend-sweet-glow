@@ -2,7 +2,6 @@
 
 import { Link } from "react-router-dom"
 // import { useLocation } from "react-router-dom"
-import CategoriasMenu from "./CategoriasMenu"
 import { useAuth } from "../contexts/AuthContext"
 
 function Menu({isTransparent, bgWhite, fixed}) {
