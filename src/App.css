@@ -9,6 +9,18 @@ h1{
     font-weight: lighter;
 }
 
+/* titulos*/
+.section-login h1, .section-register h1, .div-profile h1, 
+.section-terminos h1, .section-politicas-privacidad h1, .section-politica-envios h1, .section-atencion-cliente h1,
+.section-sobre-nosotros h1{
+    text-transform: uppercase;
+    text-align: center;
+    color: #b3848f;
+    font-size: 33px;
+    margin-bottom: 25px;
+    font-family: Heading;
+    }
+
 *{
     margin: 0;
     padding: 0;
@@ -175,7 +187,7 @@ header{
 
 /*Margen top*/
 .outlet-container{
-    padding-top: 22vh;
+    padding-top: 12vh;
     padding-left: 20px;
     padding-right: 20px;
     background-color: #f9f1f4;
@@ -190,7 +202,7 @@ footer {
     margin-bottom: 25px;
 
     a{
-        color: black;
+        color: #393939;
     }
 
 
@@ -200,13 +212,13 @@ footer {
             margin: 0 auto;
             display: flex;
             justify-content: space-evenly;
-            margin-top: 30px;
+            margin-top: 40px;
             width: 17%; 
             gap: 20px;
         }
 
         .container-links{
-            margin-top: 20px;
+            margin-top: 50px;
             display: flex;
             justify-content: center;
             gap: 20px;
@@ -215,8 +227,9 @@ footer {
         }
 
         p{
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: center;
+            color: #393939;
         }
         
     }
@@ -304,16 +317,6 @@ footer {
             }
         }
 }
-
-/* titulo de iniciar sesión y crear cuenta*/
-.section-login h1, .section-register h1, .div-profile h1{
-    text-transform: uppercase;
-    text-align: center;
-    color: #b3848f;
-    font-size: 33px;
-    margin-bottom: 25px;
-    font-family: Heading;
-    }
 
 /* registro */
 .form-input-error{
@@ -538,14 +541,82 @@ button{
         }
 }
 
+/* enlaces footer, terminos políticas y privacidad, Política de envíos, devoluciones y sobre nosotros*/
+
+.section-terminos p, .section-politicas-privacidad p, .section-politica-envios p, .section-atencion-cliente p,
+.section-sobre-nosotros p{
+    margin-left: 19%;
+    margin-right: 19%;
+    margin-bottom: 20px;
+}
+
+/*pagina sobre nosotros*/
+
+.section-sobre-nosotros{
+    img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 45vh;
+    }
+    
+    div{
+        width: 100%;
+        height: 35vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        img{
+            height: 28vh;
+            width: 28vh;
+        }
+
+        h3{
+            text-transform: uppercase;
+            text-align: right;
+            margin: 0 auto;
+            color: #393939;
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-family: Heading;
+            font-weight: lighter;
+        }
+    }
+}
 /* PANEL ADMINISTRATIVO */
 
-/*.link-panel-administrativo{
-    font-family: Heading;
-    color: #3a3a3a; 
-    font-weight: lighter;
-    font-size: 25px;
-    border: 1px solid red;
-    position: absolute;
+.contenedor-links-admin{
+    display: grid;
+    grid-template-columns: auto auto auto ;
+}
 
-}*/
+.link-administrar-roles, .link-administrar-usuarios, 
+.link-administrar-categorias, .link-administrar-marcas,
+.link-administrar-referencia-productos, .link-administrar-guia-regalos,
+.link-administrar-productos {
+    border: solid 1px #e7dae2;
+    width: 90%;
+    height: 8vh;
+    background-color: #e7dae2;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    transition: all 300ms;
+
+    &:hover{
+        background-color: #dbcfd6;
+    }
+
+    a{
+        text-decoration: none;
+        color: #393939;
+        font-family: Heading;
+        font-weight: lighter;
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: 8vh;
+    }
+}

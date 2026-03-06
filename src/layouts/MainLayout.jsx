@@ -45,7 +45,7 @@ const MainLayout = () => {
       <>
         <Menu bgWhite={bgWhite} fixed={fixed} isTransparent={isTransparent}></Menu>
 
-        <main className={`outlet-container ${fixed ? 'margin-top-for-fixed' : ''}`}>
+        <main className={`outlet-container outlet-container-footer ${fixed ? 'margin-top-for-fixed' : ''}`}>
           <Outlet></Outlet>
         </main>
           
