@@ -12,7 +12,8 @@ h1{
 /* titulos*/
 .section-login h1, .section-register h1, .div-profile h1, 
 .section-terminos h1, .section-politicas-privacidad h1, .section-politica-envios h1, .section-atencion-cliente h1,
-.section-sobre-nosotros h1{
+.Blog h1,
+.section-sobre-nosotros h1 {
     text-transform: uppercase;
     text-align: center;
     color: #b3848f;
@@ -628,4 +629,41 @@ button{
     height: 100%;
     text-align: center;
     line-height: 8vh;
+}
+
+/* BLOG */
+.Blog {
+  position: relative; 
+  width: 250px; 
+  height: 250px;
+  overflow: hidden;
+  border-radius: 15px; 
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.link {
+  position: absolute;
+  bottom: 80px; 
+  left: 15%;
+ 
+  font-family: Heading;
+  font-weight: lighter;
+  color:  white;
+  text-decoration: none;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  padding: 10px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+
+.link:hover {
+  background-color:  #efd7e5;
+  color: black;
 }
