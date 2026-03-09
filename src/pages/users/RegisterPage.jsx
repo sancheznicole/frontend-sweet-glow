@@ -112,7 +112,6 @@ const RegisterPage = () => {
 
       //si es valida redirecciona a la pagina del login
       navigate("/login");
-
     } 
     //si el try no responde ejecuta el catch
     catch (error) {
@@ -129,7 +128,7 @@ const RegisterPage = () => {
 
       <section className='section-register'>
         <form action="" method="post" onSubmit={(e) => {sendData(e)}}>
-          <div>
+          <div className="titulo-registro">
             <h1>CREAR UNA CUENTA</h1>
           </div>
 

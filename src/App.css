@@ -12,11 +12,11 @@ h1{
 /* titulos*/
 .section-login h1, .section-register h1, .div-profile h1, 
 .section-terminos h1, .section-politicas-privacidad h1, .section-politica-envios h1, .section-atencion-cliente h1,
-.section-sobre-nosotros h1{
+.section-sobre-nosotros h1, .section-admin-panel h1{
     text-transform: uppercase;
     text-align: center;
     color: #b3848f;
-    font-size: 33px;
+    font-size: 30px;
     margin-bottom: 25px;
     font-family: Heading;
 }
@@ -323,9 +323,13 @@ footer {
 
 .section-register{
     color: #393939;
-    width: 30%;
+    width: 27%;
     margin: 0 auto;
     margin-top: 35px;
+    
+        .titulo-registro{
+            width: 106%;
+        }
 
         a{
             color: #393939;
@@ -484,7 +488,7 @@ button{
 
 .section-profile{
     color: #393939;
-    width: 32%;
+    width: 27%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -502,7 +506,7 @@ button{
 
             label{
                 color: #393939;
-                margin-top: 8px;
+                margin-top: 12px;
                 padding-left: 5px;
             }
 
@@ -629,3 +633,44 @@ button{
     text-align: center;
     line-height: 8vh;
 }
+
+/*tabla de registros del panel administrativo */
+
+.section-admin-panel{
+    
+    table{
+        width: 60vw;
+        margin: 40px auto;
+        border-collapse: separate;
+        border-spacing: 12px;
+
+        th, td{
+            text-align: center;
+            border: 2px solid #e7dae2;
+            border-radius: 3px;
+        }
+
+        th{
+            font-size: 20px;
+        }
+    }
+
+    .back-link-container{
+        display: flex;
+        justify-content: end;
+
+        .link-regresar{
+            color: #393939;
+            width: fit-content;
+            padding: 30px;
+        }
+    }
+
+    p{
+        text-align: center;
+        color: #393939;
+        font-size: 18px;
+        margin-bottom: 25px; 
+    }
+}
+

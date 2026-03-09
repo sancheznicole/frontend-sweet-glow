@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { userUpdate } from "../../services/authService";
+import { userUpdate } from '../../services/authService';
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(false)
