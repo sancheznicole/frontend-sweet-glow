@@ -26,6 +26,7 @@ import CustomerServicePage from "../pages/terms/CustomerServicePage"
 import AdminIndex from "../pages/admin/AdminIndex"
 import RolesIndex from "../pages/admin/roles/RolesIndex"
 import CreateRole from "../pages/admin/roles/crear/CreateRole"
+import EditRole from "../pages/admin/roles/editar/EditRole"
 import UsuariosIndex from "../pages/admin/usuarios/UsuariosIndex"
 
 export const router = createBrowserRouter([
@@ -50,6 +51,12 @@ export const router = createBrowserRouter([
       { path: "admin/roles/crear", element: 
         <ProtectedAdmin>
           <CreateRole />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/roles/editar/:id", element: 
+        <ProtectedAdmin>
+          <EditRole />
         </ProtectedAdmin>
       },
 

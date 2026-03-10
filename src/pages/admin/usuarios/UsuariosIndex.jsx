@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import AdminPanel from '../../../components/AdminPanel'
+import AdminPanel from "../../../components/admin/AdminPanel"
 import { getAllUsers, deleteUser } from '../../../services/authService'
 
 const UsuariosIndex = () => {

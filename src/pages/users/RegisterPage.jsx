@@ -93,11 +93,11 @@ const RegisterPage = () => {
       e.preventDefault();
 
       //para cargar la pagina
-      setLoading(true)
+      
       
       //llama la validacion de los campos
       const validation = validateFields();
-
+      setLoading(true)
       //resultado de la validacion entonces si hay mas de 0 errores se corta la ejecucion para enviar los datos
       if(validation) return
 

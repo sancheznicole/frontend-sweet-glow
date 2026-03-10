@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getAllRoles, deleteRole } from "../../../services/rolesService"
-import AdminPanel from "../../../components/AdminPanel"
+import AdminPanel from "../../../components/admin/AdminPanel"
 
 const RolesIndex = () => {
 	const [data, setData] = useState({})

@@ -1,4 +1,4 @@
-											/*TABLA DE REGISTROS*/
+/*TABLA DE REGISTROS*/
 import { Link } from "react-router-dom"
 import { useState } from "react"
 
@@ -32,7 +32,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 					<h1>{titulo}</h1>
 					<p>{texto}</p>
 
-					<Link to={linkCrear}>Agregar registro</Link>
+					<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
 
 					{/* div -> boton de agregar registro | tabla con la lista de registros */}
 					<table>
@@ -59,8 +59,10 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 										))}
 
 										<td>
-											<Link to={`${linkEditar}/${row.id_rol}`}>Editar</Link>
-											<button onClick={() => {setId(row[idKey])}}>Eliminar</button>
+											<div className="contenedor-editar-eliminar">
+												<Link className="link-editar" to={`${linkEditar}/${row[idKey]}`}>Editar</Link>
+												<button className="boton-eliminar" onClick={() => {setId(row[idKey])}}>Eliminar</button>
+											</div>
 										</td>
 									</tr>
 								))
