@@ -1,7 +1,7 @@
-								/*FORMULARIO DE CREAR*/
+/*FORMULARIO DE CREAR*/
 import { Link } from "react-router-dom"
 
-const AdminForm = ({titulo, campos, onSendForm, linkRegresar}) => {
+const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, fieldErrors, button, loading}) => {
 
 	return (
 		<div>
@@ -10,19 +10,26 @@ const AdminForm = ({titulo, campos, onSendForm, linkRegresar}) => {
 				<h1>{titulo}</h1>
 
 				{/* la funcion que se va a ejecutar cuando se envie el formulario */}
-				<form method="post" onSubmit={() => {onSendForm()}}>
+				<form method="post" onSubmit={async (e) => {
+					e.preventDefault()
+					await onSendForm()
+				}}>
 					{Object.entries(campos).map(([key, value], index) => (
 						<div key={index}>
 							<label htmlFor={value?.name}>{value?.titulo}</label>
+
 							<input type={value?.type} name={value?.name} onChange={(e) => {value?.onChange(e.target.value)}}/>
+							<p>{fieldErrors?.[key] || ''}</p>
 						</div>
 					))}
 
-					<input type="submit" value="Envíar" />
+					<button type="submit" disabled={loading}>{loading ? 'Cargando...' : button} </button>
+
+					{error != '' && (<p>{error}</p>)}
 				</form>
 			</section>
 		</div>
 	)
 }
 
-export default AdminForm
+export default AdminFormCreate

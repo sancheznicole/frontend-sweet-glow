@@ -163,7 +163,7 @@ const ProfilePage = () => {
             </div>
           )}
           
-          <button onClick={() => {setMostrarDatos(!mostrarDatos)}}>{mostrarDatos ? 'Cancelar' : 'Modificar'}</button>
+          <button className="cancelar-modificar-profile"onClick={() => {setMostrarDatos(!mostrarDatos)}}>{mostrarDatos ? 'Cancelar' : 'Modificar'}</button>
           <Link onClick={() => {logout(); navigate("/")}}>cerrar sesion</Link> 
           
         </section>
