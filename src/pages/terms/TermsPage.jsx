@@ -4,7 +4,7 @@ const TermsPage = () => {
   return (
     <div className='page-container-terms'>
       <section className='section-terminos'>
-        <h1>Términos</h1>
+        <h1 className="titulo-por-h1">Términos</h1>
 
         <p>
           <strong>Los presentes Términos y Condiciones</strong> regulan el acceso, navegación y uso del sitio web de <strong>Sweet Glow</strong>, así como cualquier relación comercial que pueda generarse entre la empresa y los usuarios que utilicen la plataforma para consultar información, registrarse o adquirir los productos ofrecidos. Al ingresar, navegar o realizar cualquier tipo de transacción a través del sitio web, el usuario declara haber leído, comprendido y aceptado plenamente todas las disposiciones establecidas en este documento.

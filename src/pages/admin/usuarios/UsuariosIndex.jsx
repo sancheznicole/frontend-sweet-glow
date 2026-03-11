@@ -44,8 +44,14 @@ const UsuariosIndex = () => {
     return (
         <div>
             <AdminPanel
-                campos={fields}
                 data={data}
+				campos={fields}
+				titulo={"Administración de roles"}
+				texto={"Administra los tipos de usuario y sus permisos dentro del sistema"}
+				linkCrear={"/admin/roles/crear"}
+				linkEditar={"/admin/usuario/editar"}
+				onDelete={onDelete}
+				getData={getData}
             ></AdminPanel>
         </div>
     )

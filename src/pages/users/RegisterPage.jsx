@@ -129,7 +129,7 @@ const RegisterPage = () => {
       <section className='section-register'>
         <form action="" method="post" onSubmit={(e) => {sendData(e)}}>
           <div className="titulo-registro">
-            <h1>CREAR UNA CUENTA</h1>
+            <h1 className="titulo-por-h1">CREAR UNA CUENTA</h1>
           </div>
 
           <div>

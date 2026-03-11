@@ -4,7 +4,7 @@ const AdminIndex = () => {
     return (
         <div className='page-container'> 
             <section className='section-links-admin'>
-                <h1>Centro de administración</h1>
+                <h1 className="titulo-por-h1">Centro de administración</h1>
                 
                 <div className="links-administración">
                     <div>
