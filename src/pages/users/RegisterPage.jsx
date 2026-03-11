@@ -93,11 +93,11 @@ const RegisterPage = () => {
       e.preventDefault();
 
       //para cargar la pagina
-      setLoading(true)
+      
       
       //llama la validacion de los campos
       const validation = validateFields();
-
+      setLoading(true)
       //resultado de la validacion entonces si hay mas de 0 errores se corta la ejecucion para enviar los datos
       if(validation) return
 
@@ -112,7 +112,6 @@ const RegisterPage = () => {
 
       //si es valida redirecciona a la pagina del login
       navigate("/login");
-
     } 
     //si el try no responde ejecuta el catch
     catch (error) {
@@ -129,7 +128,7 @@ const RegisterPage = () => {
 
       <section className='section-register'>
         <form action="" method="post" onSubmit={(e) => {sendData(e)}}>
-          <div>
+          <div className="titulo-registro">
             <h1>CREAR UNA CUENTA</h1>
           </div>
 

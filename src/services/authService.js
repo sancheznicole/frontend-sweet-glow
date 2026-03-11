@@ -86,9 +86,9 @@ export async function getUserData(token) {
 //funcion para usar en update del usuario
 // funcion para eliminar un usuario
 
-export async function getAllUsuarios(page, limit) {
+export async function getAllUsers(page, limit) {
     try {
-        const res = await axios.get(`${API_URL}/usuarios?page=${page}&limit=${limit}`)
+        const res = await axios.get(`${API_URL}/users?page=${page}&limit=${limit}`)
 
         if(res?.status != 200){
             return { valid: false, error: res.data?.errors }
@@ -169,7 +169,7 @@ export async function userUpdate(
     }
 }
 
-export async function deleteRole(id_usuario) {
+export async function deleteUser(id_usuario) {
     try {
         const res = await axios.delete(`${API_URL}/users/${id_usuario}`)
 
@@ -183,5 +183,5 @@ export async function deleteRole(id_usuario) {
     catch (error) {
         return { valid: false, error: error?.message }
     }
-    
+  
 }
