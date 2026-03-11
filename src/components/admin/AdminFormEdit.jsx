@@ -1,38 +1,70 @@
-/*FORMULARIO DE CREAR*/
+/*FORMULARIO DE EDITAR*/
+
 import { Link } from "react-router-dom"
 
-const AdminFormEdit = ({titulo, campos, onSendForm, linkRegresar, error, fieldErrors, button, loading}) => {
+const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, loading}) => {
 
 	return (
 		<div>
 			<section>
-				<Link to={linkRegresar}>Regresar</Link>
+				{/* titulo del formulario */}
 				<h1>{titulo}</h1>
 
-				{/* la funcion que se va a ejecutar cuando se envie el formulario */}
-				<form method="put" onSubmit={async (e) => {
-					e.preventDefault()
-					await onSendForm()
-				}}>
-					{Object.entries(campos).map(([key, value], index) => (
-						<div key={index}>
-							<label htmlFor={value?.name}>{value?.titulo}</label>
+				{/* formulario */}
+				<form
+					onSubmit={async (e) => {
+						e.preventDefault() // evita recargar la página
+						await onSendForm() // ejecuta la función que envía datos
+					}}
+				>
 
-							<input type={value?.type} name={value?.name} onChange={(e) => {value?.onChange(e.target.value)}}/>
-							<p>{fieldErrors?.[key] || ''}</p>
+					{/* recorrer los campos dinámicamente */}
+					{Object.entries(campos).map(([key, value], index) => (
+
+						<div key={index}>
+
+							{/* titulo del campo */}
+							<label htmlFor={value?.name}>
+								{value?.titulo}
+							</label>
+
+							{/* input */}
+							<input
+								type={value?.type}
+								name={value?.name}
+
+								/* esto permite que en EDIT aparezcan los datos actuales */
+								defaultValue={value?.value || ""}
+
+								onChange={(e) => {
+									value?.onChange(e.target.value)
+								}}
+							/>
+
+							{/* error específico del campo */}
+							<p>{fieldErrors?.[key] || ""}</p>
+
 						</div>
+
 					))}
 
-					<button type="submit" disabled={loading}>{loading ? 'Cargando...' : button} </button>
+					{/* botón enviar */}
+					<button type="submit" disabled={loading}>
+						{loading ? "Cargando..." : button}
+					</button>
 
-					{error != '' && (<p>{error}</p>)}
+					{/* error general */}
+					{error != "" && (
+						<p>{error}</p>
+					)}
+
 				</form>
+
 			</section>
 		</div>
 	)
 }
 
 export default AdminFormEdit
-
 
 
