@@ -4,7 +4,7 @@ const CustomerServicePage = () => {
   return (
     <div className='page-container'>
         <section className='section-atencion-cliente'>
-            <h1>atención al cliente</h1>
+            <h1 className="titulo-por-h1">atención al cliente</h1>
 
             <p>
                 La presente sección establece las condiciones relacionadas con el servicio de <strong>Atención al Cliente de Sweet Glow</strong>, el cual tiene como objetivo brindar acompañamiento, orientación y solución a las inquietudes que puedan presentar los usuarios durante su experiencia dentro de la plataforma. Sweet Glow se compromete a ofrecer un servicio de atención claro, respetuoso y orientado a resolver las solicitudes de los clientes de manera eficiente.

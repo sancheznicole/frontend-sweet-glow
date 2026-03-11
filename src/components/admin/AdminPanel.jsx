@@ -13,13 +13,13 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 					<h3>Estar seguro de eliminar el registro?</h3>
 
 					<div>
-						<button onClick={async () => {
+						<button className="boton-eliminar-cancelar" onClick={async () => {
 								await onDelete(id)
 								await getData()
 								setId(undefined)
 							}}
 						>Eliminar</button>
-						<button onClick={() => {setId(undefined)}}>Cancelar</button>
+						<button className="boton-eliminar-cancelar" onClick={() => {setId(undefined)}}>Cancelar</button>
 					</div>
 				</div>
 			) : (
@@ -29,7 +29,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 					</div>
 
 					{/* titulo */}
-					<h1>{titulo}</h1>
+					<h1 className="titulo-por-h1">{titulo}</h1>
 					<p>{texto}</p>
 
 					<div className="contenedor-agregar-registro">

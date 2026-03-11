@@ -4,7 +4,7 @@ const PrivacyPoliciesPage = () => {
   return (
     <div className='page-container'> 
       <section className='section-politicas-privacidad'>
-        <h1>Políticas de privacidad</h1>
+        <h1 className="titulo-por-h1">Políticas de privacidad</h1>
 
         <p>
           La presente <strong>Política de Privacidad</strong> establece la forma en que <strong>Sweet Glow</strong> recopila, utiliza, almacena y protege la información personal proporcionada por los usuarios que acceden, navegan o realizan compras a través del sitio web. Al utilizar la plataforma, el usuario acepta las prácticas descritas en esta política y autoriza el tratamiento de sus datos personales conforme a las disposiciones aquí establecidas.

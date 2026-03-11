@@ -6,9 +6,9 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 
 	return (
 		<div>
-			<section>
+			<section className="section-form-edit">
 				{/* titulo del formulario */}
-				<h1>{titulo}</h1>
+				<h1 className="titulo-por-h1">{titulo}</h1>
 
 				{/* formulario */}
 				<form

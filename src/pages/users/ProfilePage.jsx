@@ -96,7 +96,7 @@ const ProfilePage = () => {
     <div className='page-container'>
         <section className='section-profile div-profile'>
           <div>
-            <h1>
+            <h1 className="titulo-por-h1">
               {mostrarDatos ? "EDITA TU PERFIL" : `HOLA ${user.nombres.toUpperCase()}`}
             </h1>
           </div>
@@ -152,18 +152,20 @@ const ProfilePage = () => {
             </div>
         </form>
           ) : (
-            
-            <div className='profile-no-uptade'>
-              <strong><p>{user?.nombres} {user?.apellidos}</p></strong>
-              <p>{user?.tipo_documento}</p> 
-              <p>{user?.num_documento}</p>
-              <p>{user?.correo}</p>
-              <p>{user?.telefono}</p>
-              <p>{user?.direccion}</p>
+            <div className='contenedor-mostrar-datos'>
+              <div className='profile-no-uptade'>
+                <strong><p>{user?.nombres} {user?.apellidos}</p></strong>
+                <p>{user?.tipo_documento}</p> 
+                <p>{user?.num_documento}</p>
+                <p>{user?.correo}</p>
+                <p>{user?.telefono}</p>
+                <p>{user?.direccion}</p>
+              </div>
             </div>
           )}
           
-          <button className="cancelar-modificar-profile"onClick={() => {setMostrarDatos(!mostrarDatos)}}>{mostrarDatos ? 'Cancelar' : 'Modificar'}</button>
+          
+          <button className={mostrarDatos ? "cancelar-profile" : "modificar-profile"} onClick={() => {setMostrarDatos(!mostrarDatos)}}> {mostrarDatos ? "Cancelar" : "Modificar"} </button>
           <Link onClick={() => {logout(); navigate("/")}}>cerrar sesion</Link> 
           
         </section>

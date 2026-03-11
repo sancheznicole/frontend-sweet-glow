@@ -48,13 +48,13 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/roles/crear", element: 
+      { path: "admin/roles/create", element: 
         <ProtectedAdmin>
           <CreateRole />
         </ProtectedAdmin>
       },
 
-      { path: "admin/roles/editar/:id", element: 
+      { path: "admin/roles/edit/:id", element: 
         <ProtectedAdmin>
           <EditRole />
         </ProtectedAdmin>

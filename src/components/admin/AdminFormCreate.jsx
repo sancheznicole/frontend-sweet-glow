@@ -5,8 +5,10 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 
 	return (
 		<div>
+			<div className="back-link-container">
+        		<Link className="link-regresar" to="/admin/roles">Regresar</Link>
+      		</div>
 			<section>
-				<Link to={linkRegresar}>Regresar</Link>
 				<h1>{titulo}</h1>
 
 				{/* la funcion que se va a ejecutar cuando se envie el formulario */}
