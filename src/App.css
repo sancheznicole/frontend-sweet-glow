@@ -9,6 +9,9 @@ h1{
     font-weight: lighter;
 }
 /* titulos*/
+.section-login h1, .section-register h1, .div-profile h1, 
+.section-terminos h1, .section-politicas-privacidad h1, .section-politica-envios h1, .section-atencion-cliente h1,
+.section-sobre-nosotros h1{
 .titulo-por-h1 {
     text-transform: uppercase;
     text-align: center;
@@ -319,7 +322,7 @@ footer {
     font-size: 14px;
 }
 
-.section-register{
+.section-register {
     color: #393939;
     width: 27%;
     margin: 0 auto;
@@ -638,7 +641,9 @@ footer {
     height: 100%;
     text-align: center;
     line-height: 8vh;
+
 }
+
 
 /*tabla de registros del panel administrativo */
 
@@ -731,7 +736,7 @@ footer {
     .contenedor-eliminar{
         margin: 0 auto;
         width: 25%;
-        height: 15vh;
+        height: auto;
         border: 1px solid #b3848f;
         border-radius: 6px;
         padding: 20px 20px 30px 30px;
@@ -883,6 +888,15 @@ footer {
     width: 27%;
 
     form{
+
+        select{
+            padding: 13px;
+            width: 100%;
+            height: 43px;
+            border-radius: 4px;
+            border: transparent;
+            outline: none;
+        }
 
         label{
                 transform: translateY(12px) translateX(10px);
