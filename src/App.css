@@ -9,6 +9,9 @@ h1{
     font-weight: lighter;
 }
 /* titulos*/
+.section-login h1, .section-register h1, .div-profile h1, 
+.section-terminos h1, .section-politicas-privacidad h1, .section-politica-envios h1, .section-atencion-cliente h1,
+.section-sobre-nosotros h1{
 .titulo-por-h1 {
     text-transform: uppercase;
     text-align: center;
@@ -638,7 +641,9 @@ footer {
     height: 100%;
     text-align: center;
     line-height: 8vh;
+
 }
+
 
 /*tabla de registros del panel administrativo */
 
