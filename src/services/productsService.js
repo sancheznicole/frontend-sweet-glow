@@ -34,9 +34,8 @@ export async function getProduct(id_producto) {
     }
 }
 
-export async function createProduct(
-    nombre, descripcion, precio, tendencia, descuento, prod_regalo, premio,
-     stock, id_categoria, id_marca, id_referencia, id_guia) {
+export async function createProduct( nombre, descripcion, precio, tendencia, descuento, prod_regalo, premio,
+    stock, id_categoria, id_marca, id_referencia, id_guia) {
 
     try {
         const payload = { nombre, descripcion, precio, tendencia, descuento, prod_regalo, premio, stock, id_categoria, id_marca, id_referencia, id_guia}
@@ -88,7 +87,7 @@ export async function updateProduct(id_producto, nombre, descripcion, precio, te
     }
 }
 
-export async function deleteRole(id_producto) {
+export async function deleteProduct(id_producto) {
     try {
         const res = await axios.delete(`${API_URL}/products/${id_producto}`)
 

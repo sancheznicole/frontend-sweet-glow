@@ -21,15 +21,26 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 					{Object.entries(campos).map(([key, value], index) => (
 						<div key={index} className="campo-form">
 
-							<input
-							type={value?.type}
-							name={value?.name}
-							placeholder=" "
-							onChange={(e) => { value?.onChange(e.target.value) }}
-							/>
+							{value?.type == "select" ? (
+								<select className="select-form" name={value?.name} onChange={(e) => { value?.onChange(e.target.value) }}>
+									<option value="">Seleccionar opción</option>
+									{Object.entries(value?.options).map(([optionKey, optionValue], optionIndex) => {
+										return (
+											<option value={optionKey} key={optionIndex}>{optionValue}</option>
+										)
+									})}
+								</select>
+							) : (
+								<input
+									type={value?.type}
+									name={value?.name}
+									placeholder=" "
+									onChange={(e) => { value?.onChange(e.target.value) }}
+								/>
+							)}
 
 							<label htmlFor={value?.name}>
-							{value?.titulo}
+								{value?.titulo}
 							</label>
 
 							<p>{fieldErrors?.[key] || ''}</p>

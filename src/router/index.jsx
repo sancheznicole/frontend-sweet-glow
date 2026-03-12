@@ -45,6 +45,7 @@ import CreateAwarded from "../pages/admin/premiados/crear/CreateAwarded"
 import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
 import CreateUser from "../pages/admin/usuarios/crear/CreateUser"
 import EditUser from "../pages/admin/usuarios/editar/EditUser"
+import ProductosIndex from "../pages/admin/productos/ProductosIndex"
 
 export const router = createBrowserRouter([
   {
@@ -169,6 +170,14 @@ export const router = createBrowserRouter([
           <EditUser />
         </ProtectedAdmin>
       },
+
+      { path: "admin/products", element: 
+        <ProtectedAdmin>
+          <ProductosIndex />
+        </ProtectedAdmin>
+      },
+
+      
 
       { path: 'categories', element: <CategoriesPage /> },
 
