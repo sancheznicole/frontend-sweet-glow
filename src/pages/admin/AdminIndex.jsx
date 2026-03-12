@@ -16,11 +16,11 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar categorias</Link>
+                        <Link to={"/admin/categories"}>Administrar categorias</Link>
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar marcas</Link>
+                        <Link to={"/admin/brands"}>Administrar marcas</Link>
                     </div>
 
                     <div>
@@ -64,7 +64,7 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar reseñas</Link>
+                        <Link to={"/admin/reviews"}>Administrar reseñas</Link>
                     </div>
                 </div>
             </section>
