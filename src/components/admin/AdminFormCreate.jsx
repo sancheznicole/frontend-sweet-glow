@@ -5,9 +5,13 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 
 	return (
 		<div>
-			<section>
-				<Link to={linkRegresar}>Regresar</Link>
-				<h1>{titulo}</h1>
+			<div className="back-link-container">
+        		<Link className="link-regresar" to={linkRegresar}>Regresar</Link>
+      		</div>
+
+			<section className="section-create-admin">
+
+				<h1 className="titulo-por-h1">{titulo}</h1>
 
 				{/* la funcion que se va a ejecutar cuando se envie el formulario */}
 				<form method="post" onSubmit={async (e) => {
@@ -15,11 +19,21 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 					await onSendForm()
 				}}>
 					{Object.entries(campos).map(([key, value], index) => (
-						<div key={index}>
-							<label htmlFor={value?.name}>{value?.titulo}</label>
+						<div key={index} className="campo-form">
 
-							<input type={value?.type} name={value?.name} onChange={(e) => {value?.onChange(e.target.value)}}/>
+							<input
+							type={value?.type}
+							name={value?.name}
+							placeholder=" "
+							onChange={(e) => { value?.onChange(e.target.value) }}
+							/>
+
+							<label htmlFor={value?.name}>
+							{value?.titulo}
+							</label>
+
 							<p>{fieldErrors?.[key] || ''}</p>
+
 						</div>
 					))}
 

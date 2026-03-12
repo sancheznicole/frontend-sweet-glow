@@ -8,7 +8,7 @@ const AboutUsPage = () => {
           <img src="/icons/icon.png" alt="" />
         </div>
 
-        <h1>sobre nosotros</h1>
+        <h1 className="titulo-por-h1">sobre nosotros</h1>
 
         <p>
           Sweet Glow nació del sueño de tres mujeres apasionadas por el mundo del maquillaje, la belleza y el cuidado personal. Durante mucho tiempo compartieron una misma frustración: en Colombia era difícil encontrar productos internacionales de maquillaje que realmente fueran originales y de alta gama.

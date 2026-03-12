@@ -102,19 +102,22 @@ const EditRole = () => {
   return (
 
     <div className="page-container">
+        {!mostrarDatos && (
+          <div className="back-link-container">
+            <Link className="link-regresar" to="/admin/roles">Regresar</Link>
+          </div>
+        )}
 
-      <section className="section-admin-edit">
+      <section className="section-editar">
 
         {/* vista información */}
         {!mostrarDatos ? (
 
           <>
-            <Link to="/admin/roles">Regresar</Link>
+            <h1 className="titulo-por-h1">Detalles del rol {nombre}</h1>
 
-            <h1>Detalles del rol: {nombre}</h1>
-
-            <div>
-              <p>Nombre:{nombre}</p>
+            <div className="contenedor-campos">
+              <strong><p>Nombre: {nombre}</p></strong>
             </div>
           </>
 
@@ -133,13 +136,10 @@ const EditRole = () => {
 
         )}
 
-        {/* botón modificar / cancelar */}
-        <button
-          onClick={() => setMostrarDatos(!mostrarDatos)}
-        >
-          {mostrarDatos ? "Cancelar" : "Modificar"}
-        </button>
-
+        <div className="contenedor-editar-botones">
+          {/* botón modificar / cancelar */}
+          <button className={mostrarDatos ? "cancelar-profile" : "modificar-profile"} onClick={() => {setMostrarDatos(!mostrarDatos)}}> {mostrarDatos ? "Cancelar" : "Modificar"} </button>
+        </div>
       </section>
 
     </div>

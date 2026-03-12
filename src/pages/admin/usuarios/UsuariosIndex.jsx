@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import AdminPanel from "../../../components/admin/AdminPanel"
 import { getAllUsers, deleteUser } from '../../../services/authService'
+import AdminPanel from "../../../components/admin/AdminPanel"
 
 const UsuariosIndex = () => {
     const [data, setData] = useState({})
@@ -9,8 +9,8 @@ const UsuariosIndex = () => {
 
     const fields = {
         "id_usuario": "ID",
-        "tipo_documento": "Tipo Doc.",
-        "num_documento": "Num Doc.",
+        "tipo_documento": "Tipo Doc",
+        "num_documento": "Num Doc",
         "nombres": "Nombres",
         "apellidos": "Apellidos",
         "correo": "E-mail",
@@ -41,11 +41,28 @@ const UsuariosIndex = () => {
     // mostar registros almacenados en data
     console.log(data)
 
+    const onDelete = async (id) => {
+        try {
+            let res = await deleteUser(id)
+    
+            if(!res?.valid) return res?.error
+    
+        } catch (error) {
+            return error.message
+        }
+    }
+
     return (
         <div>
             <AdminPanel
-                campos={fields}
                 data={data}
+				campos={fields}
+				titulo={"Administración de usuarios"}
+				texto={"Administra los tipos de usuario y sus permisos dentro del sistema"}
+				linkCrear={"/admin/user/create"}
+				linkEditar={"/admin/user/edit"}
+				onDelete={onDelete}
+				getData={getData}
             ></AdminPanel>
         </div>
     )

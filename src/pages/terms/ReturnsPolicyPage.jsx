@@ -4,7 +4,7 @@ function ReturnsPolicyPage() {
   return (
     <div className='page-container'>
       <section className='section-politica-envios'>
-        <h1>Política de envíos y devoluciones</h1>
+        <h1 className="titulo-por-h1">Política de envíos y devoluciones</h1>
 
         <p>
           La presente <strong>Política de Envíos y Devoluciones</strong> establece las condiciones bajo las cuales <strong>Sweet Glow</strong> realiza la distribución de sus productos y gestiona las solicitudes relacionadas con cambios o devoluciones. Al realizar una compra a través del sitio web, el cliente acepta las disposiciones descritas en esta política.

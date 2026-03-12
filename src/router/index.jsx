@@ -43,6 +43,8 @@ import EditAward from "../pages/admin/premios/editar/EditAward"
 import AwardedIndex from "../pages/admin/premiados/awardedIndex"
 import CreateAwarded from "../pages/admin/premiados/crear/CreateAwarded"
 import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
+import CreateUser from "../pages/admin/usuarios/crear/CreateUser"
+import EditUser from "../pages/admin/usuarios/editar/EditUser"
 
 export const router = createBrowserRouter([
   {
@@ -155,6 +157,18 @@ export const router = createBrowserRouter([
       },
 
 
+
+      { path: "admin/user/create", element: 
+        <ProtectedAdmin>
+          <CreateUser />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/user/edit/:id", element: 
+        <ProtectedAdmin>
+          <EditUser />
+        </ProtectedAdmin>
+      },
 
       { path: 'categories', element: <CategoriesPage /> },
 

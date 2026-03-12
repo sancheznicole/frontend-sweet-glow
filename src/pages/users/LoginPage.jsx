@@ -86,7 +86,7 @@ const LoginPage = () => {
     <div className='page-container'>
       <section className='section-login' >
         <div>
-          <h1>INICIAR SESIÓN</h1>
+          <h1 className="titulo-por-h1">INICIAR SESIÓN</h1>
         </div>
 
         <form action="" method="post" onSubmit={(e) => {sendData(e)}}>
