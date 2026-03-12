@@ -52,8 +52,8 @@ const RolesIndex = () => {
 				campos={fields}
 				titulo={"Administración de roles"}
 				texto={"Administra los tipos de usuario y sus permisos dentro del sistema"}
-				linkCrear={"/admin/roles/create"}
-				linkEditar={"/admin/roles/edit"}
+				linkCrear={"/admin/roles/crear"}
+				linkEditar={"/admin/roles/editar"}
 				onDelete={onDelete}
 				getData={getData}
 			></AdminPanel>

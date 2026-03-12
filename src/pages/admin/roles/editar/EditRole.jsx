@@ -102,9 +102,11 @@ const EditRole = () => {
   return (
 
     <div className="page-container">
-      <div className="back-link-container">
-        <Link className="link-regresar" to="/admin/roles">Regresar</Link>
-      </div>
+        {!mostrarDatos && (
+          <div className="back-link-container">
+            <Link className="link-regresar" to="/admin/roles">Regresar</Link>
+          </div>
+        )}
 
       <section className="section-editar">
 

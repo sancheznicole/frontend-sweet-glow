@@ -135,10 +135,10 @@ const RegisterPage = () => {
           <div>
               <select name="tipo_documento" id=""  onChange={(e) => {setTipoDocumento(e.target.value)}}>
                 <option defaultValue="" disabled selected hidden></option>
-                <option defaultValue="cc">Cédula de ciudadanía</option>
-                <option defaultValue="pep">Permiso Especial de Permanencia</option>
-                <option defaultValue="ce">Cédula de extranjería</option>
-                <option defaultValue="p">Pasaporte</option>
+                <option defaultValue="CC">Cédula de ciudadanía</option>
+                <option defaultValue="CE">Cédula de extranjería</option>
+                <option defaultValue="TI">Tarjeta de identidad</option>
+                <option defaultValue="PP">Pasaporte</option>
               </select>
               <label htmlFor="">Seleccione tipo documento</label>
               {fieldErrors?.tipoDocumento && <p className="form-input-error">{fieldErrors?.tipoDocumento}</p>}
