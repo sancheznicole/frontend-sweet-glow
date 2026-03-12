@@ -116,7 +116,7 @@ const EditRole = () => {
           <>
             <h1 className="titulo-por-h1">Detalles del rol {nombre}</h1>
 
-            <div className="contenedor-campos-rol">
+            <div className="contenedor-campos">
               <strong><p>Nombre: {nombre}</p></strong>
             </div>
           </>
