@@ -29,7 +29,16 @@ import CreateRole from "../pages/admin/roles/crear/CreateRole"
 import EditRole from "../pages/admin/roles/editar/EditRole"
 import UsuariosIndex from "../pages/admin/usuarios/UsuariosIndex"
 import CreateUser from "../pages/admin/usuarios/crear/CreateUser"
+import CategoriesIndex from "../pages/admin/categories/CategoriesIndex"
+import CreateCategory from "../pages/admin/categories/crear/CreateCategory"
+import EditCategory from "../pages/admin/categories/editar/EditCategory"
 import EditUser from "../pages/admin/usuarios/editar/EditUser"
+import BrandsIndex from "../pages/admin/brands/BrandsIndex"
+import CreateBrand from "../pages/admin/brands/crear/CreateBrand"
+import EditBrand from "../pages/admin/brands/editar/EditBrand"
+import ReviewsIndex from "../pages/admin/reviews/ReviewsIndex"
+import CreateReview from "../pages/admin/reviews/crear/CreateReview"
+import EditReview from "../pages/admin/reviews/editar/EditReview"
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +86,63 @@ export const router = createBrowserRouter([
       { path: "admin/user/edit/:id", element: 
         <ProtectedAdmin>
           <EditUser />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/categories", element:
+        <ProtectedAdmin>
+          <CategoriesIndex />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/categories/crear", element:
+        <ProtectedAdmin>
+          <CreateCategory />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/categories/editar/:id", element:
+        <ProtectedAdmin>
+          <EditCategory />
+        </ProtectedAdmin>
+      },
+
+      {
+        path:"admin/brands",element:
+        <ProtectedAdmin>
+          <BrandsIndex/>
+        </ProtectedAdmin>
+      },
+
+      {
+        path:"admin/brands/crear",element:
+        <ProtectedAdmin>
+          <CreateBrand/>
+        </ProtectedAdmin>
+      },
+
+      {
+        path:"admin/brands/editar/:id",element:
+        <ProtectedAdmin>
+          <EditBrand/>
+        </ProtectedAdmin>
+      },
+
+      {path:"admin/reviews",element:
+        <ProtectedAdmin>
+          <ReviewsIndex/>
+        </ProtectedAdmin>
+      },
+
+      {path:"admin/reviews/crear",element:
+        <ProtectedAdmin>
+          <CreateReview/>
+        </ProtectedAdmin>
+      },
+
+      {path:"admin/reviews/editar/:id",element:
+        <ProtectedAdmin>
+          <EditReview/>
         </ProtectedAdmin>
       },
 
