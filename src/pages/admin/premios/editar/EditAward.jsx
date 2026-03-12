@@ -1,10 +1,10 @@
 import { useState, useEffect} from "react"
 import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateRole, getRole } from "../../../../services/rolesService"
+import { updatePremio, getPremio } from "../../../../services/awardsService"
 import { Link } from "react-router-dom"
 
-const EditRole = () => {
+const EditAward = () => {
 
   // obtener id desde la url
   const { id } = useParams()
@@ -17,19 +17,15 @@ const EditRole = () => {
   // mostrar información o formulario
   const [mostrarDatos, setMostrarDatos] = useState(false)
 
-  // estado del nombre del rol
-  const [nombre, setNombre] = useState("")
+  // estado del nombre de premios
+  const [id_producto, setId_producto] = useState("")
 
   // validación
   function validateFields(){
 
     const errors = {}
 
-    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
-
-    if(nombre !== "" && !nameRegex.test(nombre)){
-      errors.nombre = "El nombre solo debe contener letras y espacios"
-    }
+   if(id_producto === "") errors.id_producto = "El id producto es obligatorio"
 
     setFieldErrors(errors)
 
@@ -47,7 +43,7 @@ const EditRole = () => {
       setLoading(true)
       
       setError("")
-      let res = await updateRole(id, nombre)
+      let res = await updatePremio(id, id_producto)
               
       if(!res?.valid){
         setError("Error al enviar el formulario")
@@ -72,14 +68,14 @@ const EditRole = () => {
     const getData = async () => {
       try {
 
-        const res = await getRole(id)
+        const res = await getPremio(id)
 
         if(!res?.valid){
           setError("Error al obtener dato")
         return
         }
 
-        setNombre(res?.rol?.nombre)
+        setId_producto(res?.premio?.id_producto)
         
       } catch (error) {
         setError(error.message)
@@ -90,12 +86,12 @@ const EditRole = () => {
 
   // campos para el formulario
   const campos = {
-    nombre: {
-      titulo: "Nombre del rol",
-      name: "nombre",
+    id_producto: {
+      titulo: "Id del producto",
+      name: "id_producto",
       type: "text",
-      value: nombre,
-      onChange: setNombre
+      value: id_producto,
+      onChange: setId_producto
     }
   }
 
@@ -109,22 +105,22 @@ const EditRole = () => {
         {!mostrarDatos ? (
 
           <>
-            <Link to="/admin/roles">Regresar</Link>
+            <Link to="/admin/premios">Regresar</Link>
 
-            <h1>Detalles del rol: {nombre}</h1>
+            <h1>Detalles de premios: {id_producto}</h1>
 
             <div>
-              <p>Nombre:{nombre}</p>
+              <p>Id producto:{id_producto}</p>
             </div>
           </>
 
         ) : (
 
           <AdminFormEdit
-            titulo="Editar rol"
+            titulo="Editar premio"
             campos={campos}
             onSendForm={sendData}
-            linkRegresar="/admin/roles"
+            linkRegresar="/admin/premios"
             error={error}
             fieldErrors={fieldErrors}
             button="Guardar cambios"
@@ -147,4 +143,4 @@ const EditRole = () => {
   )
 }
 
-export default EditRole
+export default EditAward

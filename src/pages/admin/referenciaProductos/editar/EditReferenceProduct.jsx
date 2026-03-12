@@ -1,10 +1,10 @@
 import { useState, useEffect} from "react"
 import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateRole, getRole } from "../../../../services/rolesService"
+import { updateReferencia, getReferencia } from "../../../../services/referenceProductsService"
 import { Link } from "react-router-dom"
 
-const EditRole = () => {
+const EditReferenceProduct = () => {
 
   // obtener id desde la url
   const { id } = useParams()
@@ -17,19 +17,19 @@ const EditRole = () => {
   // mostrar información o formulario
   const [mostrarDatos, setMostrarDatos] = useState(false)
 
-  // estado del nombre del rol
-  const [nombre, setNombre] = useState("")
+  // estados de los campos
+  const [codigo, setCodigo] = useState("")
+  const [color, setColor] = useState("")
+  const [tamaño, setTamaño] = useState("")
 
   // validación
   function validateFields(){
 
     const errors = {}
 
-    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
-
-    if(nombre !== "" && !nameRegex.test(nombre)){
-      errors.nombre = "El nombre solo debe contener letras y espacios"
-    }
+    if(codigo === "") errors.codigo = "El codigo es obligatorio"
+    if(color === "") errors.color = "El color es obligatorio"
+    if(tamaño === "") errors.tamaño = "El tamaño es obligatorio"
 
     setFieldErrors(errors)
 
@@ -47,7 +47,7 @@ const EditRole = () => {
       setLoading(true)
       
       setError("")
-      let res = await updateRole(id, nombre)
+      let res = await updateReferencia(id, codigo, color, tamaño)
               
       if(!res?.valid){
         setError("Error al enviar el formulario")
@@ -72,14 +72,16 @@ const EditRole = () => {
     const getData = async () => {
       try {
 
-        const res = await getRole(id)
+        const res = await getReferencia(id)
 
         if(!res?.valid){
           setError("Error al obtener dato")
         return
         }
 
-        setNombre(res?.rol?.nombre)
+        setCodigo(res?.referencia?.codigo)
+        setColor(res?.referencia?.color)
+        setTamaño(res?.referencia?.tamaño)
         
       } catch (error) {
         setError(error.message)
@@ -90,12 +92,28 @@ const EditRole = () => {
 
   // campos para el formulario
   const campos = {
-    nombre: {
-      titulo: "Nombre del rol",
-      name: "nombre",
+     codigo: {
+      titulo: "Codigo",
+      name: "codigo",
       type: "text",
-      value: nombre,
-      onChange: setNombre
+      value: codigo,
+      onChange: setCodigo
+    },
+
+    color: {
+      titulo: "Color",
+      name: "color",
+      type: "text",
+      value: color,
+      onChange: setColor
+    },
+
+    tamaño: {
+      titulo: "Tamaño",
+      name: "tamaño",
+      type: "text",
+      value: tamaño,
+      onChange: setTamaño
     }
   }
 
@@ -109,22 +127,30 @@ const EditRole = () => {
         {!mostrarDatos ? (
 
           <>
-            <Link to="/admin/roles">Regresar</Link>
+            <Link to="/admin/referencia">Regresar</Link>
 
-            <h1>Detalles del rol: {nombre}</h1>
+            <h1>Detalles de referencia: {codigo}</h1>
 
             <div>
-              <p>Nombre:{nombre}</p>
+              <p>Codigo: {codigo}</p>
+            </div>
+
+            <div>
+              <p>Color: {color}</p>
+            </div>
+
+            <div>
+              <p>Tamaño: {tamaño}</p>
             </div>
           </>
 
         ) : (
 
           <AdminFormEdit
-            titulo="Editar rol"
+            titulo="Editar referencia"
             campos={campos}
             onSendForm={sendData}
-            linkRegresar="/admin/roles"
+            linkRegresar="/admin/referencia"
             error={error}
             fieldErrors={fieldErrors}
             button="Guardar cambios"
@@ -147,4 +173,4 @@ const EditRole = () => {
   )
 }
 
-export default EditRole
+export default EditReferenceProduct

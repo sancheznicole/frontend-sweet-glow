@@ -9,7 +9,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 	return (
 		<section className="section-admin-panel">
 			{id != undefined ? (
-				<div>
+				<div className="contenedor-ediminar">
 					<h3>Estar seguro de eliminar el registro?</h3>
 
 					<div>
@@ -32,7 +32,9 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 					<h1>{titulo}</h1>
 					<p>{texto}</p>
 
-					<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
+					<div className="contenedor-agregar-registro">
+						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
+					</div>
 
 					{/* div -> boton de agregar registro | tabla con la lista de registros */}
 					<table>

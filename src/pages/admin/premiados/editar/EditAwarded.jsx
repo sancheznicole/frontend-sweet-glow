@@ -1,10 +1,10 @@
 import { useState, useEffect} from "react"
 import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateRole, getRole } from "../../../../services/rolesService"
+import { getPremiado, updatePremiado } from "../../../../services/awardedService"
 import { Link } from "react-router-dom"
 
-const EditRole = () => {
+const EditAwarded = () => {
 
   // obtener id desde la url
   const { id } = useParams()
@@ -17,19 +17,19 @@ const EditRole = () => {
   // mostrar información o formulario
   const [mostrarDatos, setMostrarDatos] = useState(false)
 
-  // estado del nombre del rol
-  const [nombre, setNombre] = useState("")
+  // estados de los campos
+  const [id_premio, setId_premio] = useState("")
+  const [id_usuario, setId_usuario] = useState("")
+  const [id_inscripcion, setId_inscripcion] = useState("")
 
   // validación
   function validateFields(){
 
     const errors = {}
 
-    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
-
-    if(nombre !== "" && !nameRegex.test(nombre)){
-      errors.nombre = "El nombre solo debe contener letras y espacios"
-    }
+    if(id_premio === "") errors.id_premio = "El id premio es obligatorio"
+    if(id_usuario === "") errors.id_usuario = "El id usuario es obligatorio"
+    if(id_inscripcion === "") errors.id_inscripcion = "El id inscripcion es obligatorio"
 
     setFieldErrors(errors)
 
@@ -47,7 +47,7 @@ const EditRole = () => {
       setLoading(true)
       
       setError("")
-      let res = await updateRole(id, nombre)
+      let res = await updatePremiado(id, id_premio, id_usuario, id_inscripcion)
               
       if(!res?.valid){
         setError("Error al enviar el formulario")
@@ -72,14 +72,16 @@ const EditRole = () => {
     const getData = async () => {
       try {
 
-        const res = await getRole(id)
+        const res = await getPremiado(id)
 
         if(!res?.valid){
           setError("Error al obtener dato")
         return
         }
 
-        setNombre(res?.rol?.nombre)
+        setId_premio(res?.premiado?.id_premio)
+        setId_usuario(res?.premiado?.id_usuario)
+        setId_inscripcion(res?.premiado?.id_inscripcion)
         
       } catch (error) {
         setError(error.message)
@@ -90,13 +92,30 @@ const EditRole = () => {
 
   // campos para el formulario
   const campos = {
-    nombre: {
-      titulo: "Nombre del rol",
-      name: "nombre",
+     id_premio: {
+      titulo: "Id premio",
+      name: "id_premio",
       type: "text",
-      value: nombre,
-      onChange: setNombre
+      value: id_premio,
+      onChange: setId_premio
+    },
+
+    id_usuario: {
+      titulo: "Id usuario",
+      name: "id_usuario",
+      type: "text",
+      value: id_usuario,
+      onChange: setId_usuario
+    },
+
+    id_inscripcion: {
+      titulo: "Id inscripcion",
+      name: "id_inscripcion",
+      type: "text",
+      value: id_inscripcion,
+      onChange: setId_inscripcion
     }
+
   }
 
   return (
@@ -109,22 +128,30 @@ const EditRole = () => {
         {!mostrarDatos ? (
 
           <>
-            <Link to="/admin/roles">Regresar</Link>
+            <Link to="/admin/premiados">Regresar</Link>
 
-            <h1>Detalles del rol: {nombre}</h1>
+            <h1>Detalles de premiados: {id_premio}</h1>
 
             <div>
-              <p>Nombre:{nombre}</p>
+              <p>Id premio: {id_premio}</p>
+            </div>
+
+            <div>
+              <p>Id usuario: {id_usuario}</p>
+            </div>
+
+             <div>
+              <p>Id inscripcion: {id_inscripcion}</p>
             </div>
           </>
 
         ) : (
 
           <AdminFormEdit
-            titulo="Editar rol"
+            titulo="Editar premiados"
             campos={campos}
             onSendForm={sendData}
-            linkRegresar="/admin/roles"
+            linkRegresar="/admin/premiados"
             error={error}
             fieldErrors={fieldErrors}
             button="Guardar cambios"
@@ -147,4 +174,4 @@ const EditRole = () => {
   )
 }
 
-export default EditRole
+export default EditAwarded

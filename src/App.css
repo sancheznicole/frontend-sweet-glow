@@ -632,4 +632,97 @@ footer {
     height: 100%;
     text-align: center;
     line-height: 8vh;
+
+}
+
+
+/*tabla de registros del panel administrativo */
+
+.section-admin-panel{
+    
+    table{
+        width: 60vw;
+        margin: 5px auto;
+        border-collapse: separate;
+        border-spacing: 12px;
+
+        thead th{
+            height: 5vh;
+            font-size: 15px;
+            font-weight: normal;
+            padding: 15px 20px;
+        }
+
+        th, td{
+            text-align: center;
+            border: 1px solid #efd7e5;
+            border-radius: 5px;
+            color: #393939;
+            padding: 23px 10px;
+        }
+
+        th{
+            font-size: 20px;
+        }
+    }
+
+    .back-link-container{
+        display: flex;
+        justify-content: end;
+        gap: 20px;
+
+        .link-regresar{
+            color: #393939;
+            width: fit-content;
+            padding: 10px 20px;
+        }
+    }
+
+    p{
+        text-align: center;
+        color: #393939;
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+
+    .contenedor-agregar-registro{
+        margin: 10px auto;
+        width: 58.5vw;
+        height: 7vh;
+    }
+
+    .link-agregar-registro{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: 1px solid #efd7e5;
+        width: 100%;
+        height: 5vh;
+        border-radius: 4px;
+        text-decoration: none;
+        color: black;
+    }
+
+    .contenedor-editar-eliminar{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 5vh;
+    }
+
+    .boton-eliminar, .link-editar{
+        border: 1px solid #efd7e5;
+        width: 40%;
+        border-radius: 4px;
+        padding: 10px 0px;
+        text-decoration: none;
+        color: black;
+        /* fuente para cambiar */
+        font-family: serif;
+        font-size: 15px;
+        margin: 0px 5px;
+    }
+
+
 }

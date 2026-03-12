@@ -1,10 +1,10 @@
 import { useState, useEffect} from "react"
 import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateRole, getRole } from "../../../../services/rolesService"
+import { getImagen, updateImagen } from "../../../../services/imagesService"
 import { Link } from "react-router-dom"
 
-const EditRole = () => {
+const EditImages = () => {
 
   // obtener id desde la url
   const { id } = useParams()
@@ -17,19 +17,17 @@ const EditRole = () => {
   // mostrar información o formulario
   const [mostrarDatos, setMostrarDatos] = useState(false)
 
-  // estado del nombre del rol
-  const [nombre, setNombre] = useState("")
+  // estados de los campos
+  const [filename, setFilename] = useState("")
+  const [id_producto, setId_producto] = useState("")
 
   // validación
   function validateFields(){
 
     const errors = {}
 
-    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
-
-    if(nombre !== "" && !nameRegex.test(nombre)){
-      errors.nombre = "El nombre solo debe contener letras y espacios"
-    }
+    if(filename === "") errors.filename = "El filename es obligatorio"
+    if(id_producto === "") errors.id_producto = "El id producto es obligatorio"
 
     setFieldErrors(errors)
 
@@ -47,7 +45,7 @@ const EditRole = () => {
       setLoading(true)
       
       setError("")
-      let res = await updateRole(id, nombre)
+      let res = await updateImagen(id, filename, id_producto)
               
       if(!res?.valid){
         setError("Error al enviar el formulario")
@@ -72,14 +70,15 @@ const EditRole = () => {
     const getData = async () => {
       try {
 
-        const res = await getRole(id)
+        const res = await getImagen(id)
 
         if(!res?.valid){
           setError("Error al obtener dato")
         return
         }
 
-        setNombre(res?.rol?.nombre)
+        setFilename(res?.imagen?.filename)
+        setId_producto(res?.imagen?.id_producto)
         
       } catch (error) {
         setError(error.message)
@@ -90,13 +89,22 @@ const EditRole = () => {
 
   // campos para el formulario
   const campos = {
-    nombre: {
-      titulo: "Nombre del rol",
-      name: "nombre",
+     filename: {
+      titulo: "Filename",
+      name: "filename",
       type: "text",
-      value: nombre,
-      onChange: setNombre
+      value: filename,
+      onChange: setFilename
+    },
+
+    id_producto: {
+      titulo: "Id producto",
+      name: "id_producto",
+      type: "text",
+      value: id_producto,
+      onChange: setId_producto
     }
+
   }
 
   return (
@@ -109,22 +117,26 @@ const EditRole = () => {
         {!mostrarDatos ? (
 
           <>
-            <Link to="/admin/roles">Regresar</Link>
+            <Link to="/admin/imagenes">Regresar</Link>
 
-            <h1>Detalles del rol: {nombre}</h1>
+            <h1>Detalles de imagenes: {filename}</h1>
 
             <div>
-              <p>Nombre:{nombre}</p>
+              <p>Filename: {filename}</p>
+            </div>
+
+            <div>
+              <p>Id Producto: {id_producto}</p>
             </div>
           </>
 
         ) : (
 
           <AdminFormEdit
-            titulo="Editar rol"
+            titulo="Editar imagenes"
             campos={campos}
             onSendForm={sendData}
-            linkRegresar="/admin/roles"
+            linkRegresar="/admin/imagenes"
             error={error}
             fieldErrors={fieldErrors}
             button="Guardar cambios"
@@ -147,4 +159,4 @@ const EditRole = () => {
   )
 }
 
-export default EditRole
+export default EditImages
