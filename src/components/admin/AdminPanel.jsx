@@ -9,7 +9,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 	return (
 		<section className="section-admin-panel">
 			{id != undefined ? (
-				<div className="contenedor-ediminar">
+				<div className="contenedor-eliminar">
 					<h3>Estar seguro de eliminar el registro?</h3>
 
 					<div>

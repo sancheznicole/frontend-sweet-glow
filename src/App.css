@@ -425,7 +425,6 @@ footer {
                 font-size: 13px;
             }
 
-
             .form-login{
                 text-align: center;
             }
@@ -689,9 +688,9 @@ footer {
         display: flex;
         justify-content: center;
         align-items: center;
-
+        margin: 0 auto;
         border: 1px solid #b3848f;
-        width: 100%;
+        width: 30%;
         height: 5vh;
         border-radius: 4px;
         text-decoration: none;
@@ -700,10 +699,7 @@ footer {
 
     .link-agregar-registro:hover{
         background-color: #b3848f;
-
-        
-            color: white;
-    
+        color: white;
     }
 
     .contenedor-editar-eliminar{
@@ -732,7 +728,7 @@ footer {
         color: white;
     }
 
-    .contenedor-ediminar{
+    .contenedor-eliminar{
         margin: 0 auto;
         width: 25%;
         height: 15vh;
@@ -766,6 +762,32 @@ footer {
     }
 }
 
+/* BOTON REGRESAR */
+
+.back-link-container{
+    margin-right: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+
+    .link-regresar{
+        border-radius: 5px;
+        border: 1px solid #393939;
+        width: fit-content;
+        padding: 10px 40px;
+        color: black;
+        text-decoration: none;
+    }
+
+    .link-regresar:hover{
+        background-color: #393939;
+        border: 1px solid #393939;
+        color: white;
+        width: fit-content;
+        padding: 10px 40px;
+    }
+}
+
 .back-link-container{
         display: flex;
         justify-content: end;
@@ -789,7 +811,7 @@ footer {
         }
 }
 
-.section-form-edit{
+.section-form-edit, .section-create-admin{
     color: #393939;
     width: 83%;
     display: flex;
@@ -816,9 +838,8 @@ footer {
                 border: transparent;
                 outline: none;
                 font-size: 15px;
-            }
-
-            
+                margin-bottom: 10px;
+            } 
         }
 
     button{
@@ -848,11 +869,39 @@ footer {
     width: 83.2%;
 }
 
-.contenedor-campos-rol{
+.contenedor-campos{
     margin: 0 auto;
-    height: 3vh;
     width: 92.6%;
     padding: 18px;
     border-radius: 8px;
     border: solid 1px #e7dae2;
+    height: auto; /* o simplemente quita la propiedad */
+}
+
+.section-create-admin{
+    margin: 0 auto;
+    width: 27%;
+
+    form{
+
+        label{
+                transform: translateY(12px) translateX(10px);
+                position: absolute;
+                pointer-events: none;
+                transition: all 300ms;
+                background-color: white;
+                padding: 1px;
+                padding-left: 10px;
+                padding-right: 10px;
+                border-radius: 6px;
+            }
+
+            input:focus + label,
+            select:focus + label,
+            input:not(:placeholder-shown) + label,
+            select:valid + label{
+                transform: translateY(-10px) translateX(5px);
+                border: 1px solid #d9d9d9;
+        }
+    }
 }

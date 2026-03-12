@@ -1,7 +1,5 @@
 /*FORMULARIO DE EDITAR*/
 
-import { Link } from "react-router-dom"
-
 const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, loading}) => {
 
 	return (
@@ -13,8 +11,8 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 				{/* formulario */}
 				<form
 					onSubmit={async (e) => {
-						e.preventDefault() // evita recargar la página
-						await onSendForm() // ejecuta la función que envía datos
+						e.preventDefault()
+						await onSendForm()
 					}}
 				>
 
@@ -28,18 +26,31 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 								{value?.titulo}
 							</label>
 
-							{/* input */}
-							<input
-								type={value?.type}
-								name={value?.name}
+							{value?.type == "select" ? (
+								// select
+								<select name={value?.name}>
+									<option value="">Seleccionar opción</option>
+									{Object.entries(value?.options).map(([optionKey, optionValue], optionIndex) => {
+										console.log(value?.value, optionValue)
 
-								/* esto permite que en EDIT aparezcan los datos actuales */
-								defaultValue={value?.value || ""}
+										return (
+											<option value={optionKey} key={optionIndex} selected={value?.value == optionKey}>{optionValue}</option>
+										)
+									})}
+								</select>
+							) : (
+								<input
+									type={value?.type}
+									name={value?.name}
 
-								onChange={(e) => {
-									value?.onChange(e.target.value)
-								}}
-							/>
+									/* esto permite que en EDIT aparezcan los datos actuales */
+									defaultValue={value?.value || ""}
+
+									onChange={(e) => {
+										value?.onChange(e.target.value)
+									}}
+								/>	
+							)}
 
 							{/* error específico del campo */}
 							<p>{fieldErrors?.[key] || ""}</p>

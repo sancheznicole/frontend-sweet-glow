@@ -28,6 +28,8 @@ import RolesIndex from "../pages/admin/roles/RolesIndex"
 import CreateRole from "../pages/admin/roles/crear/CreateRole"
 import EditRole from "../pages/admin/roles/editar/EditRole"
 import UsuariosIndex from "../pages/admin/usuarios/UsuariosIndex"
+import CreateUser from "../pages/admin/usuarios/crear/CreateUser"
+import EditUser from "../pages/admin/usuarios/editar/EditUser"
 
 export const router = createBrowserRouter([
   {
@@ -48,13 +50,13 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/roles/create", element: 
+      { path: "admin/roles/crear", element: 
         <ProtectedAdmin>
           <CreateRole />
         </ProtectedAdmin>
       },
 
-      { path: "admin/roles/edit/:id", element: 
+      { path: "admin/roles/editar/:id", element: 
         <ProtectedAdmin>
           <EditRole />
         </ProtectedAdmin>
@@ -63,6 +65,18 @@ export const router = createBrowserRouter([
       { path: "admin/users", element: 
         <ProtectedAdmin>
           <UsuariosIndex />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/user/create", element: 
+        <ProtectedAdmin>
+          <CreateUser />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/user/edit/:id", element: 
+        <ProtectedAdmin>
+          <EditUser />
         </ProtectedAdmin>
       },
 
