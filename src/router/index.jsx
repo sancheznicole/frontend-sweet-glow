@@ -40,9 +40,12 @@ import EditImages from "../pages/admin/imagenes/editar/EditImages"
 import AwardsIndex from "../pages/admin/premios/AwardsIndex"
 import CreateAward from "../pages/admin/premios/crear/CreateAward"
 import EditAward from "../pages/admin/premios/editar/EditAward"
-import AwardedIndex from "../pages/admin/premiados/awardedIndex"
+import AwardedIndex from "../pages/admin/premiados/AwardedIndex"
 import CreateAwarded from "../pages/admin/premiados/crear/CreateAwarded"
 import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
+import GuiaRegalosIndex from "../pages/admin/guiaRegalos/GuiaRegalosIndex"
+import CreateGuia from "../pages/admin/guiaRegalos/crear/CreateGuia"
+import EditGuia from "../pages/admin/guiaRegalos/editar/EditGuia"
 import CreateUser from "../pages/admin/usuarios/crear/CreateUser"
 import CategoriesIndex from "../pages/admin/categories/CategoriesIndex"
 import CreateCategory from "../pages/admin/categories/crear/CreateCategory"
@@ -108,7 +111,7 @@ export const router = createBrowserRouter([
 
       { path: "admin/referenciaProductos/editar/:id", element: 
         <ProtectedAdmin>
-          <EditReferenceProduct/>
+         <EditReferenceProduct/>
         </ProtectedAdmin>
       },
 
@@ -148,21 +151,39 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/premiados", element: 
+     { path: "admin/premiados", element:
         <ProtectedAdmin>
           <AwardedIndex/>
         </ProtectedAdmin>
       },
 
-      { path: "admin/premiados/crear", element: 
+      { path: "admin/premiados/crear", element:
         <ProtectedAdmin>
           <CreateAwarded/>
         </ProtectedAdmin>
       },
 
-      { path: "admin/premiados/editar/:id", element: 
+      { path: "admin/premiados/editar/:id", element:
         <ProtectedAdmin>
           <EditAwarded/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/guias", element:
+        <ProtectedAdmin>
+          <GuiaRegalosIndex/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/guias/crear", element:
+        <ProtectedAdmin>
+          <CreateGuia/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/guias/editar/:id", element:
+        <ProtectedAdmin>
+          <EditGuia/>
         </ProtectedAdmin>
       },
 

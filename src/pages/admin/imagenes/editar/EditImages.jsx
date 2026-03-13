@@ -1,162 +1,122 @@
-import { useState, useEffect} from "react"
-import { useParams } from "react-router-dom"
+import {useState,useEffect} from "react"
+import {useParams,Link} from "react-router-dom"
+import {getImage,updateImage} from "../../../../services/imagesService"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { getImagen, updateImagen } from "../../../../services/imagesService"
-import { Link } from "react-router-dom"
 
 const EditImages = () => {
 
-  // obtener id desde la url
-  const { id } = useParams()
+const {id} = useParams()
 
-  // estados generales
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [fieldErrors, setFieldErrors] = useState({})
+const [file,setFile] = useState(null)
+const [filename,setFilename] = useState("")
 
-  // mostrar información o formulario
-  const [mostrarDatos, setMostrarDatos] = useState(false)
+const [error,setError] = useState("")
+const [loading,setLoading] = useState(false)
+const [fieldErrors,setFieldErrors] = useState({})
+const [mostrarDatos,setMostrarDatos] = useState(false)
 
-  // estados de los campos
-  const [filename, setFilename] = useState("")
-  const [id_producto, setId_producto] = useState("")
+async function sendData(){
 
-  // validación
-  function validateFields(){
+ if(!file){
+  setFieldErrors({filename:"Selecciona imagen"})
+  return
+ }
 
-    const errors = {}
+ try{
 
-    if(filename === "") errors.filename = "El filename es obligatorio"
-    if(id_producto === "") errors.id_producto = "El id producto es obligatorio"
+ setLoading(true)
 
-    setFieldErrors(errors)
+ const res = await updateImage(id,file)
 
-    return Object.keys(errors).length > 0
-  }
+ if(!res?.valid){
+  setError("Error actualizando")
+  return
+ }
 
-  // enviar formulario
-  async function sendData(){
-    try{
+ setMostrarDatos(false)
 
-      const validation = validateFields();
-                  
-      if(validation) return
-      
-      setLoading(true)
-      
-      setError("")
-      let res = await updateImagen(id, filename, id_producto)
-              
-      if(!res?.valid){
-        setError("Error al enviar el formulario")
-        return
-      }
+ }catch(error){
 
-      // volver a mostrar datos
-      setMostrarDatos(false)
+ setError(error.message)
 
-    }
-    catch(error){
+ }finally{
 
-      setError(error.message)
+ setLoading(false)
 
-    }
-    finally{
-      setLoading(false)
-    }
-  }
+ }
 
-  useEffect(()=>{
-    const getData = async () => {
-      try {
+}
 
-        const res = await getImagen(id)
+useEffect(()=>{
 
-        if(!res?.valid){
-          setError("Error al obtener dato")
-        return
-        }
+ async function getData(){
 
-        setFilename(res?.imagen?.filename)
-        setId_producto(res?.imagen?.id_producto)
-        
-      } catch (error) {
-        setError(error.message)
-      }
-    }
-    getData()
-  }, [])
+ const res = await getImage(id)
 
-  // campos para el formulario
-  const campos = {
-     filename: {
-      titulo: "Filename",
-      name: "filename",
-      type: "text",
-      value: filename,
-      onChange: setFilename
-    },
+ if(!res?.valid){
+  setError("Error cargando imagen")
+  return
+ }
 
-    id_producto: {
-      titulo: "Id producto",
-      name: "id_producto",
-      type: "text",
-      value: id_producto,
-      onChange: setId_producto
-    }
+ setFilename(res.data.filename)
 
-  }
+ }
 
-  return (
+ getData()
 
-    <div className="page-container">
+},[])
 
-      <section className="section-admin-edit">
+const campos={
 
-        {/* vista información */}
-        {!mostrarDatos ? (
+ filename:{
+  titulo:"Nueva imagen",
+  name:"filename",
+  type:"file",
+  onChange:(e)=>setFile(e.target.files[0])
+ }
 
-          <>
-            <Link to="/admin/imagenes">Regresar</Link>
+}
 
-            <h1>Detalles de imagenes: {filename}</h1>
+return(
 
-            <div>
-              <p>Filename: {filename}</p>
-            </div>
+<div className="page-container">
 
-            <div>
-              <p>Id Producto: {id_producto}</p>
-            </div>
-          </>
+<section className="section-admin-edit">
 
-        ) : (
+{!mostrarDatos?(
+<>
+<Link to="/admin/imagenes">Regresar</Link>
 
-          <AdminFormEdit
-            titulo="Editar imagenes"
-            campos={campos}
-            onSendForm={sendData}
-            linkRegresar="/admin/imagenes"
-            error={error}
-            fieldErrors={fieldErrors}
-            button="Guardar cambios"
-            loading={loading}
-          />
+<h1>Imagen</h1>
 
-        )}
+<p>{filename}</p>
 
-        {/* botón modificar / cancelar */}
-        <button
-          onClick={() => setMostrarDatos(!mostrarDatos)}
-        >
-          {mostrarDatos ? "Cancelar" : "Modificar"}
-        </button>
+</>
+):(
 
-      </section>
+<AdminFormEdit
+ titulo={"Editar imagen"}
+ campos={campos}
+ onSendForm={sendData}
+ linkRegresar={"/admin/imagenes"}
+ error={error}
+ fieldErrors={fieldErrors}
+ button={"Actualizar imagen"}
+ loading={loading}
+/>
 
-    </div>
+)}
 
-  )
+<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
+{mostrarDatos?"Cancelar":"Modificar"}
+</button>
+
+</section>
+
+</div>
+
+)
+
 }
 
 export default EditImages

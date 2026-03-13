@@ -1,146 +1,131 @@
-import { useState, useEffect} from "react"
-import { useParams } from "react-router-dom"
+import {useEffect,useState} from "react"
+import {useParams,Link} from "react-router-dom"
+import {getPremio,updatePremio} from "../../../../services/awardsService"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updatePremio, getPremio } from "../../../../services/awardsService"
-import { Link } from "react-router-dom"
 
 const EditAward = () => {
 
-  // obtener id desde la url
-  const { id } = useParams()
+const {id} = useParams()
 
-  // estados generales
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [fieldErrors, setFieldErrors] = useState({})
+const [id_producto,setIdProducto] = useState("")
 
-  // mostrar información o formulario
-  const [mostrarDatos, setMostrarDatos] = useState(false)
+const [error,setError] = useState("")
+const [loading,setLoading] = useState(false)
+const [fieldErrors,setFieldErrors] = useState({})
+const [mostrarDatos,setMostrarDatos] = useState(false)
 
-  // estado del nombre de premios
-  const [id_producto, setId_producto] = useState("")
+function validateFields(){
 
-  // validación
-  function validateFields(){
+ const errors={}
 
-    const errors = {}
+ if(id_producto==="") errors.id_producto="Producto obligatorio"
 
-   if(id_producto === "") errors.id_producto = "El id producto es obligatorio"
+ setFieldErrors(errors)
 
-    setFieldErrors(errors)
+ return Object.keys(errors).length>0
+}
 
-    return Object.keys(errors).length > 0
-  }
+async function sendData(){
 
-  // enviar formulario
-  async function sendData(){
-    try{
+ const validation = validateFields()
 
-      const validation = validateFields();
-                  
-      if(validation) return
-      
-      setLoading(true)
-      
-      setError("")
-      let res = await updatePremio(id, id_producto)
-              
-      if(!res?.valid){
-        setError("Error al enviar el formulario")
-        return
-      }
+ if(validation) return
 
-      // volver a mostrar datos
-      setMostrarDatos(false)
+ try{
 
-    }
-    catch(error){
+ setLoading(true)
 
-      setError(error.message)
+ const res = await updatePremio(id,id_producto)
 
-    }
-    finally{
-      setLoading(false)
-    }
-  }
+ if(!res?.valid){
+  setError("Error actualizando premio")
+  return
+ }
 
-  useEffect(()=>{
-    const getData = async () => {
-      try {
+ setMostrarDatos(false)
 
-        const res = await getPremio(id)
+ }catch(error){
 
-        if(!res?.valid){
-          setError("Error al obtener dato")
-        return
-        }
+ setError(error.message)
 
-        setId_producto(res?.premio?.id_producto)
-        
-      } catch (error) {
-        setError(error.message)
-      }
-    }
-    getData()
-  }, [])
+ }finally{
 
-  // campos para el formulario
-  const campos = {
-    id_producto: {
-      titulo: "Id del producto",
-      name: "id_producto",
-      type: "text",
-      value: id_producto,
-      onChange: setId_producto
-    }
-  }
+ setLoading(false)
 
-  return (
+ }
 
-    <div className="page-container">
+}
 
-      <section className="section-admin-edit">
+useEffect(()=>{
 
-        {/* vista información */}
-        {!mostrarDatos ? (
+ async function getData(){
 
-          <>
-            <Link to="/admin/premios">Regresar</Link>
+ const res = await getPremio(id)
 
-            <h1>Detalles de premios: {id_producto}</h1>
+ if(!res?.valid){
+  setError("Error cargando premio")
+  return
+ }
 
-            <div>
-              <p>Id producto:{id_producto}</p>
-            </div>
-          </>
+ setIdProducto(res.data.id_producto)
 
-        ) : (
+ }
 
-          <AdminFormEdit
-            titulo="Editar premio"
-            campos={campos}
-            onSendForm={sendData}
-            linkRegresar="/admin/premios"
-            error={error}
-            fieldErrors={fieldErrors}
-            button="Guardar cambios"
-            loading={loading}
-          />
+ getData()
 
-        )}
+},[])
 
-        {/* botón modificar / cancelar */}
-        <button
-          onClick={() => setMostrarDatos(!mostrarDatos)}
-        >
-          {mostrarDatos ? "Cancelar" : "Modificar"}
-        </button>
+const campos={
 
-      </section>
+ id_producto:{
+  titulo:"ID Producto",
+  name:"id_producto",
+  type:"text",
+  value:id_producto,
+  onChange:setIdProducto
+ }
 
-    </div>
+}
 
-  )
+return(
+
+<div className="page-container">
+
+<section className="section-admin-edit">
+
+{!mostrarDatos?(
+<>
+<Link to="/admin/premios">Regresar</Link>
+
+<h1>Premio</h1>
+
+<p>ID producto: {id_producto}</p>
+</>
+):(
+
+<AdminFormEdit
+ titulo={"Editar premio"}
+ campos={campos}
+ onSendForm={sendData}
+ linkRegresar={"/admin/premios"}
+ error={error}
+ fieldErrors={fieldErrors}
+ button={"Guardar cambios"}
+ loading={loading}
+/>
+
+)}
+
+<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
+{mostrarDatos?"Cancelar":"Modificar"}
+</button>
+
+</section>
+
+</div>
+
+)
+
 }
 
 export default EditAward

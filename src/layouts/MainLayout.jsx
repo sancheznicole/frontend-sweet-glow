@@ -4,6 +4,7 @@ import Footer from "../components/footer"
 import "../App.css"
 import { useEffect, useState } from "react"
 
+
 const MainLayout = () => {
   // const location = useLocation()
   //use state actualiza el dato en tiempo real 

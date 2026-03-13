@@ -1,176 +1,153 @@
-import { useState, useEffect} from "react"
-import { useParams } from "react-router-dom"
+import {useEffect,useState} from "react"
+import {useParams,Link} from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateReferencia, getReferencia } from "../../../../services/referenceProductsService"
-import { Link } from "react-router-dom"
+import {getReferenceProduct,updateReferenceProduct} from "../../../../services/referenceProductsService"
 
 const EditReferenceProduct = () => {
 
-  // obtener id desde la url
-  const { id } = useParams()
+const {id} = useParams()
 
-  // estados generales
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [fieldErrors, setFieldErrors] = useState({})
+const [codigo,setCodigo] = useState("")
+const [color,setColor] = useState("")
+const [tamano,setTamano] = useState("")
 
-  // mostrar información o formulario
-  const [mostrarDatos, setMostrarDatos] = useState(false)
+const [error,setError] = useState("")
+const [loading,setLoading] = useState(false)
+const [fieldErrors,setFieldErrors] = useState({})
+const [mostrarDatos,setMostrarDatos] = useState(false)
 
-  // estados de los campos
-  const [codigo, setCodigo] = useState("")
-  const [color, setColor] = useState("")
-  const [tamaño, setTamaño] = useState("")
+function validateFields(){
 
-  // validación
-  function validateFields(){
+ const errors={}
 
-    const errors = {}
+ if(codigo==="") errors.codigo="Código obligatorio"
 
-    if(codigo === "") errors.codigo = "El codigo es obligatorio"
-    if(color === "") errors.color = "El color es obligatorio"
-    if(tamaño === "") errors.tamaño = "El tamaño es obligatorio"
+ setFieldErrors(errors)
 
-    setFieldErrors(errors)
+ return Object.keys(errors).length>0
+}
 
-    return Object.keys(errors).length > 0
-  }
+async function sendData(){
 
-  // enviar formulario
-  async function sendData(){
-    try{
+ const validation = validateFields()
 
-      const validation = validateFields();
-                  
-      if(validation) return
-      
-      setLoading(true)
-      
-      setError("")
-      let res = await updateReferencia(id, codigo, color, tamaño)
-              
-      if(!res?.valid){
-        setError("Error al enviar el formulario")
-        return
-      }
+ if(validation) return
 
-      // volver a mostrar datos
-      setMostrarDatos(false)
+ try{
 
-    }
-    catch(error){
+ setLoading(true)
 
-      setError(error.message)
+ const res = await updateReferenceProduct(id,codigo,color,tamano)
 
-    }
-    finally{
-      setLoading(false)
-    }
-  }
+ if(!res?.valid){
+   setError("Error actualizando")
+   return
+ }
 
-  useEffect(()=>{
-    const getData = async () => {
-      try {
+ setMostrarDatos(false)
 
-        const res = await getReferencia(id)
+ }catch(error){
 
-        if(!res?.valid){
-          setError("Error al obtener dato")
-        return
-        }
+ setError(error.message)
 
-        setCodigo(res?.referencia?.codigo)
-        setColor(res?.referencia?.color)
-        setTamaño(res?.referencia?.tamaño)
-        
-      } catch (error) {
-        setError(error.message)
-      }
-    }
-    getData()
-  }, [])
+ }finally{
 
-  // campos para el formulario
-  const campos = {
-     codigo: {
-      titulo: "Codigo",
-      name: "codigo",
-      type: "text",
-      value: codigo,
-      onChange: setCodigo
-    },
+ setLoading(false)
 
-    color: {
-      titulo: "Color",
-      name: "color",
-      type: "text",
-      value: color,
-      onChange: setColor
-    },
+ }
 
-    tamaño: {
-      titulo: "Tamaño",
-      name: "tamaño",
-      type: "text",
-      value: tamaño,
-      onChange: setTamaño
-    }
-  }
+}
 
-  return (
+useEffect(()=>{
 
-    <div className="page-container">
+ async function getData(){
 
-      <section className="section-admin-edit">
+ const res = await getReferenceProduct(id)
 
-        {/* vista información */}
-        {!mostrarDatos ? (
+ if(!res?.valid){
+   setError("Error obteniendo datos")
+   return
+ }
 
-          <>
-            <Link to="/admin/referencia">Regresar</Link>
+ setCodigo(res.data.codigo)
+ setColor(res.data.color)
+ setTamano(res.data.tamano)
 
-            <h1>Detalles de referencia: {codigo}</h1>
+ }
 
-            <div>
-              <p>Codigo: {codigo}</p>
-            </div>
+ getData()
 
-            <div>
-              <p>Color: {color}</p>
-            </div>
+},[])
 
-            <div>
-              <p>Tamaño: {tamaño}</p>
-            </div>
-          </>
+const campos={
 
-        ) : (
+ codigo:{
+  titulo:"Código",
+  name:"codigo",
+  type:"text",
+  value:codigo,
+  onChange:setCodigo
+ },
 
-          <AdminFormEdit
-            titulo="Editar referencia"
-            campos={campos}
-            onSendForm={sendData}
-            linkRegresar="/admin/referencia"
-            error={error}
-            fieldErrors={fieldErrors}
-            button="Guardar cambios"
-            loading={loading}
-          />
+ color:{
+  titulo:"Color",
+  name:"color",
+  type:"text",
+  value:color,
+  onChange:setColor
+ },
 
-        )}
+ tamano:{
+  titulo:"Tamaño",
+  name:"tamano",
+  type:"text",
+  value:tamano,
+  onChange:setTamano
+ }
 
-        {/* botón modificar / cancelar */}
-        <button
-          onClick={() => setMostrarDatos(!mostrarDatos)}
-        >
-          {mostrarDatos ? "Cancelar" : "Modificar"}
-        </button>
+}
 
-      </section>
+return(
 
-    </div>
+<div className="page-container">
 
-  )
+<section className="section-admin-edit">
+
+{!mostrarDatos?(
+<>
+<Link to="/admin/referenciaProductos">Regresar</Link>
+
+<h1>Referencia: {codigo}</h1>
+
+<p>Código: {codigo}</p>
+<p>Color: {color}</p>
+<p>Tamaño: {tamano}</p>
+</>
+):(
+
+<AdminFormEdit
+ titulo={"Editar referencia"}
+ campos={campos}
+ onSendForm={sendData}
+ linkRegresar={"/admin/referenciaProductos"}
+ error={error}
+ fieldErrors={fieldErrors}
+ button={"Guardar cambios"}
+ loading={loading}
+/>
+
+)}
+
+<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
+{mostrarDatos?"Cancelar":"Modificar"}
+</button>
+
+</section>
+
+</div>
+
+)
+
 }
 
 export default EditReferenceProduct

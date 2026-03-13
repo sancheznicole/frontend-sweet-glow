@@ -1,90 +1,99 @@
-import axios from "axios";
+import axios from "axios"
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL
 
-export async function getAllImagenes(page, limit) {
-    try {
-        const res = await axios.get(`${API_URL}/imagen?page=${page}&limit=${limit}`)
+export async function getAllImages(){
+ try{
 
-        if(res?.status != 200){
-            return { valid: false, error: res.data?.errors }
-        }
-        
-        return { valid: true, imagen: res?.data }
-    } 
-    
-    catch (error) {
-        return { valid: false, error: error?.message }
-    }
+  const res = await axios.get(`${API_URL}/images`)
+
+  if(res?.status !== 200){
+   return {valid:false,error:res.data}
+  }
+
+  return {valid:true,data:res.data}
+
+ }catch(error){
+  return {valid:false,error:error.message}
+ }
 }
 
-export async function getImagen(id_imagen) {
-    try {
-        const res = await axios.get(`${API_URL}/imagen/${id_imagen}`)
+export async function getImage(id){
 
-        if(res?.status != 200){
-            return { valid: false, error: res.data?.errors }
-        }
-        
-        return { valid: true, imagen: res?.data }
-    } 
-    
-    catch (error) {
-        return { valid: false, error: error?.message }
-    }
+ try{
+
+  const res = await axios.get(`${API_URL}/images/${id}`)
+
+  if(res?.status !== 200){
+   return {valid:false,error:res.data}
+  }
+
+  return {valid:true,data:res.data}
+
+ }catch(error){
+  return {valid:false,error:error.message}
+ }
 }
 
-export async function CreateImagen(filename, id_producto) {
-    try {
-        const payload = { filename, id_producto }
+export async function createImage(file,id_producto){
 
-        const res = await axios.post(`${API_URL}/imagen`, payload)
+ try{
 
-        if(res?.status != 201){
-            return { valid: false, error: res.data?.errors }
-        }
+  const formData = new FormData()
 
-        return { valid: true }
-    } 
+  formData.append("filename",file)
+  formData.append("id_producto",id_producto)
 
-    catch (error) {
-        return { valid: false, error: error?.message }
-    }
+  const res = await axios.post(`${API_URL}/images`,formData)
+
+  if(res?.status !== 201){
+   return {valid:false,error:res.data}
+  }
+
+  return {valid:true}
+
+ }catch(error){
+  return {valid:false,error:error.message}
+ }
+
 }
 
-export async function updateImagen(id_imagen, filename, id_producto) {
-    try {
-        const datos = {}
+export async function updateImage(id,file){
 
-        if (filename) datos.filename = filename
-        if (id_producto) datos.id_producto = id_producto
+ try{
 
-        const res = await axios.put(`${API_URL}/imagen/${id_imagen}`, datos)
+  const formData = new FormData()
 
-        if(res?.status != 200){
-            return { valid: false, error: res.data?.errors }
-        }
+  formData.append("filename",file)
 
-        return { valid: true }
-    } 
-    
-    catch (error) {
-        return { valid: false, error: error?.message }
-    }
+  const res = await axios.put(`${API_URL}/images/${id}`,formData)
+
+  if(res?.status !== 200){
+   return {valid:false,error:res.data}
+  }
+
+  return {valid:true}
+
+ }catch(error){
+  return {valid:false,error:error.message}
+ }
+
 }
 
-export async function deleteImagen(id_imagen) {
-    try {
-        const res = await axios.delete(`${API_URL}/imagen/${id_imagen}`)
+export async function deleteImage(id){
 
-        if(res?.status != 200){
-            return { valid: false, error: res.data?.errors }
-        }
-        
-        return { valid: true }
-    } 
-    
-    catch (error) {
-        return { valid: false, error: error?.message }
-    }
+ try{
+
+  const res = await axios.delete(`${API_URL}/images/${id}`)
+
+  if(res?.status !== 200){
+   return {valid:false,error:res.data}
+  }
+
+  return {valid:true}
+
+ }catch(error){
+  return {valid:false,error:error.message}
+ }
+
 }

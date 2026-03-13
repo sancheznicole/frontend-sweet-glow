@@ -1,15 +1,14 @@
 import {useEffect,useState} from "react"
 import {useParams,Link} from "react-router-dom"
-import {getPremiado,updatePremiado} from "../../../../services/winnersService"
+import {getGuia,updateGuia} from "../../../../services/giftGuideService"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 
-const EditAwarded = ()=>{
+const EditGuia = ()=>{
 
 const {id} = useParams()
 
-const [id_premio,setIdPremio] = useState("")
-const [id_usuario,setIdUsuario] = useState("")
-const [id_inscripcion,setIdInscripcion] = useState("")
+const [nombre,setNombre] = useState("")
+const [descripcion,setDescripcion] = useState("")
 
 const [error,setError] = useState("")
 const [loading,setLoading] = useState(false)
@@ -20,9 +19,7 @@ function validateFields(){
 
  const errors={}
 
- if(id_premio==="") errors.id_premio="Premio obligatorio"
- if(id_usuario==="") errors.id_usuario="Usuario obligatorio"
- if(id_inscripcion==="") errors.id_inscripcion="Inscripción obligatoria"
+ if(nombre==="") errors.nombre="Nombre obligatorio"
 
  setFieldErrors(errors)
 
@@ -40,7 +37,7 @@ async function sendData(){
 
  setLoading(true)
 
- const res = await updatePremiado(id,id_premio,id_usuario,id_inscripcion)
+ const res = await updateGuia(id,nombre,descripcion)
 
  if(!res?.valid){
   setError("Error actualizando")
@@ -65,16 +62,15 @@ useEffect(()=>{
 
  async function getData(){
 
- const res = await getPremiado(id)
+ const res = await getGuia(id)
 
  if(!res?.valid){
   setError("Error cargando datos")
   return
  }
 
- setIdPremio(res.data.id_premio)
- setIdUsuario(res.data.id_usuario)
- setIdInscripcion(res.data.id_inscripcion)
+ setNombre(res.data.nombre)
+ setDescripcion(res.data.descripcion)
 
  }
 
@@ -84,28 +80,20 @@ useEffect(()=>{
 
 const campos={
 
- id_premio:{
-  titulo:"ID Premio",
-  name:"id_premio",
+ nombre:{
+  titulo:"Nombre",
+  name:"nombre",
   type:"text",
-  value:id_premio,
-  onChange:setIdPremio
+  value:nombre,
+  onChange:setNombre
  },
 
- id_usuario:{
-  titulo:"ID Usuario",
-  name:"id_usuario",
+ descripcion:{
+  titulo:"Descripción",
+  name:"descripcion",
   type:"text",
-  value:id_usuario,
-  onChange:setIdUsuario
- },
-
- id_inscripcion:{
-  titulo:"ID Inscripción",
-  name:"id_inscripcion",
-  type:"text",
-  value:id_inscripcion,
-  onChange:setIdInscripcion
+  value:descripcion,
+  onChange:setDescripcion
  }
 
 }
@@ -118,22 +106,21 @@ return(
 
 {!mostrarDatos?(
 <>
-<Link to="/admin/premiados">Regresar</Link>
+<Link to="/admin/guias">Regresar</Link>
 
-<h1>Premiado</h1>
+<h1>Guía de regalos</h1>
 
-<p>Premio: {id_premio}</p>
-<p>Usuario: {id_usuario}</p>
-<p>Inscripción: {id_inscripcion}</p>
+<p>Nombre: {nombre}</p>
+<p>Descripción: {descripcion}</p>
 
 </>
 ):(
 
 <AdminFormEdit
- titulo={"Editar premiado"}
+ titulo={"Editar guía"}
  campos={campos}
  onSendForm={sendData}
- linkRegresar={"/admin/premiados"}
+ linkRegresar={"/admin/guias"}
  error={error}
  fieldErrors={fieldErrors}
  button={"Guardar cambios"}
@@ -154,4 +141,4 @@ return(
 
 }
 
-export default EditAwarded
+export default EditGuia

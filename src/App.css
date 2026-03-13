@@ -8,18 +8,17 @@ h1{
     color: #3a3a3a; 
     font-weight: lighter;
 }
+
 /* titulos*/
 .section-login h1, .section-register h1, .div-profile h1, 
 .section-terminos h1, .section-politicas-privacidad h1, .section-politica-envios h1, .section-atencion-cliente h1,
 .section-sobre-nosotros h1{
-.titulo-por-h1 {
     text-transform: uppercase;
     text-align: center;
     color: #b3848f;
     font-size: 30px;
     margin-bottom: 25px;
     font-family: Heading;
-    font-weight: lighter;
 }
 
 *{
@@ -322,7 +321,7 @@ footer {
     font-size: 14px;
 }
 
-.section-register {
+.section-register{
     color: #393939;
     width: 27%;
     margin: 0 auto;
@@ -428,6 +427,7 @@ footer {
                 font-size: 13px;
             }
 
+
             .form-login{
                 text-align: center;
             }
@@ -467,15 +467,10 @@ footer {
     border: solid 1px #e7dae2;
 }
 
-.contenedor-mostrar-datos a{
-   display: flex;
-   justify-content: center;
-   
-}
-
-.modificar-profile,  .cancelar-profile{
+.cancelar-modificar-profile{
     color: #b3848f;
     height: 40px;
+    width: 100%;
     border: 1px solid #b3848f;
     background-color: transparent;
     cursor: pointer;
@@ -485,21 +480,11 @@ footer {
     font-size: 14px;
 }
 
-    .modificar-profile:hover,  .cancelar-profile:hover{
+    .cancelar-modificar-profile:hover{
         border: 1px solid #b3848f;
         background-color: #b3848f;
         color: white;
         }
-
-.modificar-profile{
-    width: 121%;
-}
-
-.cancelar-profile{
-    width: 100%;
-}
-
-
 
 .section-profile{
     color: #393939;
@@ -611,6 +596,15 @@ footer {
     align-items: center;
 }
 
+.section-links-admin h1{
+    text-transform: uppercase;
+    text-align: center;
+    color: #424242;
+    font-size: 25px;
+    margin-bottom: 40px;
+    font-family: Heading;
+}
+
 .links-administración{
     display: grid;
     grid-template-columns: auto auto auto;
@@ -620,17 +614,14 @@ footer {
 
 .links-administración div{
     height: 8vh;
-    border: solid 1px #b3848f;
+    border: solid 1px #efd7e5;
     border-radius: 6px;
     transition: all 300ms;
 }
 
 .links-administración div:hover{
-    background-color: #b3848f;
-    border: solid 1px #b3848f;
-    a{
-        color: white;
-    }
+    background-color: #efd7e5;
+    border: solid 1px #efd7e5;
 }
 
 .links-administración a{
@@ -664,7 +655,7 @@ footer {
 
         th, td{
             text-align: center;
-            border: 1px solid #b3848f;
+            border: 1px solid #efd7e5;
             border-radius: 5px;
             color: #393939;
             padding: 23px 10px;
@@ -675,6 +666,17 @@ footer {
         }
     }
 
+    .back-link-container{
+        display: flex;
+        justify-content: end;
+        gap: 20px;
+
+        .link-regresar{
+            color: #393939;
+            width: fit-content;
+            padding: 10px 20px;
+        }
+    }
 
     p{
         text-align: center;
@@ -693,18 +695,13 @@ footer {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 auto;
-        border: 1px solid #b3848f;
-        width: 30%;
+
+        border: 1px solid #efd7e5;
+        width: 100%;
         height: 5vh;
         border-radius: 4px;
         text-decoration: none;
         color: black;
-    }
-
-    .link-agregar-registro:hover{
-        background-color: #b3848f;
-        color: white;
     }
 
     .contenedor-editar-eliminar{
@@ -715,7 +712,7 @@ footer {
     }
 
     .boton-eliminar, .link-editar{
-        border: 1px solid #393939;
+        border: 1px solid #efd7e5;
         width: 40%;
         border-radius: 4px;
         padding: 10px 0px;
@@ -727,195 +724,5 @@ footer {
         margin: 0px 5px;
     }
 
-    .boton-eliminar:hover, .link-editar:hover{
-        background-color: #b3848f;
-        border: 1px solid #b3848f;
-        color: white;
-    }
 
-    .contenedor-eliminar{
-        margin: 0 auto;
-        width: 25%;
-        height: auto;
-        border: 1px solid #b3848f;
-        border-radius: 6px;
-        padding: 20px 20px 30px 30px;
-
-        h3{
-            margin: 20px;
-            text-align: center;
-        }
-    }
-
-    .boton-eliminar-cancelar{
-        margin: 5px auto;
-        border: 1px solid #393939;
-        width: 45%;
-        border-radius: 4px;
-        padding: 10px 0px;
-        text-decoration: none;
-        color: black;
-        /* fuente para cambiar */
-        font-family: serif;
-        font-size: 15px;
-        margin: 0px 5px;
-    }
-
-    .boton-eliminar-cancelar:hover{
-        background-color: #393939;
-        color: white;
-    }
-}
-
-/* BOTON REGRESAR */
-
-.back-link-container{
-    margin-right: 20px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 20px;
-
-    .link-regresar{
-        border-radius: 5px;
-        border: 1px solid #393939;
-        width: fit-content;
-        padding: 10px 40px;
-        color: black;
-        text-decoration: none;
-    }
-
-    .link-regresar:hover{
-        background-color: #393939;
-        border: 1px solid #393939;
-        color: white;
-        width: fit-content;
-        padding: 10px 40px;
-    }
-}
-
-.back-link-container{
-        display: flex;
-        justify-content: end;
-        gap: 20px;
-
-        .link-regresar{
-            border-radius: 5px;
-            border: 1px solid #393939;
-            width: fit-content;
-            padding: 10px 40px;
-            color: black;
-            text-decoration: none;
-        }
-
-        .link-regresar:hover{
-            background-color: #393939;
-            border: 1px solid #393939;
-            color: white;
-            width: fit-content;
-            padding: 10px 40px;
-        }
-}
-
-.section-form-edit, .section-create-admin{
-    color: #393939;
-    width: 83%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    form{
-            display: block;
-            width: 100%;
-
-            div{
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            input{
-                width: 95%;
-                height: 30px;
-                padding: 5px;
-                padding-left: 15px;
-                border-radius: 4px;
-                border: transparent;
-                outline: none;
-                font-size: 15px;
-                margin-bottom: 10px;
-            } 
-        }
-
-    button{
-        color: #393939;
-        height: 40px;
-        width: 100%;
-        border: 1px solid #393939;
-        background-color: transparent;
-        cursor: pointer;
-        margin-top: 10px;
-        border-radius: 4px;
-    }
-
-    button:hover{
-        border: 1px solid #393939;
-        background-color: #393939;
-        color: white;
-    }
-}
-
-.section-editar{
-    margin: 0 auto;
-    width: 33%;
-}
-
-.contenedor-editar-botones{
-    width: 83.2%;
-}
-
-.contenedor-campos{
-    margin: 0 auto;
-    width: 92.6%;
-    padding: 18px;
-    border-radius: 8px;
-    border: solid 1px #e7dae2;
-    height: auto; /* o simplemente quita la propiedad */
-}
-
-.section-create-admin{
-    margin: 0 auto;
-    width: 27%;
-
-    form{
-
-        select{
-            padding: 13px;
-            width: 100%;
-            height: 43px;
-            border-radius: 4px;
-            border: transparent;
-            outline: none;
-        }
-
-        label{
-                transform: translateY(12px) translateX(10px);
-                position: absolute;
-                pointer-events: none;
-                transition: all 300ms;
-                background-color: white;
-                padding: 1px;
-                padding-left: 10px;
-                padding-right: 10px;
-                border-radius: 6px;
-            }
-
-            input:focus + label,
-            select:focus + label,
-            input:not(:placeholder-shown) + label,
-            select:valid + label{
-                transform: translateY(-10px) translateX(5px);
-                border: 1px solid #d9d9d9;
-        }
-    }
 }

@@ -1,13 +1,14 @@
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
 import AdminFormCreate from "../../../../components/admin/AdminFormCreate"
-import {createPremio} from "../../../../services/awardsService"
+import {createGuia} from "../../../../services/giftGuideService"
 
-const CreateAward = () => {
+const CreateGuia = ()=>{
 
 const navigate = useNavigate()
 
-const [id_producto,setIdProducto] = useState("")
+const [nombre,setNombre] = useState("")
+const [descripcion,setDescripcion] = useState("")
 
 const [error,setError] = useState("")
 const [loading,setLoading] = useState(false)
@@ -17,11 +18,12 @@ function validateFields(){
 
  const errors={}
 
- if(id_producto==="") errors.id_producto="Producto obligatorio"
+ if(nombre==="") errors.nombre="Nombre obligatorio"
 
  setFieldErrors(errors)
 
  return Object.keys(errors).length>0
+
 }
 
 const sendData = async()=>{
@@ -34,14 +36,14 @@ const sendData = async()=>{
 
  setLoading(true)
 
- const res = await createPremio(id_producto)
+ const res = await createGuia(nombre,descripcion)
 
  if(!res?.valid){
-  setError("Error creando premio")
+  setError("Error creando guía")
   return
  }
 
- navigate("/admin/premios")
+ navigate("/admin/guias")
 
  }catch(error){
 
@@ -57,11 +59,18 @@ const sendData = async()=>{
 
 const campos={
 
- id_producto:{
-  titulo:"ID Producto",
-  name:"id_producto",
+ nombre:{
+  titulo:"Nombre",
+  name:"nombre",
   type:"text",
-  onChange:setIdProducto
+  onChange:setNombre
+ },
+
+ descripcion:{
+  titulo:"Descripción",
+  name:"descripcion",
+  type:"text",
+  onChange:setDescripcion
  }
 
 }
@@ -69,13 +78,13 @@ const campos={
 return(
 
 <AdminFormCreate
- titulo={"Crear premio"}
+ titulo={"Crear guía de regalos"}
  campos={campos}
- linkRegresar={"/admin/premios"}
+ linkRegresar={"/admin/guias"}
  onSendForm={sendData}
  error={error}
  fieldErrors={fieldErrors}
- button={"Crear premio"}
+ button={"Crear guía"}
  loading={loading}
 />
 
@@ -83,4 +92,4 @@ return(
 
 }
 
-export default CreateAward
+export default CreateGuia

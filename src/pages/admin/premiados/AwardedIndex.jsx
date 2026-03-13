@@ -1,65 +1,60 @@
-import { useState, useEffect } from "react"
-import { getAllPremiados, deletePremiado } from "../../../services/awardedService"
+import {useEffect,useState} from "react"
+import {getAllPremiados,deletePremiado} from "../../../services/winnersService"
 import AdminPanel from "../../../components/admin/AdminPanel"
 
-const AwardedIndex = () => {
-	const [data, setData] = useState({})
-	// los campos que se reciben del back y el nombre de la tabla del front 
-	const fields = {
-		id_premio: "id premio",
-		id_usuario: "id usuario",
-		id_inscripcion: "id inscripcion",
-		created_at: "Fecha creación",
-	}
+const AwardedIndex = ()=>{
 
-	//funcion que llama la funcion getall
-	async function getData(){
-		try {
-			let res = await getAllPremiados(1,10)
+const [data,setData] = useState({})
 
-		if(!res?.valid){
-			console.log(res?.error)
-			return
-		}
+const fields={
+ id_premiado:"ID",
+ id_premio:"Premio",
+ id_usuario:"Usuario",
+ id_inscripcion:"Inscripción"
+}
 
-		setData(res?.premiado?.data)
-		} catch (error) {
-		console.log(error?.message)
-		}
-	}
+async function getData(){
 
-	// funcion que llama al getdata cuando carga la pagina
-	useEffect(() => {
-		getData()
-	}, [])
+ const res = await getAllPremiados()
 
-	// función para llamar al delete  
-	const onDelete = async (id) => {
-		try {
-			let res = await deletePremiado(id)
+ if(!res?.valid){
+  console.log(res.error)
+  return
+ }
 
-			if(!res?.valid) return res?.error
+ setData(res.data)
 
-		} catch (error) {
-			return error.message
-		}
-	}
+}
 
-	//retornamos la plantilla para administradores 
-  	return (
-		<div>
-			<AdminPanel 
-				data={data}
-				campos={fields}
-				titulo={"Administración de Premiados"}
-				texto={"Administra los Premiados"}
-				linkCrear={"/admin/premiados/crear"}
-				linkEditar={"/admin/premiados/editar"}
-				onDelete={onDelete}
-				getData={getData}
-			></AdminPanel>
-		</div>
-  	)
+useEffect(()=>{
+ getData()
+},[])
+
+const onDelete = async(id)=>{
+
+ const res = await deletePremiado(id)
+
+ if(!res?.valid){
+  return res.error
+ }
+
+}
+
+return(
+
+<AdminPanel
+ data={data}
+ campos={fields}
+ titulo={"Administración premiados"}
+ texto={"Administra los ganadores"}
+ linkCrear={"/admin/premiados/crear"}
+ linkEditar={"/admin/premiados/editar"}
+ onDelete={onDelete}
+ getData={getData}
+/>
+
+)
+
 }
 
 export default AwardedIndex

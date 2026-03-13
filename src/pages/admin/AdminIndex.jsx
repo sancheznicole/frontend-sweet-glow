@@ -24,11 +24,11 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar referencia productos</Link>
+                        <Link to={"/admin/referenciaProductos"}>Administrar referencia productos</Link>
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar guia regalos</Link>
+                        <Link to={"/admin/guias"}>Administrar guía de regalos</Link>
                     </div>
 
                     <div>
@@ -36,7 +36,7 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar imagenes</Link>
+                        <Link to={"/admin/imagenes"}>Administrar imagenes</Link>
                     </div>
 
                     <div>
@@ -56,11 +56,11 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar premios</Link>
+                        <Link to={"/admin/premios"}>Administrar premios</Link>
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar premiados</Link>
+                        <Link to={"/admin/premiados"}>Administrar premiados</Link>
                     </div>
 
                     <div>

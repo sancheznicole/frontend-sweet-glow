@@ -1,66 +1,59 @@
-import { useState, useEffect } from "react"
-import { getAllReferencias, deleteReferencia } from "../../../services/referenceProductsService"
+import {useEffect,useState} from "react"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import {getAllReferenceProducts,deleteReferenceProduct} from "../../../services/referenceProductsService"
 
 const ReferenceProductsIndex = () => {
-	const [data, setData] = useState({})
-	// los campos que se reciben del back y el nombre de la tabla del front 
-	const fields = {
-		id_referencia: "id referencia",
-		codigo: "codigo",
-		color: "color",
-		tamaño: "tamaño",
-		created_at: "Fecha creación",
-	}
 
-	//funcion que llama la funcion getall
-	async function getData(){
-		try {
-			let res = await getAllReferencias(1,10)
+const [data,setData] = useState({})
 
-		if(!res?.valid){
-			console.log(res?.error)
-			return
-		}
+const fields = {
+ id_referencia:"ID",
+ codigo:"Código",
+ color:"Color",
+ tamano:"Tamaño"
+}
 
-		setData(res?.referencia?.data)
-		} catch (error) {
-		console.log(error?.message)
-		}
-	}
+async function getData(){
 
-	// funcion que llama al getdata cuando carga la pagina
-	useEffect(() => {
-		getData()
-	}, [])
+ const res = await getAllReferenceProducts()
 
-	// función para llamar al delete rol 
-	const onDelete = async (id) => {
-		try {
-			let res = await deleteReferencia(id)
+ if(!res?.valid){
+   console.log(res.error)
+   return
+ }
 
-			if(!res?.valid) return res?.error
+ setData(res.data)
+}
 
-		} catch (error) {
-			return error.message
-		}
-	}
+useEffect(()=>{
+ getData()
+},[])
 
-	//retornamos la plantilla para administradores 
-  	return (
-		<div>
-			<AdminPanel 
-				data={data}
-				campos={fields}
-				titulo={"Administración de referencias productos"}
-				texto={"Administra los tipos de referencias"}
-				linkCrear={"/admin/referencia/crear"}
-				linkEditar={"/admin/referencia/editar"}
-				onDelete={onDelete}
-				getData={getData}
-			></AdminPanel>
-		</div>
-  	)
+const onDelete = async(id)=>{
+
+ const res = await deleteReferenceProduct(id)
+
+ if(!res?.valid){
+   return res.error
+ }
+
+}
+
+return(
+
+ <AdminPanel
+   data={data}
+   campos={fields}
+   titulo={"Administración referencia productos"}
+   texto={"Administra las referencias de productos"}
+   linkCrear={"/admin/referenciaProductos/crear"}
+   linkEditar={"/admin/referenciaProductos/editar"}
+   onDelete={onDelete}
+   getData={getData}
+ />
+
+)
+
 }
 
 export default ReferenceProductsIndex

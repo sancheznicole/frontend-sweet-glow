@@ -1,96 +1,96 @@
-import React, { useState } from 'react'
-import { CreateImages } from '../../../../services/imagesService'
-import AdminFormCreate from '../../../../components/admin/AdminFormCreate'
-import { useNavigate } from 'react-router-dom'
+import {useState} from "react"
+import {useNavigate} from "react-router-dom"
+import AdminFormCreate from "../../../../components/admin/AdminFormCreate"
+import {createImage} from "../../../../services/imagesService"
 
-/* me falta el validatefields o con errores y el cargando */
 const CreateImages = () => {
-    //usestate para guardar el valor del input
-    const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
-    const [fieldErrors, setFieldErrors] = useState({})
 
-    const [filename, setFilename] = useState('')
-    const [id_producto, setId_producto] = useState('')
-    
-    const campos = {
-        //nombre de bd 
-        filename: {
-            //la funcion que va a cambiar el dato
-			onChange: setFilename,
-            //tipo de input
-			type: 'text',
-            //nombre del input 
-			name: 'filename',
-            //nombre visible 
-			titulo: 'Filename',
-		},
+const navigate = useNavigate()
 
-        id_producto: {
-            //la funcion que va a cambiar el dato
-			onChange: setId_producto,
-            //tipo de input
-			type: 'text',
-            //nombre del input 
-			name: 'id_producto',
-            //nombre visible 
-			titulo: 'Id_producto',
-		},
+const [file,setFile] = useState(null)
+const [id_producto,setIdProducto] = useState("")
 
-    }
+const [error,setError] = useState("")
+const [loading,setLoading] = useState(false)
+const [fieldErrors,setFieldErrors] = useState({})
 
-    function validateFields(){
-        const errors = {};
+function validateFields(){
 
+ const errors={}
 
-        if(filename === "") errors.filename = "El filename es obligatorio"
-        if(id_producto === "") errors.id_producto = "El id producto es obligatorio"
-            
-        setFieldErrors(errors)
-        return Object.keys(errors).length > 0
-    }
+ if(!file) errors.filename="Imagen obligatoria"
+ if(id_producto==="") errors.id_producto="Producto obligatorio"
 
-    const sendData = async () => {
-        try {
+ setFieldErrors(errors)
 
-            const validation = validateFields();
-            
-            if(validation) return
+ return Object.keys(errors).length>0
 
-            setLoading(true)
+}
 
-            setError("")
-            let res = await CreateImages(filename, id_producto)
-        
-            if(!res?.valid){
-                setError("Error al enviar el formulario")
-                return
-            }
+const sendData = async()=>{
 
-            navigate("/admin/imagen")
+ const validation = validateFields()
 
-        } catch (error) {
-            setError("Error al enviar el formulario")
-        }
+ if(validation) return
 
-        finally {
-            setLoading(false)
-        }
-    }
+ try{
 
-    return (
-        <AdminFormCreate
-            titulo={'Crear imagenes'}
-            campos={campos}
-            linkRegresar={"/admin/imagen"}
-            onSendForm={sendData}
-            error={error}
-            fieldErrors={fieldErrors}
-            button={'Crear imagen'}
-            loading={loading}
-        ></AdminFormCreate>
-  	)
+ setLoading(true)
+
+ const res = await createImage(file,id_producto)
+
+ if(!res?.valid){
+  setError("Error creando imagen")
+  return
+ }
+
+ navigate("/admin/imagenes")
+
+ }catch(error){
+
+ setError(error.message)
+
+ }finally{
+
+ setLoading(false)
+
+ }
+
+}
+
+const campos={
+
+ filename:{
+  titulo:"Imagen",
+  name:"filename",
+  type:"file",
+  onChange:(e)=>setFile(e.target.files[0])
+ },
+
+ id_producto:{
+  titulo:"ID producto",
+  name:"id_producto",
+  type:"text",
+  onChange:setIdProducto
+ }
+
+}
+
+return(
+
+<AdminFormCreate
+ titulo={"Subir imagen"}
+ campos={campos}
+ linkRegresar={"/admin/imagenes"}
+ onSendForm={sendData}
+ error={error}
+ fieldErrors={fieldErrors}
+ button={"Subir imagen"}
+ loading={loading}
+/>
+
+)
+
 }
 
 export default CreateImages
