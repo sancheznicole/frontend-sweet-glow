@@ -9,7 +9,7 @@ import ProtectedAdmin from "./ProtectedAdmin"
 //-----------------------------------RUTAS------------------------------------------------------------------
 import HomePage from "../pages/HomePage"
 import CategoriesPage from "../pages/products/CategoriesPage"
-import BlogPage from "../pages/Blog/BlogPage"
+import BlogPage from "../pages/blog/BlogPage"
 
 
 import GiftGuidePage from "../pages/products/GiftGuidePage"

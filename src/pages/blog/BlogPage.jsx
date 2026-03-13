@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { Link } from "react-router-dom";
 
 const BlogPage = () => {
@@ -8,10 +8,10 @@ const BlogPage = () => {
       <div className="Blog">
         
         <img className="img"
-          src="http://127.0.0.1:8000/storage/imagenes_productos/cuidadodelapiel.jpg" 
+          src="http://127.0.0.1:8000/storage/skin.jpg" 
           alt="Cuidado de la Piel" 
         />
-        l
+        <Link to="/Skincare.jsx">Cuidado de la piel</Link> y{" "}
         
 
       </div>
