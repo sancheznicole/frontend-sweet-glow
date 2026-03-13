@@ -45,7 +45,7 @@ return(
  data={data}
  campos={fields}
  titulo={"Administración imágenes"}
- texto={"Administra las imágenes de productos"}
+ texto={"Administra las imágenes de productos."}
  linkCrear={"/admin/imagenes/crear"}
  linkEditar={"/admin/imagenes/editar"}
  onDelete={onDelete}

@@ -45,7 +45,7 @@ return(
    data={data}
    campos={fields}
    titulo={"Administración referencia productos"}
-   texto={"Administra las referencias de productos"}
+   texto={"Administra las referencias de productos."}
    linkCrear={"/admin/referenciaProductos/crear"}
    linkEditar={"/admin/referenciaProductos/editar"}
    onDelete={onDelete}

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 
 const BlogPage = () => {
   return (
@@ -10,11 +11,13 @@ const BlogPage = () => {
           src="http://127.0.0.1:8000/storage/imagenes_productos/cuidadodelapiel.jpg" 
           alt="Cuidado de la Piel" 
         />
-        <a href="#" className="link">Skin Care</a>
+        l
+        
 
       </div>
     </div>
   )
+
 }
 
 export default BlogPage

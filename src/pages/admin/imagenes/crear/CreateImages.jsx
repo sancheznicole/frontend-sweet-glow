@@ -85,7 +85,7 @@ return(
  onSendForm={sendData}
  error={error}
  fieldErrors={fieldErrors}
- button={"Subir imagen"}
+ button={"Subir imagen."}
  loading={loading}
 />
 

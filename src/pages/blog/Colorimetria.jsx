@@ -1,9 +1,9 @@
 import React from 'react'
 
-const colorimetria = () => {
+const Colorimetria = () => {
   return (
-    <div>colorimetria</div>
+    <div>Colorimetria</div>
   )
 }
 
-export default colorimetria
+export default Colorimetria

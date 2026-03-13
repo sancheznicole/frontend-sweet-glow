@@ -93,7 +93,7 @@ return(
  onSendForm={sendData}
  error={error}
  fieldErrors={fieldErrors}
- button={"Crear referencia"}
+ button={"Crear referencia."}
  loading={loading}
 />
 

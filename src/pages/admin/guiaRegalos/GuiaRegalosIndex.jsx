@@ -45,7 +45,7 @@ return(
  data={data}
  campos={fields}
  titulo={"Administración guía de regalos"}
- texto={"Administra las guías de regalos"}
+ texto={"Administra las guías de regalos."}
  linkCrear={"/admin/guias/crear"}
  linkEditar={"/admin/guias/editar"}
  onDelete={onDelete}

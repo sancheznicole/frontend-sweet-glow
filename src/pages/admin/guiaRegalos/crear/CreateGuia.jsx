@@ -78,7 +78,7 @@ const campos={
 return(
 
 <AdminFormCreate
- titulo={"Crear guía de regalos"}
+ titulo={"Crear guía de regalos."}
  campos={campos}
  linkRegresar={"/admin/guias"}
  onSendForm={sendData}

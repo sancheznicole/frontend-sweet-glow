@@ -75,7 +75,7 @@ return(
  onSendForm={sendData}
  error={error}
  fieldErrors={fieldErrors}
- button={"Crear premio"}
+ button={"Crear premio."}
  loading={loading}
 />
 

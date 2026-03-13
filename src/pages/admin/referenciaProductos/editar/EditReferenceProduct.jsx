@@ -139,7 +139,7 @@ return(
 )}
 
 <button onClick={()=>setMostrarDatos(!mostrarDatos)}>
-{mostrarDatos?"Cancelar":"Modificar"}
+{mostrarDatos?"Cancelar": "Modificar"}
 </button>
 
 </section>

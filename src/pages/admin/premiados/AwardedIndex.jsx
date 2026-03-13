@@ -46,7 +46,7 @@ return(
  data={data}
  campos={fields}
  titulo={"Administración premiados"}
- texto={"Administra los ganadores"}
+ texto={"Administra los ganadores."}
  linkCrear={"/admin/premiados/crear"}
  linkEditar={"/admin/premiados/editar"}
  onDelete={onDelete}

@@ -88,7 +88,7 @@ const campos={
 return(
 
 <AdminFormCreate
- titulo={"Crear premiado"}
+ titulo={"Crear premiado."}
  campos={campos}
  linkRegresar={"/admin/premiados"}
  onSendForm={sendData}
