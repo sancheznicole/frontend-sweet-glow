@@ -40,7 +40,7 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar tarjetas regalo</Link>
+                        <Link to={"/admin/gift-cards"}>Administrar tarjetas regalo</Link>
                     </div>
 
                     <div>
@@ -52,7 +52,7 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar inscripciones regalo</Link>
+                        <Link to={"/admin/gift_registrations"}>Administrar inscripciones regalo</Link>
                     </div>
 
                     <div>
