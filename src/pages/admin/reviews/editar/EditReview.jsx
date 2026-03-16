@@ -1,189 +1,170 @@
-import { useState,useEffect } from "react"
-import { useParams } from "react-router-dom"
-import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateReview,getReview } from "../../../../services/reviewsService"
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
+import { getReview, updateReview } from "../../../../services/reviewsService"
 
 const EditReview = () => {
 
-	const { id } = useParams()
+    const { id } = useParams()
 
-	const [loading,setLoading] = useState(false)
-	const [error,setError] = useState("")
-	const [fieldErrors,setFieldErrors] = useState({})
-	const [mostrarDatos,setMostrarDatos] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
+    const [mostrarDatos, setMostrarDatos] = useState(false)
 
-	const [resena,setResena] = useState("")
-	const [idProducto,setIdProducto] = useState("")
-	const [idUsuario,setIdUsuario] = useState("")
+    // Datos de solo lectura (no se pueden cambiar)
+    const [productoNombre, setProductoNombre] = useState('')
+    const [usuarioNombre, setUsuarioNombre] = useState('')
 
-	function validateFields(){
+    // Solo la calificación es editable (el backend solo acepta resena en update)
+    const [calificacion, setCalificacion] = useState(3)
 
-		const errors = {}
+    const stars = [1, 2, 3, 4, 5]
 
-		if(resena.trim().length < 3){
-			errors.resena = "La reseña debe tener mínimo 3 caracteres"
-		}
+    const etiqueta = {
+        1: '😞 Muy malo',
+        2: '😕 Malo',
+        3: '😐 Regular',
+        4: '😊 Bueno',
+        5: '🤩 Excelente',
+    }
 
-		setFieldErrors(errors)
+    useEffect(() => {
+        const fetchReview = async () => {
+            try {
+                const res = await getReview(id)
+                if (!res?.valid) {
+                    setError("Error al obtener la reseña")
+                    return
+                }
+                const rev = res.review
+                setCalificacion(Number(rev.resena))
+                setProductoNombre(rev.producto?.nombre ?? `Producto #${rev.id_producto}`)
+                setUsuarioNombre(
+                    rev.usuario
+                        ? `${rev.usuario.nombres} ${rev.usuario.apellidos}`
+                        : `Usuario #${rev.id_usuario}`
+                )
+            } catch (err) {
+                setError(err.message)
+            }
+        }
+        fetchReview()
+    }, [id])
 
-		return Object.keys(errors).length > 0
+    async function sendData() {
+        try {
+            if (!calificacion || calificacion < 1 || calificacion > 5) {
+                setError("Selecciona una calificación entre 1 y 5")
+                return
+            }
+            setLoading(true)
+            setError("")
+            const res = await updateReview(id, calificacion)
+            if (!res?.valid) {
+                setError("Error al actualizar la reseña")
+                return
+            }
+            setMostrarDatos(false)
+        } catch (err) {
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
-	}
+    return (
+        <div className="page-container">
 
-	async function sendData(){
+            {!mostrarDatos && (
+                <div className="back-link-container">
+                    <Link className="link-regresar" to="/admin/reviews">
+                        Regresar
+                    </Link>
+                </div>
+            )}
 
-		try{
+            <section className="section-editar">
 
-			const validation = validateFields()
+                {!mostrarDatos ? (
 
-			if(validation) return
+                    <>
+                        <h1 className="titulo-por-h1">
+                            Detalles de la reseña #{id}
+                        </h1>
 
-			setLoading(true)
+                        <div className="contenedor-campos">
+                            <strong><p>{productoNombre}</p></strong>
+                            <p>{usuarioNombre}</p>
+                            <p>
+                                {'★'.repeat(calificacion)}{'☆'.repeat(5 - calificacion)}{' '}
+                                ({calificacion}/5) — {etiqueta[calificacion]}
+                            </p>
+                        </div>
+                    </>
 
-			let res = await updateReview(id,resena,idProducto,idUsuario)
+                ) : (
 
-			if(!res?.valid){
-				setError("Error al actualizar reseña")
-				return
-			}
+                    <div className="stepper-panel">
+                        <h1 className="titulo-por-h1">Editar reseña #{id}</h1>
 
-			setMostrarDatos(false)
+                        {/* Info de solo lectura */}
+                        <div className="contenedor-campos" style={{ marginBottom: '24px' }}>
+                            <p><strong>Producto:</strong> {productoNombre}</p>
+                            <p><strong>Usuario:</strong> {usuarioNombre}</p>
+                        </div>
 
-		}catch(error){
+                        {/* Slider de calificación */}
+                        <div className="stepper-estrellas">
+                            <div className="estrellas-display">
+                                {stars.map(s => (
+                                    <span
+                                        key={s}
+                                        className={`estrella ${s <= calificacion ? 'activa' : ''}`}
+                                        onClick={() => setCalificacion(s)}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+                            </div>
 
-			setError(error.message)
+                            <input
+                                type="range"
+                                min="1"
+                                max="5"
+                                step="1"
+                                value={calificacion}
+                                onChange={e => setCalificacion(Number(e.target.value))}
+                                className="slider-estrellas"
+                            />
 
-		}
-		finally{
+                            <p className="calificacion-texto">{etiqueta[calificacion]}</p>
+                        </div>
 
-			setLoading(false)
+                        {error && <p className="error-message">{error}</p>}
 
-		}
+                        <button
+                            className="modificar-profile"
+                            onClick={sendData}
+                            disabled={loading}
+                            style={{ marginTop: '24px', width: '100%' }}
+                        >
+                            {loading ? 'Guardando...' : 'Guardar cambios'}
+                        </button>
+                    </div>
 
-	}
+                )}
 
-	useEffect(()=>{
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
 
-		const getData = async()=>{
-
-			try{
-
-				const res = await getReview(id)
-
-				if(!res?.valid){
-					setError("Error al obtener reseña")
-					return
-				}
-
-				setResena(res?.review?.resena)
-				setIdProducto(res?.review?.id_producto)
-				setIdUsuario(res?.review?.id_usuario)
-
-			}catch(error){
-
-				setError(error.message)
-
-			}
-
-		}
-
-		getData()
-
-	},[])
-
-	const campos = {
-
-		resena:{
-			titulo:"Reseña",
-			name:"resena",
-			type:"text",
-			value:resena,
-			onChange:setResena
-		},
-
-		id_producto:{
-			titulo:"ID Producto",
-			name:"id_producto",
-			type:"number",
-			value:idProducto,
-			onChange:setIdProducto
-		},
-
-		id_usuario:{
-			titulo:"ID Usuario",
-			name:"id_usuario",
-			type:"number",
-			value:idUsuario,
-			onChange:setIdUsuario
-		}
-
-	}
-
-	return(
-
-		<div className="page-container">
-
-			{!mostrarDatos && (
-				<div className="back-link-container">
-					<Link className="link-regresar" to="/admin/reviews">Regresar</Link>
-				</div>
-			)}
-
-			<section className="section-editar">
-
-				{!mostrarDatos ? (
-
-					<>
-
-						<h1 className="titulo-por-h1">
-							Detalles de la reseña
-						</h1>
-
-						<div className="contenedor-campos">
-
-							<strong><p>Reseña: {resena}</p></strong>
-							<p>ID Producto: {idProducto}</p>
-							<p>ID Usuario: {idUsuario}</p>
-
-						</div>
-
-					</>
-
-				) : (
-
-					<AdminFormEdit
-						titulo="Editar reseña"
-						campos={campos}
-						onSendForm={sendData}
-						linkRegresar="/admin/reviews"
-						error={error}
-						fieldErrors={fieldErrors}
-						button="Guardar cambios"
-						loading={loading}
-					/>
-
-				)}
-
-				<div className="contenedor-editar-botones">
-
-					<button
-						className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
-						onClick={()=>{setMostrarDatos(!mostrarDatos)}}
-					>
-
-						{mostrarDatos ? "Cancelar" : "Modificar"}
-
-					</button>
-
-				</div>
-
-			</section>
-
-		</div>
-
-	)
-
+            </section>
+        </div>
+    )
 }
 
 export default EditReview

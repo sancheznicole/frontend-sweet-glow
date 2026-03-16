@@ -1,154 +1,415 @@
-import { useState, useEffect } from "react"
-import { createReview } from "../../../../services/reviewsService"
-import { getAllProducts } from "../../../../services/productsService"
-import { getAllUsers } from "../../../../services/authService"
-import AdminFormCreate from "../../../../components/admin/AdminFormCreate"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { createReview, getAllCategorias, getAllMarcas, getAllProductosSinPaginar, buscarUsuarios } from '../../../../services/reviewsService'
+
+const STEPS = ['Categoría', 'Marca', 'Producto', 'Usuario', 'Calificación']
 
 const CreateReview = () => {
 
-	const navigate = useNavigate()
+    const navigate = useNavigate()
 
-	const [loading,setLoading] = useState(false)
-	const [error,setError] = useState("")
-	const [fieldErrors,setFieldErrors] = useState({})
+    const [step, setStep] = useState(0)
+    const [loading, setLoading] = useState(false)
+    const [loadingOptions, setLoadingOptions] = useState(false)
+    const [error, setError] = useState('')
 
-	const [resena,setResena] = useState("")
-	const [idProducto,setIdProducto] = useState("")
-	const [idUsuario,setIdUsuario] = useState("")
+    const [categorias, setCategorias] = useState([])
+    const [marcas, setMarcas] = useState([])
+    const [productos, setProductos] = useState([])
 
-	const [productos,setProductos] = useState([])
-	const [usuarios,setUsuarios] = useState([])
+    const [categoriaId, setCategoriaId] = useState('')
+    const [marcaId, setMarcaId] = useState('')
+    const [productoId, setProductoId] = useState('')
+    const [productoNombre, setProductoNombre] = useState('')
+    const [usuarioId, setUsuarioId] = useState('')
+    const [usuarioNombre, setUsuarioNombre] = useState('')
+    const [calificacion, setCalificacion] = useState(3)
 
-	useEffect(()=>{
+    const [busqueda, setBusqueda] = useState('')
+    const [resultadosUsuarios, setResultadosUsuarios] = useState([])
+    const [buscando, setBuscando] = useState(false)
 
-		async function cargarDatos(){
+    // Paso 0: cargar categorías al montar
+    useEffect(() => {
+        const fetchCategorias = async () => {
+            setLoadingOptions(true)
+            try {
+                const res = await getAllCategorias()
+                if (res?.valid) setCategorias(res.categorias)
+            } catch (e) {
+                console.log(e.message)
+            } finally {
+                setLoadingOptions(false)
+            }
+        }
+        fetchCategorias()
+    }, [])
 
-			try{
+    // Paso 1: cargar marcas cuando se elige categoría
+    useEffect(() => {
+        if (!categoriaId) return
+        const fetchMarcas = async () => {
+            setLoadingOptions(true)
+            try {
+                const res = await getAllMarcas()
+                if (res?.valid) setMarcas(res.marcas)
+            } catch (e) {
+                console.log(e.message)
+            } finally {
+                setLoadingOptions(false)
+            }
+        }
+        fetchMarcas()
+    }, [categoriaId])
 
-				const productosRes = await getAllProducts(1,100)
-				const usuariosRes = await getAllUsers(1,100)
+    // Paso 2: cargar y filtrar productos por categoría + marca
+    useEffect(() => {
+        if (!marcaId) return
+        const fetchProductos = async () => {
+            setLoadingOptions(true)
+            try {
+                const res = await getAllProductosSinPaginar()
+                if (res?.valid) {
+                    const filtrados = res.productos.filter(p =>
+                        String(p.id_categoria) === String(categoriaId) &&
+                        String(p.id_marca) === String(marcaId)
+                    )
+                    setProductos(filtrados)
+                }
+            } catch (e) {
+                console.log(e.message)
+            } finally {
+                setLoadingOptions(false)
+            }
+        }
+        fetchProductos()
+    }, [marcaId])
 
-				if(productosRes?.valid){
-					setProductos(productosRes.products || [])
-				}
+    // Paso 3: debounce búsqueda de usuarios
+    useEffect(() => {
+        if (!busqueda.trim()) {
+            setResultadosUsuarios([])
+            return
+        }
+        const timer = setTimeout(async () => {
+            setBuscando(true)
+            try {
+                const res = await buscarUsuarios(busqueda)
+                if (res?.valid) setResultadosUsuarios(res.usuarios)
+            } catch (e) {
+                console.log(e.message)
+            } finally {
+                setBuscando(false)
+            }
+        }, 400)
+        return () => clearTimeout(timer)
+    }, [busqueda])
 
-				if(usuariosRes?.valid){
-					setUsuarios(usuariosRes.users?.data || [])
-				}
+    const handleSelectCategoria = (id) => {
+        setCategoriaId(id)
+        setMarcaId('')
+        setProductoId('')
+        setProductoNombre('')
+        setUsuarioId('')
+        setUsuarioNombre('')
+        setStep(1)
+    }
 
-			}catch(error){
-				console.error(error)
-			}
+    const handleSelectMarca = (id) => {
+        setMarcaId(id)
+        setProductoId('')
+        setProductoNombre('')
+        setStep(2)
+    }
 
-		}
+    const handleSelectProducto = (id, nombre) => {
+        setProductoId(id)
+        setProductoNombre(nombre)
+        setStep(3)
+    }
 
-		cargarDatos()
+    const handleSelectUsuario = (id, nombre) => {
+        setUsuarioId(id)
+        setUsuarioNombre(nombre)
+        setBusqueda(nombre)
+        setResultadosUsuarios([])
+    }
 
-	},[])
+    const handleSubmit = async () => {
+        if (!productoId || !usuarioId) return
+        try {
+            setLoading(true)
+            setError('')
+            const res = await createReview(calificacion, productoId, usuarioId)
+            if (!res?.valid) {
+                setError('Error al crear la reseña')
+                return
+            }
+            navigate('/admin/reviews')
+        } catch (e) {
+            setError('Error al enviar el formulario')
+        } finally {
+            setLoading(false)
+        }
+    }
 
-	const campos = {
+    const goToStep = (s) => {
+        if (s < step) setStep(s)
+    }
 
-		resena:{
-			onChange:setResena,
-			type:"text",
-			name:"resena",
-			titulo:"Reseña"
-		},
+    const categoriaSeleccionada = categorias.find(c => String(c.id_categoria) === String(categoriaId))
+    const marcaSeleccionada = marcas.find(m => String(m.id_marca) === String(marcaId))
+    const stars = [1, 2, 3, 4, 5]
 
-		id_producto:{
-			onChange:setIdProducto,
-			type:"select",
-			name:"id_producto",
-			titulo:"Producto",
-			options: productos.map(p => ({
-				value: p.id_producto,
-				label: p.nombre
-			}))
-		},
+    return (
+        <div className="page-container">
 
-		id_usuario:{
-			onChange:setIdUsuario,
-			type:"select",
-			name:"id_usuario",
-			titulo:"Usuario",
-			options: usuarios.map(u => ({
-                value: u.id,
-                label: `${u.nombres} ${u.apellidos}`
-            }))
-		}
+            <div className="back-link-container">
+                <Link className="link-regresar" to="/admin/reviews">Regresar</Link>
+            </div>
 
-	}
+            <section className="section-editar">
 
-	function validateFields(){
+                <h1 className="titulo-por-h1">Crear reseña</h1>
 
-		const errors = {}
+                {/* Indicador de pasos */}
+                <div className="stepper-indicador">
+                    {STEPS.map((label, i) => (
+                        <div
+                            key={i}
+                            className={`stepper-paso ${i === step ? 'activo' : ''} ${i < step ? 'completado' : ''}`}
+                            onClick={() => goToStep(i)}
+                            style={{ cursor: i < step ? 'pointer' : 'default' }}
+                        >
+                            <div className="stepper-circulo">
+                                {i < step ? '✓' : i + 1}
+                            </div>
+                            <span className="stepper-label">{label}</span>
+                        </div>
+                    ))}
+                </div>
 
-		if(resena.trim().length < 3){
-			errors.resena = "La reseña debe tener mínimo 3 caracteres"
-		}
+                {/* Resumen de selecciones anteriores */}
+                {(categoriaId || marcaId || productoId || usuarioId) && (
+                    <div className="stepper-resumen">
+                        {categoriaSeleccionada && (
+                            <span className="stepper-tag" onClick={() => goToStep(0)}>
+                                📁 {categoriaSeleccionada.nombre}
+                            </span>
+                        )}
+                        {marcaSeleccionada && (
+                            <span className="stepper-tag" onClick={() => goToStep(1)}>
+                                🏷️ {marcaSeleccionada.nombre}
+                            </span>
+                        )}
+                        {productoNombre && (
+                            <span className="stepper-tag" onClick={() => goToStep(2)}>
+                                📦 {productoNombre}
+                            </span>
+                        )}
+                        {usuarioNombre && (
+                            <span className="stepper-tag" onClick={() => goToStep(3)}>
+                                👤 {usuarioNombre}
+                            </span>
+                        )}
+                    </div>
+                )}
 
-		if(!idProducto){
-			errors.id_producto = "El producto es obligatorio"
-		}
+                <div className="stepper-contenido">
 
-		if(!idUsuario){
-			errors.id_usuario = "El usuario es obligatorio"
-		}
+                    {/* PASO 0: Categoría */}
+                    {step === 0 && (
+                        <div className="stepper-panel">
+                            <h2 className="stepper-titulo-paso">Selecciona una categoría</h2>
+                            {loadingOptions ? (
+                                <p className="stepper-cargando">Cargando categorías...</p>
+                            ) : (
+                                <div className="stepper-lista">
+                                    {categorias.map(cat => (
+                                        <button
+                                            key={cat.id_categoria}
+                                            className={`stepper-item ${String(categoriaId) === String(cat.id_categoria) ? 'seleccionado' : ''}`}
+                                            onClick={() => handleSelectCategoria(cat.id_categoria)}
+                                        >
+                                            {cat.nombre}
+                                        </button>
+                                    ))}
+                                    {categorias.length === 0 && (
+                                        <p className="stepper-vacio">No hay categorías disponibles</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-		setFieldErrors(errors)
+                    {/* PASO 1: Marca */}
+                    {step === 1 && (
+                        <div className="stepper-panel">
+                            <h2 className="stepper-titulo-paso">Selecciona una marca</h2>
+                            {loadingOptions ? (
+                                <p className="stepper-cargando">Cargando marcas...</p>
+                            ) : (
+                                <div className="stepper-lista">
+                                    {marcas.map(marca => (
+                                        <button
+                                            key={marca.id_marca}
+                                            className={`stepper-item ${String(marcaId) === String(marca.id_marca) ? 'seleccionado' : ''}`}
+                                            onClick={() => handleSelectMarca(marca.id_marca)}
+                                        >
+                                            {marca.nombre}
+                                        </button>
+                                    ))}
+                                    {marcas.length === 0 && (
+                                        <p className="stepper-vacio">No hay marcas disponibles</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-		return Object.keys(errors).length > 0
+                    {/* PASO 2: Producto */}
+                    {step === 2 && (
+                        <div className="stepper-panel">
+                            <h2 className="stepper-titulo-paso">Selecciona un producto</h2>
+                            {loadingOptions ? (
+                                <p className="stepper-cargando">Cargando productos...</p>
+                            ) : (
+                                <div className="stepper-lista">
+                                    {productos.map(prod => (
+                                        <button
+                                            key={prod.id_producto}
+                                            className={`stepper-item ${String(productoId) === String(prod.id_producto) ? 'seleccionado' : ''}`}
+                                            onClick={() => handleSelectProducto(prod.id_producto, prod.nombre)}
+                                        >
+                                            {prod.nombre}
+                                        </button>
+                                    ))}
+                                    {productos.length === 0 && (
+                                        <p className="stepper-vacio">
+                                            No hay productos para esta combinación.{' '}
+                                            <span
+                                                style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                                                onClick={() => setStep(0)}
+                                            >
+                                                Cambiar filtros
+                                            </span>
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-	}
+                    {/* PASO 3: Búsqueda de usuario */}
+                    {step === 3 && (
+                        <div className="stepper-panel">
+                            <h2 className="stepper-titulo-paso">Busca el usuario</h2>
+                            <div className="stepper-buscador">
+                                <input
+                                    type="text"
+                                    className="input-busqueda"
+                                    placeholder="Escribe nombre o apellido..."
+                                    value={busqueda}
+                                    onChange={e => {
+                                        setBusqueda(e.target.value)
+                                        setUsuarioId('')
+                                        setUsuarioNombre('')
+                                    }}
+                                    autoFocus
+                                />
+                                {buscando && <p className="stepper-cargando">Buscando...</p>}
+                            </div>
 
-	const sendData = async ()=>{
+                            {resultadosUsuarios.length > 0 && (
+                                <div className="stepper-lista">
+                                    {resultadosUsuarios.map(u => (
+                                        <button
+                                            key={u.id_usuario}
+                                            className={`stepper-item ${String(usuarioId) === String(u.id_usuario) ? 'seleccionado' : ''}`}
+                                            onClick={() => handleSelectUsuario(u.id_usuario, `${u.nombres} ${u.apellidos}`)}
+                                        >
+                                            <strong>{u.nombres} {u.apellidos}</strong>
+                                            <span style={{ marginLeft: '8px', opacity: 0.6, fontSize: '13px' }}>
+                                                {u.correo}
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
 
-		try{
+                            {busqueda && !buscando && resultadosUsuarios.length === 0 && !usuarioId && (
+                                <p className="stepper-vacio">No se encontraron usuarios con "{busqueda}"</p>
+                            )}
 
-			const validation = validateFields()
+                            {usuarioId && (
+                                <div className="stepper-seleccion-confirmada">
+                                    ✓ Seleccionado: <strong>{usuarioNombre}</strong>
+                                    <button
+                                        className="modificar-profile"
+                                        style={{ marginLeft: '12px' }}
+                                        onClick={() => setStep(4)}
+                                    >
+                                        Continuar →
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-			if(validation) return
+                    {/* PASO 4: Slider de calificación */}
+                    {step === 4 && (
+                        <div className="stepper-panel">
+                            <h2 className="stepper-titulo-paso">Calificación</h2>
 
-			setLoading(true)
+                            <div className="stepper-estrellas">
+                                <div className="estrellas-display">
+                                    {stars.map(s => (
+                                        <span
+                                            key={s}
+                                            className={`estrella ${s <= calificacion ? 'activa' : ''}`}
+                                            onClick={() => setCalificacion(s)}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                </div>
 
-			let res = await createReview(resena,idProducto,idUsuario)
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="5"
+                                    step="1"
+                                    value={calificacion}
+                                    onChange={e => setCalificacion(Number(e.target.value))}
+                                    className="slider-estrellas"
+                                />
 
-			if(!res?.valid){
-				setError("Error al crear reseña")
-				return
-			}
+                                <p className="calificacion-texto">
+                                    {calificacion === 1 && '😞 Muy malo'}
+                                    {calificacion === 2 && '😕 Malo'}
+                                    {calificacion === 3 && '😐 Regular'}
+                                    {calificacion === 4 && '😊 Bueno'}
+                                    {calificacion === 5 && '🤩 Excelente'}
+                                </p>
+                            </div>
 
-			navigate("/admin/reviews")
+                            {error && <p className="error-message">{error}</p>}
 
-		}catch(error){
+                            <button
+                                className="modificar-profile"
+                                onClick={handleSubmit}
+                                disabled={loading}
+                                style={{ marginTop: '24px', width: '100%' }}
+                            >
+                                {loading ? 'Creando...' : 'Crear reseña'}
+                            </button>
+                        </div>
+                    )}
 
-			setError(error.message)
-
-		}
-		finally{
-
-			setLoading(false)
-
-		}
-
-	}
-
-	return(
-
-		<AdminFormCreate
-			titulo={"Crear reseña"}
-			campos={campos}
-			linkRegresar={"/admin/reviews"}
-			onSendForm={sendData}
-			error={error}
-			fieldErrors={fieldErrors}
-			button={"Crear reseña"}
-			loading={loading}
-		/>
-
-	)
-
+                </div>
+            </section>
+        </div>
+    )
 }
 
 export default CreateReview
