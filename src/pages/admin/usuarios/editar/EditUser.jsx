@@ -39,36 +39,49 @@ const EditUser = () => {
 
     const errors = {}
 
+    // Tipo de documento
     if (!tipoDocumento) {
-      errors.tipoDocumento = "Seleccione un tipo de documento"
+        errors.tipoDocumento = "Debe seleccionar un tipo de documento"
     }
 
+    // Número de documento
     const docRegex = /^[0-9]{6,12}$/
     if (!docRegex.test(numeroDocumento)) {
-      errors.numeroDocumento = "El número debe tener entre 6 y 12 dígitos"
+        errors.numeroDocumento =
+            "El número de documento debe contener entre 6 y 12 dígitos numéricos"
     }
 
+    // Nombres
     const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
     if (!nameRegex.test(nombres)) {
-      errors.nombres = "Solo letras"
+        errors.nombres =
+            "El nombre debe contener mínimo 2 letras y solo caracteres alfabéticos"
     }
 
+    // Apellidos
     if (!nameRegex.test(apellidos)) {
-      errors.apellidos = "Solo letras"
+        errors.apellidos =
+            "El apellido debe contener mínimo 2 letras y solo caracteres alfabéticos"
     }
 
+    // Teléfono
     const phoneRegex = /^[0-9]{10}$/
     if (!phoneRegex.test(telefono)) {
-      errors.telefono = "Teléfono debe tener 10 dígitos"
+        errors.telefono =
+            "El teléfono debe contener exactamente 10 dígitos numéricos"
     }
 
+    // Dirección
     if (direccion.trim().length < 5) {
-      errors.direccion = "Dirección inválida"
+        errors.direccion =
+            "La dirección debe contener mínimo 5 caracteres"
     }
 
+    // Correo
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(correo)) {
-      errors.correo = "Correo inválido"
+        errors.correo =
+            "Debe ingresar un correo electrónico válido (ejemplo: usuario@correo.com)"
     }
 
     setFieldErrors(errors)
@@ -77,6 +90,7 @@ const EditUser = () => {
 
     return Object.keys(errors).length > 0
   }
+
 
   async function sendData() {
 

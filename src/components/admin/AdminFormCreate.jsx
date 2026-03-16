@@ -23,7 +23,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 
 							{value?.type == "select" ? (
 								<select className="select-form" name={value?.name} onChange={(e) => { value?.onChange(e.target.value) }}>
-									<option value="">Seleccionar opción</option>
+									<option defaultValue="" disabled selected hidden></option>
 									{Object.entries(value?.options).map(([optionKey, optionValue], optionIndex) => {
 										return (
 											<option value={optionKey} key={optionIndex}>{optionValue}</option>
@@ -43,7 +43,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 								{value?.titulo}
 							</label>
 
-							<p>{fieldErrors?.[key] || ''}</p>
+							<p className="errores-form">{fieldErrors?.[key] || ''}</p>
 
 						</div>
 					))}

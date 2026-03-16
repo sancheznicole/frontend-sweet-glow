@@ -102,55 +102,72 @@ const CreateUser = () => {
 
     }
 
-    function validateFields(){
+    function validateFields() {
 
         const errors = {}
 
+        // Tipo de documento
         if (!tipoDocumento) {
-            errors.tipoDocumento = "Seleccione un tipo de documento"
+            errors.tipoDocumento = "Debe seleccionar un tipo de documento"
         }
 
+        // Número de documento: 6 a 12 dígitos numéricos
         const docRegex = /^[0-9]{6,12}$/
         if (!docRegex.test(numeroDocumento)) {
-            errors.numeroDocumento = "Documento inválido"
+            errors.numeroDocumento =
+                "El número de documento debe contener entre 6 y 12 dígitos numéricos"
         }
 
+        // Nombres: solo letras, mínimo 2 caracteres
         const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
         if (!nameRegex.test(nombres)) {
-            errors.nombres = "Nombre inválido"
+            errors.nombres =
+                "El nombre debe contener mínimo 2 letras y solo caracteres alfabéticos"
         }
 
+        // Apellidos: solo letras, mínimo 2 caracteres
         if (!nameRegex.test(apellidos)) {
-            errors.apellidos = "Apellido inválido"
+            errors.apellidos =
+                "El apellido debe contener mínimo 2 letras y solo caracteres alfabéticos"
         }
 
+        // Teléfono: exactamente 10 dígitos
         const phoneRegex = /^[0-9]{10}$/
         if (!phoneRegex.test(telefono)) {
-            errors.telefono = "Teléfono inválido"
+            errors.telefono =
+                "El teléfono debe contener exactamente 10 dígitos numéricos"
         }
 
+        // Dirección: mínimo 5 caracteres
         if (direccion.trim().length < 5) {
-            errors.direccion = "Dirección inválida"
+            errors.direccion =
+                "La dirección debe contener mínimo 5 caracteres"
         }
 
+        // Correo electrónico válido
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(correo)) {
-            errors.correo = "Correo inválido"
+            errors.correo =
+                "Debe ingresar un correo electrónico válido (ejemplo: usuario@correo.com)"
         }
 
+        // Contraseña: mínimo 6 caracteres, mayúscula, minúscula y número
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/
         if (!passwordRegex.test(contrasena)) {
-            errors.contrasena = "Contraseña inválida"
+            errors.contrasena =
+                "La contraseña debe tener mínimo 6 caracteres, una mayúscula, una minúscula y un número"
         }
 
+        // Rol obligatorio
         if (!role) {
-            errors.role = "Seleccione un rol"
+            errors.role = "Debe seleccionar un rol"
         }
 
         setFieldErrors(errors)
 
         return Object.keys(errors).length > 0
     }
+
 
     const sendData = async () => {
 

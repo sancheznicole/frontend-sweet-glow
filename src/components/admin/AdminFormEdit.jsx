@@ -22,7 +22,7 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 						<div key={index}>
 
 							{/* titulo del campo */}
-							<label htmlFor={value?.name}>
+							<label htmlFor={value?.name} className="admin-edit-label">
 								{value?.titulo}
 							</label>
 
