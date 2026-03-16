@@ -46,6 +46,13 @@ import ReviewsIndex from "../pages/admin/reviews/ReviewsIndex"
 import CreateReview from "../pages/admin/reviews/crear/CreateReview"
 import EditReview from "../pages/admin/reviews/editar/EditReview"
 import ProductosIndex from "../pages/admin/productos/ProductosIndex"
+import GiftCardsIndex from "../pages/admin/gift-cards/GiftCardsIndex"
+import CreateGiftCard from "../pages/admin/gift-cards/crear/CreateGiftCard"
+import EditGiftCard   from "../pages/admin/gift-cards/editar/EditGiftCard"
+import GiftRegistrationsIndex  from "../pages/admin/gift_registrations/GiftRegistrationsIndex"
+import CreateGiftRegistration  from "../pages/admin/gift_registrations/crear/CreateGiftRegistration"
+import EditGiftRegistration    from "../pages/admin/gift_registrations/editar/EditGiftRegistration"
+
 
 export const router = createBrowserRouter([
   {
@@ -175,6 +182,42 @@ export const router = createBrowserRouter([
         <ProtectedAdmin>
           <ProductosIndex />
         </ProtectedAdmin>
+      },
+
+      { path: "admin/gift-cards", element: 
+        <ProtectedAdmin>
+          <GiftCardsIndex />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/gift-cards/crear", element: 
+        <ProtectedAdmin>
+          <CreateGiftCard />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/gift-cards/editar/:id", element: 
+        <ProtectedAdmin>
+          <EditGiftCard />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/gift_registrations", element: 
+        <ProtectedAdmin>
+          <GiftRegistrationsIndex />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/gift_registrations/crear", element: 
+        <ProtectedAdmin>
+          <CreateGiftRegistration />
+        </ProtectedAdmin> 
+      },
+      
+      { path: "admin/gift_registrations/editar/:id", element: 
+        <ProtectedAdmin>
+          <EditGiftRegistration />
+        </ProtectedAdmin> 
       },
       
       { path: 'categories', element: <CategoriesPage /> },
