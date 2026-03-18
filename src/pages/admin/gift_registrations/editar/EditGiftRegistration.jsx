@@ -3,10 +3,10 @@ import { useParams, Link } from 'react-router-dom'
 import { getGiftRegistration, updateGiftRegistration } from '../../../../services/giftRegistrationService'
 
 const estadoOptions = {
-    'pendiente':  '⏳ Pendiente',
-    'activa':     '✅ Activa',
-    'completada': '🎁 Completada',
-    'cancelada':  '❌ Cancelada'
+    'pendiente':  'Pendiente',
+    'activa':     'Activa',
+    'completada': 'Completada',
+    'cancelada':  'Cancelada'
 }
 
 const EditGiftRegistration = () => {
@@ -15,12 +15,10 @@ const EditGiftRegistration = () => {
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [fieldErrors, setFieldErrors] = useState({})   // ← nuevo
     const [mostrarDatos, setMostrarDatos] = useState(false)
 
-    // Editable
     const [estado, setEstado] = useState('')
-
-    // Solo lectura
     const [usuarioNombre, setUsuarioNombre] = useState('')
     const [facturaId, setFacturaId] = useState('')
 
@@ -47,12 +45,24 @@ const EditGiftRegistration = () => {
         fetchInscripcion()
     }, [id])
 
+    // ← función de validación
+    function validateFields() {
+        const errors = {}
+
+        if (!estado || estado.trim() === '') {
+            errors.estado = "Debes seleccionar un estado"
+        } else if (!Object.keys(estadoOptions).includes(estado)) {
+            errors.estado = "El estado seleccionado no es válido"
+        }
+
+        setFieldErrors(errors)
+        return Object.keys(errors).length > 0
+    }
+
     async function sendData() {
         try {
-            if (!estado) {
-                setError("Selecciona un estado")
-                return
-            }
+            if (validateFields()) return   // ← validar antes de enviar
+
             setLoading(true)
             setError('')
 
@@ -64,6 +74,7 @@ const EditGiftRegistration = () => {
             }
 
             setMostrarDatos(false)
+            setFieldErrors({})   // ← limpiar errores al guardar exitosamente
 
         } catch (e) {
             setError(e.message)
@@ -86,7 +97,7 @@ const EditGiftRegistration = () => {
                 {!mostrarDatos ? (
 
                     <>
-                        <h1 className="titulo-por-h1">Detalles de la inscripción #{id}</h1>
+                        <h1 className="titulo-por-h1">Detalles de la inscripción de {usuarioNombre}</h1>
                         <div className="contenedor-campos">
                             <p><strong>Usuario:</strong> {usuarioNombre}</p>
                             <p><strong>Factura:</strong> #{facturaId}</p>
@@ -97,32 +108,35 @@ const EditGiftRegistration = () => {
                 ) : (
 
                     <div>
-                        <h1 className="titulo-por-h1">Editar inscripción #{id}</h1>
+                        <h1 className="titulo-por-h1">Editar inscripción</h1>
 
-                        {/* Solo lectura */}
                         <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
                             <p><strong>Usuario:</strong> {usuarioNombre}</p>
                             <p><strong>Factura:</strong> #{facturaId}</p>
                         </div>
 
-                        {/* Estado editable */}
                         <div className="campo-grupo">
                             <label className="campo-label">Estado</label>
                             <select
                                 className="input-busqueda"
                                 value={estado}
-                                onChange={e => setEstado(e.target.value)}
+                                onChange={e => {
+                                    setEstado(e.target.value)
+                                    setFieldErrors({})   // ← limpiar error al cambiar
+                                }}
                             >
+                                <option value="">Selecciona un estado</option>   {/* ← opción vacía para forzar selección */}
                                 {Object.entries(estadoOptions).map(([val, label]) => (
                                     <option key={val} value={val}>{label}</option>
                                 ))}
                             </select>
+                            {fieldErrors.estado && <p className="error-field">{fieldErrors.estado}</p>}  {/* ← error del campo */}
                         </div>
 
                         {error && <p className="error-message">{error}</p>}
 
                         <button
-                            className="modificar-profile"
+                            className="modificar-profile guardar-cambios"
                             onClick={sendData}
                             disabled={loading}
                             style={{ marginTop: '24px', width: '100%' }}
@@ -135,8 +149,11 @@ const EditGiftRegistration = () => {
 
                 <div className="contenedor-editar-botones">
                     <button
-                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
-                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                        className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
+                        onClick={() => {
+                            setMostrarDatos(!mostrarDatos)
+                            setFieldErrors({})   // ← limpiar errores al cancelar
+                        }}
                     >
                         {mostrarDatos ? "Cancelar" : "Modificar"}
                     </button>

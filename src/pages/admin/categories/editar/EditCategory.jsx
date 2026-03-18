@@ -22,7 +22,9 @@ const EditCategory = () => {
 
 		const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
 
-		if(nombre !== "" && !nameRegex.test(nombre)){
+		if (!nombre || nombre.trim() === '') {
+        errors.nombre = "El nombre no puede ir vacío"
+		} else if (!nameRegex.test(nombre)) {
 			errors.nombre = "El nombre solo debe contener letras"
 		}
 
