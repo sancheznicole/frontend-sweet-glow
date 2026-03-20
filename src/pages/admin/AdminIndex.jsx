@@ -44,11 +44,11 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar factura pedidos</Link>
+                        <Link to={"/admin/invoice-orders"}>Administrar factura pedidos</Link>
                     </div>
 
                     <div>
-                        <Link to={"/admin/"}>Administrar carritos</Link>
+                        <Link to={"/admin/cart"}>Administrar carritos</Link>
                     </div>
 
                     <div>

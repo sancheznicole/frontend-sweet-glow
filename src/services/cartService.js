@@ -6,17 +6,17 @@ export async function getAllCart(page, limit) {
     try {
         const res = await axios.get(`${API_URL}/carts?page=${page}&limit=${limit}`)
 
-        if(res?.status != 200){
+        if (res?.status != 200) {
             return { valid: false, error: res.data?.errors }
         }
-        
-        return { valid: true, Carts: res?.data }
-    } 
-    
-    catch (error) {
+
+        return { valid: true, carts: res?.data }
+
+    } catch (error) {
         return { valid: false, error: error?.message }
     }
 }
+
 
 export async function getCart(id_carrito) {
     try {
@@ -26,7 +26,7 @@ export async function getCart(id_carrito) {
             return { valid: false, error: res.data?.errors }
         }
         
-        return { valid: true, Carts: res?.data }
+        return { valid: true, carts: res?.data }
     } 
     
     catch (error) {

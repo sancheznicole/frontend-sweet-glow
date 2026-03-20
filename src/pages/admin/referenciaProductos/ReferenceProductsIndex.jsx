@@ -56,8 +56,8 @@ const ReferenceProductsIndex = () => {
 				campos={fields}
 				titulo={"Administración de referencias productos"}
 				texto={"Administra los tipos de referencias"}
-				linkCrear={"/admin/referencia/crear"}
-				linkEditar={"/admin/referencia/editar"}
+				linkCrear={"/admin/referencia/create"}
+				linkEditar={"/admin/referencia/edit"}
 				onDelete={onDelete}
 				getData={getData}
 			></AdminPanel>

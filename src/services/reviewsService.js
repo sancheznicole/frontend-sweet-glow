@@ -77,6 +77,21 @@ export const deleteReview = async (id) => {
     }
 }
 
+// search reviews by product id
+export const searchReviewsByProductId = async (id) => {
+    try {
+        const res = await axios.get(`${API_URL}/reviews/product/${id}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res?.data?.errors }
+        }
+
+        return { valid: true, data: res.data }
+    } catch (error) {
+        return { valid: false, error: error?.response?.data?.message || error.message }
+    }
+}
+
 // ── Funciones para el stepper de CreateReview ──────────────────────────────
 
 // Todas las categorías (el endpoint devuelve array plano)

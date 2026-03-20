@@ -5,7 +5,7 @@ import AdminPanel from "../../../components/admin/AdminPanel"
 const UsuariosIndex = () => {
     const [data, setData] = useState({})
     const [page, setPage] = useState(1)
-    const [limit, setLimit] = useState(2)
+    const [limit, setLimit] = useState(50)
     const [lastPage, setLastPage] = useState(undefined)
 
     const fields = {
@@ -25,6 +25,8 @@ const UsuariosIndex = () => {
         try {
             let res = await getAllUsers(page, limit)
 
+            console.log(res?.users)
+
             if(!res?.valid){
                 console.log(res?.error)
                 return
@@ -34,10 +36,7 @@ const UsuariosIndex = () => {
                 ...user,
 
                 // Reemplazamos el número por texto
-                id_rol:
-                    user.id_rol === 1 ? "Administrador" :
-                    user.id_rol === 2 ? "Cliente" :
-                    "Sin rol"
+                id_rol: user?.rol?.nombre
             }))
 
             setData(users)
@@ -68,7 +67,7 @@ const UsuariosIndex = () => {
                 data={data}
 				campos={fields}
 				titulo={"Administración de usuarios"}
-				texto={"Administra los tipos de usuario y sus permisos dentro del sistema"}
+				texto={"Administra la información de los usuarios registrados y supervisa su acceso dentro de la plataforma"}
 				linkCrear={"/admin/user/create"}
 				linkEditar={"/admin/user/edit"}
 				onDelete={onDelete}

@@ -31,57 +31,44 @@ const EditUser = () => {
   }
 
   const roles = {
-    "1": "Cliente",
-    "2": "Administrador",
+    "1": "Administrador",
+    "2": "Cliente",
   }
 
   function validateFields() {
 
     const errors = {}
 
-    // Tipo de documento
     if (!tipoDocumento) {
-        errors.tipoDocumento = "Debe seleccionar un tipo de documento"
+      errors.tipoDocumento = "Seleccione un tipo de documento"
     }
 
-    // Número de documento
     const docRegex = /^[0-9]{6,12}$/
     if (!docRegex.test(numeroDocumento)) {
-        errors.numeroDocumento =
-            "El número de documento debe contener entre 6 y 12 dígitos numéricos"
+      errors.numeroDocumento = "El número debe tener entre 6 y 12 dígitos"
     }
 
-    // Nombres
     const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
     if (!nameRegex.test(nombres)) {
-        errors.nombres =
-            "El nombre debe contener mínimo 2 letras y solo caracteres alfabéticos"
+      errors.nombres = "Solo letras"
     }
 
-    // Apellidos
     if (!nameRegex.test(apellidos)) {
-        errors.apellidos =
-            "El apellido debe contener mínimo 2 letras y solo caracteres alfabéticos"
+      errors.apellidos = "Solo letras"
     }
 
-    // Teléfono
     const phoneRegex = /^[0-9]{10}$/
     if (!phoneRegex.test(telefono)) {
-        errors.telefono =
-            "El teléfono debe contener exactamente 10 dígitos numéricos"
+      errors.telefono = "Teléfono debe tener 10 dígitos"
     }
 
-    // Dirección
     if (direccion.trim().length < 5) {
-        errors.direccion =
-            "La dirección debe contener mínimo 5 caracteres"
+      errors.direccion = "Dirección inválida"
     }
 
-    // Correo
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(correo)) {
-        errors.correo =
-            "Debe ingresar un correo electrónico válido (ejemplo: usuario@correo.com)"
+      errors.correo = "Correo inválido"
     }
 
     setFieldErrors(errors)
@@ -90,7 +77,6 @@ const EditUser = () => {
 
     return Object.keys(errors).length > 0
   }
-
 
   async function sendData() {
 
@@ -250,16 +236,14 @@ const EditUser = () => {
             </h1>
 
             <div className="contenedor-campos">
-
-              <strong>
-                <p>{nombres} {apellidos}</p>
-              </strong>
-
-              <p>{tipoDocumento}</p>
-              <p>{numeroDocumento}</p>
-              <p>{correo}</p>
-              <p>{telefono}</p>
-              <p>{direccion}</p>
+              
+              <p><strong>Rol:</strong> {roles[String(role)] || "Sin rol"}</p>
+              <p><strong>Nombres y Apellidos:</strong> {nombres} {apellidos}</p>
+              <p><strong>Tipo de documento:</strong> {tipoDocumento}</p>
+              <p><strong>Numero de documento:</strong> {numeroDocumento}</p>
+              <p><strong>Correo: </strong> {correo}</p>
+              <p><strong>telefono:</strong> {telefono}</p>
+              <p><strong>Direccion:</strong> {direccion}</p>
 
             </div>
           </>
