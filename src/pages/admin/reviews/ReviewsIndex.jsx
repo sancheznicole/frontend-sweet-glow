@@ -28,7 +28,7 @@ const ReviewsIndex = () => {
                 return
             }
 
-            const lista = res.resenas ?? []
+            const lista = Array.isArray(res) ? res : (res.resenas ?? [])
 
             const reviews = lista.map(review => ({
                 ...review,
@@ -70,8 +70,8 @@ const ReviewsIndex = () => {
                 campos={fields}
                 titulo={"Administración de reseñas"}
                 texto={"Administra las reseñas de productos realizadas por los usuarios"}
-                linkCrear={"/admin/reviews/crear"}
-                linkEditar={"/admin/reviews/editar"}
+                linkCrear={"/admin/reviews/create"}
+                linkEditar={"/admin/reviews/edit"}
                 onDelete={onDelete}
                 getData={getData}
                 page={page}

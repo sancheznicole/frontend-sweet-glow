@@ -91,3 +91,19 @@ export async function deleteInvoiceOrders(id_factura_pedido) {
         return { valid: false, error: error?.message }
     }
 }
+
+export async function searchInvoiceOrders(search) {
+    try {
+        const res = await axios.get(`${API_URL}/order_invoice?search=${search}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, InvoiceOrders: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}

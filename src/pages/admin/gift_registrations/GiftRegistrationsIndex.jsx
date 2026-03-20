@@ -63,8 +63,8 @@ const GiftRegistrationsIndex = () => {
                 campos={fields}
                 titulo={"Administración de inscripciones regalo"}
                 texto={"Gestiona las inscripciones de regalo de los usuarios"}
-                linkCrear={"/admin/gift_registrations/crear"}
-                linkEditar={"/admin/gift_registrations/editar"}
+                linkCrear={"/admin/gift_registrations/create"}
+                linkEditar={"/admin/gift_registrations/edit"}
                 onDelete={onDelete}
                 getData={getData}
                 page={page}

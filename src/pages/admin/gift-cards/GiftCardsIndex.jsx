@@ -64,8 +64,8 @@ const GiftCardsIndex = () => {
                 campos={fields}
                 titulo={"Administración de tarjetas regalo"}
                 texto={"Gestiona las tarjetas regalo asignadas a los usuarios"}
-                linkCrear={"/admin/gift-cards/crear"}
-                linkEditar={"/admin/gift-cards/editar"}
+                linkCrear={"/admin/gift-cards/create"}
+                linkEditar={"/admin/gift-cards/edit"}
                 onDelete={onDelete}
                 getData={getData}
                 page={page}

@@ -46,12 +46,21 @@ import ReviewsIndex from "../pages/admin/reviews/ReviewsIndex"
 import CreateReview from "../pages/admin/reviews/crear/CreateReview"
 import EditReview from "../pages/admin/reviews/editar/EditReview"
 import ProductosIndex from "../pages/admin/productos/ProductosIndex"
+import ProductCreate from "../pages/admin/productos/crear/ProductCreate"
+import EditProduct from "../pages/admin/productos/editar/EditProduct"
 import GiftCardsIndex from "../pages/admin/gift-cards/GiftCardsIndex"
 import CreateGiftCard from "../pages/admin/gift-cards/crear/CreateGiftCard"
 import EditGiftCard   from "../pages/admin/gift-cards/editar/EditGiftCard"
 import GiftRegistrationsIndex  from "../pages/admin/gift_registrations/GiftRegistrationsIndex"
 import CreateGiftRegistration  from "../pages/admin/gift_registrations/crear/CreateGiftRegistration"
 import EditGiftRegistration    from "../pages/admin/gift_registrations/editar/EditGiftRegistration"
+import CarritoIndex from "../pages/admin/carritos/CarritoIndex"
+import CreateCarrito from "../pages/admin/carritos/crear/CreateCarrito."
+import EditCart from "../pages/admin/carritos/editar/EditCart"
+import PedidosFacturaIndex from "../pages/admin/factura_pedidos/PedidosFacturaIndex"
+import ProductsDetails from "../pages/products/ProductsDetails"
+import CreateOrderInvoice from "../pages/admin/factura_pedidos/crear/CreateOrderInvoice"
+import EditOrderInvoice from "../pages/admin/factura_pedidos/editar/EditOrderInvoice"
 
 
 export const router = createBrowserRouter([
@@ -60,6 +69,8 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <HomePage /> },
+
+      // admin panel routes
 
       { path: "admin", element: 
         <ProtectedAdmin>
@@ -71,15 +82,15 @@ export const router = createBrowserRouter([
         <ProtectedAdmin>
           <RolesIndex />
         </ProtectedAdmin>
-      },
+      },  
 
-      { path: "admin/roles/crear", element: 
+      { path: "admin/roles/create", element: 
         <ProtectedAdmin>
           <CreateRole />
         </ProtectedAdmin>
       },
 
-      { path: "admin/roles/editar/:id", element: 
+      { path: "admin/roles/edit/:id", element: 
         <ProtectedAdmin>
           <EditRole />
         </ProtectedAdmin>
@@ -98,13 +109,13 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/referenciaProductos/crear", element: 
+      { path: "admin/referenciaProductos/create", element: 
         <ProtectedAdmin>
           <CreateReferenceProduct/>
         </ProtectedAdmin>
       },
 
-      { path: "admin/referenciaProductos/editar/:id", element: 
+      { path: "admin/referenciaProductos/edit/:id", element: 
         <ProtectedAdmin>
           <EditReferenceProduct/>
         </ProtectedAdmin>
@@ -128,13 +139,13 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/categories/crear", element:
+      { path: "admin/categories/create", element:
         <ProtectedAdmin>
           <CreateCategory />
         </ProtectedAdmin>
       },
 
-      { path: "admin/categories/editar/:id", element:
+      { path: "admin/categories/edit/:id", element:
         <ProtectedAdmin>
           <EditCategory />
         </ProtectedAdmin>
@@ -148,14 +159,14 @@ export const router = createBrowserRouter([
       },
 
       {
-        path:"admin/brands/crear",element:
+        path:"admin/brands/create",element:
         <ProtectedAdmin>
           <CreateBrand/>
         </ProtectedAdmin>
       },
 
       {
-        path:"admin/brands/editar/:id",element:
+        path:"admin/brands/edit/:id",element:
         <ProtectedAdmin>
           <EditBrand/>
         </ProtectedAdmin>
@@ -167,20 +178,33 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      {path:"admin/reviews/crear",element:
+      {path:"admin/reviews/create",element:
         <ProtectedAdmin>
           <CreateReview/>
         </ProtectedAdmin>
       },
 
-      {path:"admin/reviews/editar/:id",element:
+      {path:"admin/reviews/edit/:id",element:
         <ProtectedAdmin>
           <EditReview/>
         </ProtectedAdmin>
       },
+
       { path: "admin/products", element: 
         <ProtectedAdmin>
           <ProductosIndex />
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/products/create", element: 
+        <ProtectedAdmin>
+          <ProductCreate />
+        </ProtectedAdmin>
+      },
+
+      {path:"admin/products/edit/:id",element:
+        <ProtectedAdmin>
+          <EditProduct/>
         </ProtectedAdmin>
       },
 
@@ -190,13 +214,13 @@ export const router = createBrowserRouter([
         </ProtectedAdmin> 
       },
 
-      { path: "admin/gift-cards/crear", element: 
+      { path: "admin/gift-cards/create", element: 
         <ProtectedAdmin>
           <CreateGiftCard />
         </ProtectedAdmin> 
       },
 
-      { path: "admin/gift-cards/editar/:id", element: 
+      { path: "admin/gift-cards/edit/:id", element: 
         <ProtectedAdmin>
           <EditGiftCard />
         </ProtectedAdmin> 
@@ -208,17 +232,59 @@ export const router = createBrowserRouter([
         </ProtectedAdmin> 
       },
 
-      { path: "admin/gift_registrations/crear", element: 
+      { path: "admin/gift_registrations/create", element: 
         <ProtectedAdmin>
           <CreateGiftRegistration />
         </ProtectedAdmin> 
       },
       
-      { path: "admin/gift_registrations/editar/:id", element: 
+      { path: "admin/gift_registrations/edit/:id", element: 
         <ProtectedAdmin>
           <EditGiftRegistration />
         </ProtectedAdmin> 
       },
+
+      { path: "admin/cart", element: 
+        <ProtectedAdmin>
+          <CarritoIndex />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/cart/create", element: 
+        <ProtectedAdmin>
+          <CreateCarrito />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/cart/edit/:id", element: 
+        <ProtectedAdmin>
+          <EditCart />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/invoice-orders", element: 
+        <ProtectedAdmin>
+          <PedidosFacturaIndex />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/invoice-orders/create", element: 
+        <ProtectedAdmin>
+          <CreateOrderInvoice />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/invoice-orders/edit/:id", element: 
+        <ProtectedAdmin>
+          <EditOrderInvoice />
+        </ProtectedAdmin> 
+      },
+
+      // products routes
+      { path: 'products/details/:id', element: <ProductsDetails /> },
+
+      
+      // general routes
       
       { path: 'categories', element: <CategoriesPage /> },
 

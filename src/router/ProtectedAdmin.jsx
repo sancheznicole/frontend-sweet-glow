@@ -1,15 +1,13 @@
 import { useAuth } from "../contexts/AuthContext"
 import { Navigate  } from "react-router-dom"
+import Loader from "../components/Loader"
 
 const ProtectedAdmin = ({children}) => {
     const { isAuthenticated, user, loadingUser } = useAuth()
 
     if(loadingUser){
         return (
-          <div className="user-loader">
-            <h1>Cargando información...</h1>
-            <p>Regalanos unos instantes mientras cargamos la informacion del usuario</p>
-          </div>
+          <Loader />
         )
     }
 

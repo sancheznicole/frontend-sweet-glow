@@ -139,8 +139,8 @@ const EditBrand = () => {
 
 						<div className="contenedor-campos">
 
-							<strong><p>Nombre: {nombre}</p></strong>
-							<p>País de origen: {paisOrigen}</p>
+							<p><strong>Nombre: </strong>{nombre}</p>
+							<p><strong>País de origen:</strong> {paisOrigen}</p>
 
 						</div>
 
