@@ -1,122 +1,166 @@
-import {useState,useEffect} from "react"
-import {useParams,Link} from "react-router-dom"
-import {getImage,updateImage} from "../../../../services/imagesService"
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
+import { getImage, updateImage } from "../../../../services/imagesService"
+import { getAllProducts } from "../../../../services/productsService"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
+
+const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
 
 const EditImages = () => {
 
-const {id} = useParams()
+    const { id } = useParams()
 
-const [file,setFile] = useState(null)
-const [filename,setFilename] = useState("")
+    const [file, setFile] = useState(null)
+    const [id_producto, setIdProducto] = useState("")
+    const [filename, setFilename] = useState("")
+    const [productos, setProductos] = useState({})
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [mostrarDatos, setMostrarDatos] = useState(false)
 
-const [error,setError] = useState("")
-const [loading,setLoading] = useState(false)
-const [fieldErrors,setFieldErrors] = useState({})
-const [mostrarDatos,setMostrarDatos] = useState(false)
+    useEffect(() => {
 
-async function sendData(){
+        async function getData() {
+            try {
+                const res = await getImage(id)
+                if (!res?.valid) {
+                    setError("Error al obtener la imagen")
+                    return
+                }
+                setFilename(res?.image?.filename)
+                setIdProducto(res?.image?.id_producto)
+            } catch (error) {
+                setError(error.message)
+            }
+        }
 
- if(!file){
-  setFieldErrors({filename:"Selecciona imagen"})
-  return
- }
+        async function fetchProductos() {
+            try {
+                const res = await getAllProducts(1, 1000)
+                if (!res?.valid) return
 
- try{
+                const lista = res?.products?.data ?? res?.products ?? []
 
- setLoading(true)
+                const opciones = {}
+                lista.forEach(p => {
+                    opciones[p.id_producto] = p.nombre
+                })
 
- const res = await updateImage(id,file)
+                setProductos(opciones)
+            } catch (error) {
+                console.log(error?.message)
+            }
+        }
 
- if(!res?.valid){
-  setError("Error actualizando")
-  return
- }
+        getData()
+        fetchProductos()
 
- setMostrarDatos(false)
+    }, [id])
 
- }catch(error){
+    async function sendData() {
+        try {
+            if (!file) {
+                setFieldErrors({ filename: "Selecciona una imagen" })
+                return
+            }
 
- setError(error.message)
+            setLoading(true)
+            setError("")
 
- }finally{
+            const res = await updateImage(id, file, id_producto)
 
- setLoading(false)
+            if (!res?.valid) {
+                setError("Error al actualizar la imagen")
+                return
+            }
 
- }
+            setMostrarDatos(false)
 
-}
+            // Recargamos la imagen actualizada
+            const updated = await getImage(id)
+            if (updated?.valid) setFilename(updated?.image?.filename)
 
-useEffect(()=>{
+        } catch (error) {
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
- async function getData(){
+    const campos = {
+        filename: {
+            titulo: "Nueva imagen",
+            name: "filename",
+            type: "file",
+            onChange: (e) => setFile(e)
+        },
+        id_producto: {
+            titulo: "Producto",
+            name: "id_producto",
+            type: "select",
+            value: id_producto,
+            options: productos,
+            onChange: setIdProducto
+        }
+    }
 
- const res = await getImage(id)
+    return (
+        <div className="page-container">
 
- if(!res?.valid){
-  setError("Error cargando imagen")
-  return
- }
+            {!mostrarDatos && (
+                <div className="back-link-container">
+                    <Link className="link-regresar" to="/admin/imagenes">Regresar</Link>
+                </div>
+            )}
 
- setFilename(res.data.filename)
+            <section className="section-editar">
 
- }
+                {!mostrarDatos ? (
 
- getData()
+                    <>
+                        <h1 className="titulo-por-h1">Detalles de la imagen</h1>
 
-},[])
+                        <div className="contenedor-campos">
+                            {filename && (
+                                <img
+                                    src={`${STORAGE_URL}/${filename}`}
+                                    alt="Imagen producto"
+                                    style={{ maxWidth: "300px", borderRadius: "8px" }}
+                                />
+                            )}
+                            <p><strong>Producto ID:</strong> {id_producto}</p>
+                        </div>
+                    </>
 
-const campos={
+                ) : (
 
- filename:{
-  titulo:"Nueva imagen",
-  name:"filename",
-  type:"file",
-  onChange:(e)=>setFile(e.target.files[0])
- }
+                    <AdminFormEdit
+                        titulo={"Editar imagen"}
+                        campos={campos}
+                        onSendForm={sendData}
+                        linkRegresar={"/admin/imagenes"}
+                        error={error}
+                        fieldErrors={fieldErrors}
+                        button={"Actualizar imagen"}
+                        loading={loading}
+                    />
 
-}
+                )}
 
-return(
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
 
-<div className="page-container">
+            </section>
 
-<section className="section-admin-edit">
-
-{!mostrarDatos?(
-<>
-<Link to="/admin/imagenes">Regresar</Link>
-
-<h1>Imagen</h1>
-
-<p>{filename}</p>
-
-</>
-):(
-
-<AdminFormEdit
- titulo={"Editar imagen"}
- campos={campos}
- onSendForm={sendData}
- linkRegresar={"/admin/imagenes"}
- error={error}
- fieldErrors={fieldErrors}
- button={"Actualizar imagen"}
- loading={loading}
-/>
-
-)}
-
-<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
-{mostrarDatos?"Cancelar": "Modificar"}
-</button>
-
-</section>
-
-</div>
-
-)
-
+        </div>
+    )
 }
 
 export default EditImages

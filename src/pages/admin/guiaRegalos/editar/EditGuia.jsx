@@ -1,144 +1,126 @@
-import {useEffect,useState} from "react"
-import {useParams,Link} from "react-router-dom"
-import {getGuia,updateGuia} from "../../../../services/giftGuideService"
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
+import { getGuia, updateGuia } from "../../../../services/giftGuideService"
 
-const EditGuia = ()=>{
+const EditGuia = () => {
 
-const {id} = useParams()
+    const { id } = useParams()
 
-const [nombre,setNombre] = useState("")
-const [descripcion,setDescripcion] = useState("")
+    const [nombre, setNombre] = useState("")
+    const [descripcion, setDescripcion] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [mostrarDatos, setMostrarDatos] = useState(false)
 
-const [error,setError] = useState("")
-const [loading,setLoading] = useState(false)
-const [fieldErrors,setFieldErrors] = useState({})
-const [mostrarDatos,setMostrarDatos] = useState(false)
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await getGuia(id)
+                if (!res?.valid) {
+                    setError("Error al obtener la guía")
+                    return
+                }
+                setNombre(res?.data?.nombre)
+                setDescripcion(res?.data?.descripcion)
+            } catch (error) {
+                setError(error.message)
+            }
+        }
+        getData()
+    }, [id])
 
-function validateFields(){
+    async function sendData() {
+        try {
+            const errors = {}
+            if (nombre.trim().length < 1) errors.nombre = "El nombre es obligatorio"
 
- const errors={}
+            if (Object.keys(errors).length > 0) {
+                setFieldErrors(errors)
+                return
+            }
 
- if(nombre==="") errors.nombre="Nombre obligatorio"
+            setLoading(true)
+            setError("")
 
- setFieldErrors(errors)
+            const res = await updateGuia(id, nombre, descripcion)
 
- return Object.keys(errors).length>0
+            if (!res?.valid) {
+                setError("Error al actualizar la guía")
+                return
+            }
 
-}
+            setMostrarDatos(false)
 
-async function sendData(){
+        } catch (error) {
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
- const validation = validateFields()
+    const campos = {
+        nombre: {
+            titulo: "Nombre",
+            name: "nombre",
+            type: "text",
+            value: nombre,
+            onChange: setNombre
+        },
+        descripcion: {
+            titulo: "Descripción",
+            name: "descripcion",
+            type: "text",
+            value: descripcion,
+            onChange: setDescripcion
+        }
+    }
 
- if(validation) return
+    return (
+        <div className="page-container">
 
- try{
+            {!mostrarDatos && (
+                <div className="back-link-container">
+                    <Link className="link-regresar" to="/admin/guiaRegalos">Regresar</Link>
+                </div>
+            )}
 
- setLoading(true)
+            <section className="section-editar">
 
- const res = await updateGuia(id,nombre,descripcion)
+                {!mostrarDatos ? (
+                    <>
+                        <h1 className="titulo-por-h1">Detalles de la guía</h1>
+                        <div className="contenedor-campos">
+                            <p><strong>Nombre:</strong> {nombre}</p>
+                            <p><strong>Descripción:</strong> {descripcion}</p>
+                        </div>
+                    </>
+                ) : (
+                    <AdminFormEdit
+                        titulo={"Editar guía de regalos"}
+                        campos={campos}
+                        onSendForm={sendData}
+                        linkRegresar={"/admin/guiaRegalos"}
+                        error={error}
+                        fieldErrors={fieldErrors}
+                        button={"Guardar cambios"}
+                        loading={loading}
+                    />
+                )}
 
- if(!res?.valid){
-  setError("Error actualizando")
-  return
- }
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
 
- setMostrarDatos(false)
-
- }catch(error){
-
- setError(error.message)
-
- }finally{
-
- setLoading(false)
-
- }
-
-}
-
-useEffect(()=>{
-
- async function getData(){
-
- const res = await getGuia(id)
-
- if(!res?.valid){
-  setError("Error cargando datos")
-  return
- }
-
- setNombre(res.data.nombre)
- setDescripcion(res.data.descripcion)
-
- }
-
- getData()
-
-},[])
-
-const campos={
-
- nombre:{
-  titulo:"Nombre",
-  name:"nombre",
-  type:"text",
-  value:nombre,
-  onChange:setNombre
- },
-
- descripcion:{
-  titulo:"Descripción",
-  name:"descripcion",
-  type:"text",
-  value:descripcion,
-  onChange:setDescripcion
- }
-
-}
-
-return(
-
-<div className="page-container">
-
-<section className="section-admin-edit">
-
-{!mostrarDatos?(
-<>
-<Link to="/admin/guias">Regresar</Link>
-
-<h1>Guía de regalos</h1>
-
-<p>Nombre: {nombre}</p>
-<p>Descripción: {descripcion}</p>
-
-</>
-):(
-
-<AdminFormEdit
- titulo={"Editar guía"}
- campos={campos}
- onSendForm={sendData}
- linkRegresar={"/admin/guias"}
- error={error}
- fieldErrors={fieldErrors}
- button={"Guardar cambios"}
- loading={loading}
-/>
-
-)}
-
-<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
-{mostrarDatos?"Cancelar": "Modificar"}
-</button>
-
-</section>
-
-</div>
-
-)
-
+            </section>
+        </div>
+    )
 }
 
 export default EditGuia

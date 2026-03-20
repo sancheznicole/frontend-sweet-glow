@@ -1,131 +1,140 @@
-import {useEffect,useState} from "react"
-import {useParams,Link} from "react-router-dom"
-import {getPremio,updatePremio} from "../../../../services/awardsService"
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
+import { getAward, updateAward } from "../../../../services/awardsService"
+import { getAllProducts } from "../../../../services/productsService"
 
 const EditAward = () => {
 
-const {id} = useParams()
+    const { id } = useParams()
 
-const [id_producto,setIdProducto] = useState("")
+    const [id_producto, setIdProducto] = useState("")
+    const [productos, setProductos] = useState({})
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [mostrarDatos, setMostrarDatos] = useState(false)
+    const [nombreProducto, setNombreProducto] = useState("")
 
-const [error,setError] = useState("")
-const [loading,setLoading] = useState(false)
-const [fieldErrors,setFieldErrors] = useState({})
-const [mostrarDatos,setMostrarDatos] = useState(false)
+    useEffect(() => {
 
-function validateFields(){
+        async function getData() {
+            try {
+                const res = await getAward(id)
+                if (!res?.valid) {
+                    setError("Error al obtener el premio")
+                    return
+                }
+                setIdProducto(res?.award?.id_producto)
+                setNombreProducto(res?.award?.producto?.nombre)
+            } catch (error) {
+                setError(error.message)
+            }
+        }
 
- const errors={}
+        async function fetchProductos() {
+            try {
+                const res = await getAllProducts(1, 1000)
+                if (!res?.valid) return
 
- if(id_producto==="") errors.id_producto="Producto obligatorio"
+                const lista = res?.products?.data ?? res?.products ?? []
 
- setFieldErrors(errors)
+                const opciones = {}
+                lista.forEach(p => {
+                    opciones[p.id_producto] = p.nombre
+                })
 
- return Object.keys(errors).length>0
-}
+                setProductos(opciones)
+            } catch (error) {
+                console.log(error?.message)
+            }
+        }
 
-async function sendData(){
+        getData()
+        fetchProductos()
 
- const validation = validateFields()
+    }, [id])
 
- if(validation) return
+    async function sendData() {
+        try {
+            if (id_producto === "") {
+                setFieldErrors({ id_producto: "El producto es obligatorio" })
+                return
+            }
 
- try{
+            setLoading(true)
+            setError("")
 
- setLoading(true)
+            const res = await updateAward(id, id_producto)
 
- const res = await updatePremio(id,id_producto)
+            if (!res?.valid) {
+                setError("Error al actualizar el premio")
+                return
+            }
 
- if(!res?.valid){
-  setError("Error actualizando premio")
-  return
- }
+            setMostrarDatos(false)
 
- setMostrarDatos(false)
+        } catch (error) {
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
- }catch(error){
+    const campos = {
+        id_producto: {
+            titulo: "Producto",
+            name: "id_producto",
+            type: "select",
+            value: id_producto,
+            options: productos,
+            onChange: setIdProducto
+        }
+    }
 
- setError(error.message)
+    return (
+        <div className="page-container">
 
- }finally{
+            {!mostrarDatos && (
+                <div className="back-link-container">
+                    <Link className="link-regresar" to="/admin/premios">Regresar</Link>
+                </div>
+            )}
 
- setLoading(false)
+            <section className="section-editar">
 
- }
+                {!mostrarDatos ? (
+                    <>
+                        <h1 className="titulo-por-h1">Detalles del premio</h1>
+                        <div className="contenedor-campos">
+                            <p><strong>Producto:</strong> {nombreProducto}</p>
+                        </div>
+                    </>
+                ) : (
+                    <AdminFormEdit
+                        titulo={"Editar premio"}
+                        campos={campos}
+                        onSendForm={sendData}
+                        linkRegresar={"/admin/premios"}
+                        error={error}
+                        fieldErrors={fieldErrors}
+                        button={"Guardar cambios"}
+                        loading={loading}
+                    />
+                )}
 
-}
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
 
-useEffect(()=>{
-
- async function getData(){
-
- const res = await getPremio(id)
-
- if(!res?.valid){
-  setError("Error cargando premio")
-  return
- }
-
- setIdProducto(res.data.id_producto)
-
- }
-
- getData()
-
-},[])
-
-const campos={
-
- id_producto:{
-  titulo:"ID Producto",
-  name:"id_producto",
-  type:"text",
-  value:id_producto,
-  onChange:setIdProducto
- }
-
-}
-
-return(
-
-<div className="page-container">
-
-<section className="section-admin-edit">
-
-{!mostrarDatos?(
-<>
-<Link to="/admin/premios">Regresar</Link>
-
-<h1>Premio</h1>
-
-<p>ID producto: {id_producto}</p>
-</>
-):(
-
-<AdminFormEdit
- titulo={"Editar premio"}
- campos={campos}
- onSendForm={sendData}
- linkRegresar={"/admin/premios"}
- error={error}
- fieldErrors={fieldErrors}
- button={"Guardar cambios"}
- loading={loading}
-/>
-
-)}
-
-<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
-{mostrarDatos?"Cancelar": "Modificar"}
-</button>
-
-</section>
-
-</div>
-
-)
-
+            </section>
+        </div>
+    )
 }
 
 export default EditAward

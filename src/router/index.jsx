@@ -10,6 +10,11 @@ import ProtectedAdmin from "./ProtectedAdmin"
 import HomePage from "../pages/HomePage"
 import CategoriesPage from "../pages/products/CategoriesPage"
 import BlogPage from "../pages/blog/BlogPage"
+import Skincare from "../pages/blog/Skincare"
+import Colorimetria from "../pages/blog/Colorimetria"
+import Fragrance from "../pages/blog/Fragrance"
+import Recommended from "../pages/blog/Recommended"
+import Advice from "../pages/blog/Advice"
 
 
 import GiftGuidePage from "../pages/products/GiftGuidePage"
@@ -168,19 +173,19 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/guias", element:
+      { path: "admin/guiaRegalos", element:
         <ProtectedAdmin>
           <GuiaRegalosIndex/>
         </ProtectedAdmin>
       },
 
-      { path: "admin/guias/crear", element:
+      { path: "admin/guiaRegalos/crear", element:
         <ProtectedAdmin>
           <CreateGuia/>
         </ProtectedAdmin>
       },
 
-      { path: "admin/guias/editar/:id", element:
+      { path: "admin/guiaRegalos/editar/:id", element:
         <ProtectedAdmin>
           <EditGuia/>
         </ProtectedAdmin>
@@ -268,7 +273,16 @@ export const router = createBrowserRouter([
 
       { path: 'blog', element: <BlogPage /> },
 
+      { path: '/blog/Skincare', element: <Skincare /> },
 
+      { path: '/blog/Colorimetria', element: <Colorimetria/> },
+
+      { path: '/blog/Fragrance', element: <Fragrance/> },
+
+      { path: '/blog/Recommended', element: <Recommended/> },
+
+      { path: '/blog/Advice', element: <Advice/> },
+      
 
 
       { path: 'gift-guide', element: <GiftGuidePage /> },

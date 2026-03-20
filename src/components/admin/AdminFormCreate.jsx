@@ -13,7 +13,6 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 
 				<h1 className="titulo-por-h1">{titulo}</h1>
 
-				{/* la funcion que se va a ejecutar cuando se envie el formulario */}
 				<form method="post" onSubmit={async (e) => {
 					e.preventDefault()
 					await onSendForm()
@@ -35,7 +34,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 									type={value?.type}
 									name={value?.name}
 									placeholder=" "
-									onChange={(e) => { value?.onChange(e.target.value) }}
+									onChange={(e) => { value?.onChange(value?.type === "file" ? e.target.files[0] : e.target.value) }}
 								/>
 							)}
 

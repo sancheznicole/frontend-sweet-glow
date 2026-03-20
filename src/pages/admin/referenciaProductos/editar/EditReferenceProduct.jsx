@@ -1,153 +1,138 @@
-import {useEffect,useState} from "react"
-import {useParams,Link} from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import {getReferenceProduct,updateReferenceProduct} from "../../../../services/referenceProductsService"
+import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
 
 const EditReferenceProduct = () => {
 
-const {id} = useParams()
+    const { id } = useParams()
 
-const [codigo,setCodigo] = useState("")
-const [color,setColor] = useState("")
-const [tamano,setTamano] = useState("")
+    const [codigo, setCodigo] = useState("")
+    const [color, setColor] = useState("")
+    const [tamano, setTamano] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [mostrarDatos, setMostrarDatos] = useState(false)
 
-const [error,setError] = useState("")
-const [loading,setLoading] = useState(false)
-const [fieldErrors,setFieldErrors] = useState({})
-const [mostrarDatos,setMostrarDatos] = useState(false)
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await getReferenceProduct(id)
+                if (!res?.valid) {
+                    setError("Error al obtener la referencia")
+                    return
+                }
+                setCodigo(res?.reference?.codigo)
+                setColor(res?.reference?.color)
+                setTamano(res?.reference?.tamano)
+            } catch (error) {
+                setError(error.message)
+            }
+        }
+        getData()
+    }, [id])
 
-function validateFields(){
+    async function sendData() {
+        try {
+            const errors = {}
+            if (codigo.trim().length < 1) errors.codigo = "El código es obligatorio"
+            if (color.trim().length < 1) errors.color = "El color es obligatorio"
+            if (tamano.trim().length < 1) errors.tamano = "El tamaño es obligatorio"
 
- const errors={}
+            if (Object.keys(errors).length > 0) {
+                setFieldErrors(errors)
+                return
+            }
 
- if(codigo==="") errors.codigo="Código obligatorio"
+            setLoading(true)
+            setError("")
 
- setFieldErrors(errors)
+            const res = await updateReferenceProduct(id, codigo, color, tamano)
 
- return Object.keys(errors).length>0
-}
+            if (!res?.valid) {
+                setError("Error al actualizar la referencia")
+                return
+            }
 
-async function sendData(){
+            setMostrarDatos(false)
 
- const validation = validateFields()
+        } catch (error) {
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
- if(validation) return
+    const campos = {
+        codigo: {
+            titulo: "Código",
+            name: "codigo",
+            type: "text",
+            value: codigo,
+            onChange: setCodigo
+        },
+        color: {
+            titulo: "Color",
+            name: "color",
+            type: "text",
+            value: color,
+            onChange: setColor
+        },
+        tamano: {
+            titulo: "Tamaño",
+            name: "tamano",
+            type: "text",
+            value: tamano,
+            onChange: setTamano
+        }
+    }
 
- try{
+    return (
+        <div className="page-container">
 
- setLoading(true)
+            {!mostrarDatos && (
+                <div className="back-link-container">
+                    <Link className="link-regresar" to="/admin/referenciaProductos">Regresar</Link>
+                </div>
+            )}
 
- const res = await updateReferenceProduct(id,codigo,color,tamano)
+            <section className="section-editar">
 
- if(!res?.valid){
-   setError("Error actualizando")
-   return
- }
+                {!mostrarDatos ? (
+                    <>
+                        <h1 className="titulo-por-h1">Detalles de la referencia</h1>
+                        <div className="contenedor-campos">
+                            <p><strong>Código:</strong> {codigo}</p>
+                            <p><strong>Color:</strong> {color}</p>
+                            <p><strong>Tamaño:</strong> {tamano}</p>
+                        </div>
+                    </>
+                ) : (
+                    <AdminFormEdit
+                        titulo={"Editar referencia"}
+                        campos={campos}
+                        onSendForm={sendData}
+                        linkRegresar={"/admin/referenciaProductos"}
+                        error={error}
+                        fieldErrors={fieldErrors}
+                        button={"Guardar cambios"}
+                        loading={loading}
+                    />
+                )}
 
- setMostrarDatos(false)
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
 
- }catch(error){
-
- setError(error.message)
-
- }finally{
-
- setLoading(false)
-
- }
-
-}
-
-useEffect(()=>{
-
- async function getData(){
-
- const res = await getReferenceProduct(id)
-
- if(!res?.valid){
-   setError("Error obteniendo datos")
-   return
- }
-
- setCodigo(res.data.codigo)
- setColor(res.data.color)
- setTamano(res.data.tamano)
-
- }
-
- getData()
-
-},[])
-
-const campos={
-
- codigo:{
-  titulo:"Código",
-  name:"codigo",
-  type:"text",
-  value:codigo,
-  onChange:setCodigo
- },
-
- color:{
-  titulo:"Color",
-  name:"color",
-  type:"text",
-  value:color,
-  onChange:setColor
- },
-
- tamano:{
-  titulo:"Tamaño",
-  name:"tamano",
-  type:"text",
-  value:tamano,
-  onChange:setTamano
- }
-
-}
-
-return(
-
-<div className="page-container">
-
-<section className="section-admin-edit">
-
-{!mostrarDatos?(
-<>
-<Link to="/admin/referenciaProductos">Regresar</Link>
-
-<h1>Referencia: {codigo}</h1>
-
-<p>Código: {codigo}</p>
-<p>Color: {color}</p>
-<p>Tamaño: {tamano}</p>
-</>
-):(
-
-<AdminFormEdit
- titulo={"Editar referencia"}
- campos={campos}
- onSendForm={sendData}
- linkRegresar={"/admin/referenciaProductos"}
- error={error}
- fieldErrors={fieldErrors}
- button={"Guardar cambios"}
- loading={loading}
-/>
-
-)}
-
-<button onClick={()=>setMostrarDatos(!mostrarDatos)}>
-{mostrarDatos?"Cancelar": "Modificar"}
-</button>
-
-</section>
-
-</div>
-
-)
-
+            </section>
+        </div>
+    )
 }
 
 export default EditReferenceProduct

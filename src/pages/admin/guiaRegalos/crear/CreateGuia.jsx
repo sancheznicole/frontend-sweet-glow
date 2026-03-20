@@ -1,95 +1,76 @@
-import {useState} from "react"
-import {useNavigate} from "react-router-dom"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import AdminFormCreate from "../../../../components/admin/AdminFormCreate"
-import {createGuia} from "../../../../services/giftGuideService"
+import { createGuia } from "../../../../services/giftGuideService"
 
-const CreateGuia = ()=>{
+const CreateGuia = () => {
 
-const navigate = useNavigate()
+    const navigate = useNavigate()
 
-const [nombre,setNombre] = useState("")
-const [descripcion,setDescripcion] = useState("")
+    const [nombre, setNombre] = useState("")
+    const [descripcion, setDescripcion] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
 
-const [error,setError] = useState("")
-const [loading,setLoading] = useState(false)
-const [fieldErrors,setFieldErrors] = useState({})
+    function validateFields() {
+        const errors = {}
+        if (nombre.trim().length < 1) errors.nombre = "El nombre es obligatorio"
+        setFieldErrors(errors)
+        return Object.keys(errors).length > 0
+    }
 
-function validateFields(){
+    const sendData = async () => {
+        try {
+            const validation = validateFields()
+            if (validation) return
 
- const errors={}
+            setLoading(true)
+            setError("")
 
- if(nombre==="") errors.nombre="Nombre obligatorio"
+            const res = await createGuia(nombre, descripcion)
 
- setFieldErrors(errors)
+            if (!res?.valid) {
+                setError("Error al crear la guía de regalos")
+                return
+            }
 
- return Object.keys(errors).length>0
+            navigate("/admin/guiaRegalos")
 
-}
+        } catch (error) {
+            setError("Error al enviar el formulario")
+        } finally {
+            setLoading(false)
+        }
+    }
 
-const sendData = async()=>{
+    const campos = {
+        nombre: {
+            titulo: "Nombre",
+            name: "nombre",
+            type: "text",
+            onChange: setNombre
+        },
+        descripcion: {
+            titulo: "Descripción",
+            name: "descripcion",
+            type: "text",
+            onChange: setDescripcion
+        }
+    }
 
- const validation = validateFields()
-
- if(validation) return
-
- try{
-
- setLoading(true)
-
- const res = await createGuia(nombre,descripcion)
-
- if(!res?.valid){
-  setError("Error creando guía")
-  return
- }
-
- navigate("/admin/guias")
-
- }catch(error){
-
- setError(error.message)
-
- }finally{
-
- setLoading(false)
-
- }
-
-}
-
-const campos={
-
- nombre:{
-  titulo:"Nombre",
-  name:"nombre",
-  type:"text",
-  onChange:setNombre
- },
-
- descripcion:{
-  titulo:"Descripción",
-  name:"descripcion",
-  type:"text",
-  onChange:setDescripcion
- }
-
-}
-
-return(
-
-<AdminFormCreate
- titulo={"Crear guía de regalos."}
- campos={campos}
- linkRegresar={"/admin/guias"}
- onSendForm={sendData}
- error={error}
- fieldErrors={fieldErrors}
- button={"Crear guía"}
- loading={loading}
-/>
-
-)
-
+    return (
+        <AdminFormCreate
+            titulo={"Crear guía de regalos"}
+            campos={campos}
+            linkRegresar={"/admin/guiaRegalos"}
+            onSendForm={sendData}
+            error={error}
+            fieldErrors={fieldErrors}
+            button={"Crear guía"}
+            loading={loading}
+        />
+    )
 }
 
 export default CreateGuia

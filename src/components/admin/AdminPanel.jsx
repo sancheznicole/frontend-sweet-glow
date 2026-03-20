@@ -2,84 +2,110 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
 
-const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDelete, getData }) => {
-	const [id, setId] = useState(undefined)
-	const idKey = Object.keys(campos)[0]
+const AdminPanel = ({ data, paginacion, onPageChange, titulo, texto, linkCrear, linkEditar, campos, onDelete, getData }) => {
+    const [id, setId] = useState(undefined)
+    const idKey = Object.keys(campos)[0]
 
-	return (
-		<section className="section-admin-panel">
-			{id != undefined ? (
-				<div className="contenedor-eliminar">
-					<h3>Estar seguro de eliminar el registro?</h3>
+    const getValor = (row, key) => {
+        if (key === "created_at") return row[key]?.slice(0, 10)
+        if (key.includes(".")) return key.split(".").reduce((obj, k) => obj?.[k], row)
+        return row[key]
+    }
 
-					<div>
-						<button className="boton-eliminar-cancelar" onClick={async () => {
-								await onDelete(id)
-								await getData()
-								setId(undefined)
-							}}
-						>Eliminar</button>
-						<button className="boton-eliminar-cancelar" onClick={() => {setId(undefined)}}>Cancelar</button>
-					</div>
-				</div>
-			) : (
-				<>
-					<div className="back-link-container">
-						<Link className='link-regresar' to="/admin">Regresar</Link>
-					</div>
+    return (
+        <section className="section-admin-panel">
+            {id != undefined ? (
+                <div className="contenedor-eliminar">
+                    <h3>¿Estar seguro de eliminar el registro?</h3>
+                    <div>
+                        <button className="boton-eliminar-cancelar" onClick={async () => {
+                            await onDelete(id)
+                            await getData()
+                            setId(undefined)
+                        }}>Eliminar</button>
+                        <button className="boton-eliminar-cancelar" onClick={() => { setId(undefined) }}>Cancelar</button>
+                    </div>
+                </div>
+            ) : (
+                <>
+                    <div className="back-link-container">
+                        <Link className='link-regresar' to="/admin">Regresar</Link>
+                    </div>
 
-					{/* titulo */}
-					<h1 className="titulo-por-h1">{titulo}</h1>
-					<p>{texto}</p>
+                    <h1 className="titulo-por-h1">{titulo}</h1>
+                    <p>{texto}</p>
 
-					<div className="contenedor-agregar-registro">
-						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
-					</div>
+                    <div className="contenedor-agregar-registro">
+                        <Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
+                    </div>
 
-					{/* div -> boton de agregar registro | tabla con la lista de registros */}
-					<table>
-						<thead>
-							<tr>
-								{Object.entries(campos).map(([key, value], index) => (
-									<th key={index}>{value}</th>
-								))}
-								{/* para recorrer clave, valor e indice de un json */}
-								<th>Acciones</th>
-							</tr>
-						</thead>
-						<tbody>
-							{data && data.length > 0 ? (
+                    <table>
+                        <thead>
+                            <tr>
+                                {Object.entries(campos).map(([key, value], index) => (
+                                    <th key={index}>{value}</th>
+                                ))}
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data && data.length > 0 ? (
+                                data.map((row, index) => (
+                                    <tr key={index}>
+                                        {Object.keys(campos).map((key) => (
+                                            <td key={key}>
+                                                {getValor(row, key)}
+                                            </td>
+                                        ))}
+                                        <td>
+                                            <div className="contenedor-editar-eliminar">
+                                                <Link className="link-editar" to={`${linkEditar}/${row[idKey]}`}>Editar</Link>
+                                                <button className="boton-eliminar" onClick={() => { setId(row[idKey]) }}>Eliminar</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td>No hay registros</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
 
-								data.map((row, index) => (
-									<tr key={index}>
-										{Object.keys(campos).map((key) => (
-											<td key={key}>
-												{key === "created_at"
-													? row[key]?.slice(0, 10)
-													: row[key]}
-											</td>
-										))}
+                    {paginacion && paginacion.last_page > 1 && (
+                        <div className="contenedor-paginacion">
+                            <button
+                                className="boton-pagina"
+                                disabled={paginacion.current_page === 1}
+                                onClick={() => onPageChange(paginacion.current_page - 1)}
+                            >
+                                Anterior
+                            </button>
 
-										<td>
-											<div className="contenedor-editar-eliminar">
-												<Link className="link-editar" to={`${linkEditar}/${row[idKey]}`}>Editar</Link>
-												<button className="boton-eliminar" onClick={() => {setId(row[idKey])}}>Eliminar</button>
-											</div>
-										</td>
-									</tr>
-								))
+                            {Array.from({ length: paginacion.last_page }, (_, i) => i + 1).map((page) => (
+                                <button
+                                    key={page}
+                                    className={`boton-pagina ${paginacion.current_page === page ? "pagina-activa" : ""}`}
+                                    onClick={() => onPageChange(page)}
+                                >
+                                    {page}
+                                </button>
+                            ))}
 
-							) : (
-								<tr>
-									<td>No hay registros</td>
-								</tr>
-							)}
-						</tbody>
-					</table>
-				</>
-			)}
-		</section>
-	)
+                            <button
+                                className="boton-pagina"
+                                disabled={paginacion.current_page === paginacion.last_page}
+                                onClick={() => onPageChange(paginacion.current_page + 1)}
+                            >
+                                Siguiente
+                            </button>
+                        </div>
+                    )}
+                </>
+            )}
+        </section>
+    )
 }
 
 export default AdminPanel
