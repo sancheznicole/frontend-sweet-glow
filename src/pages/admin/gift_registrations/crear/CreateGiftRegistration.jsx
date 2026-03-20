@@ -22,22 +22,6 @@ const CreateGiftRegistration = () => {
     const [facturas, setFacturas] = useState([])
     const [loadingFacturas, setLoadingFacturas] = useState(false)
 
-    // Cargar facturas al montar
-    useEffect(() => {
-        const fetchFacturas = async () => {
-            setLoadingFacturas(true)
-            try {
-                const res = await getAllFacturas()
-                if (res?.valid) setFacturas(res.facturas)
-            } catch (e) {
-                console.log(e.message)
-            } finally {
-                setLoadingFacturas(false)
-            }
-        }
-        fetchFacturas()
-    }, [])
-
     // Debounce búsqueda de usuarios
     useEffect(() => {
         if (!busqueda.trim()) {
@@ -58,17 +42,30 @@ const CreateGiftRegistration = () => {
         return () => clearTimeout(timer)
     }, [busqueda])
 
-    const handleSelectUsuario = (id, nombre) => {
+    // Cargar facturas cuando se selecciona un usuario
+    const handleSelectUsuario = async (id, nombre) => {
         setUsuarioId(id)
         setUsuarioNombre(nombre)
         setBusqueda(nombre)
         setResultados([])
+        setFacturaId('')
+        setFacturas([])
+
+        setLoadingFacturas(true)
+        try {
+            const res = await getAllFacturas(id)
+            if (res?.valid) setFacturas(res.facturas)
+        } catch (e) {
+            console.log(e.message)
+        } finally {
+            setLoadingFacturas(false)
+        }
     }
 
     function validateFields() {
         const errors = {}
-        if (!usuarioId)  errors.usuario  = "Selecciona un usuario"
-        if (!facturaId)  errors.factura  = "Selecciona una factura"
+        if (!usuarioId) errors.usuario = "Selecciona un usuario"
+        if (!facturaId) errors.factura = "Selecciona una factura"
         setFieldErrors(errors)
         return Object.keys(errors).length > 0
     }
@@ -119,6 +116,8 @@ const CreateGiftRegistration = () => {
                                 setBusqueda(e.target.value)
                                 setUsuarioId('')
                                 setUsuarioNombre('')
+                                setFacturaId('')
+                                setFacturas([])
                             }}
                         />
                         {buscando && <p className="stepper-cargando">Buscando...</p>}
@@ -162,16 +161,24 @@ const CreateGiftRegistration = () => {
                                 className="input-busqueda"
                                 value={facturaId}
                                 onChange={e => setFacturaId(e.target.value)}
+                                disabled={!usuarioId}
                             >
-                                <option value="">Selecciona una factura</option>
+                                <option value="">
+                                    {usuarioId ? 'Selecciona una factura' : 'Primero selecciona un usuario'}
+                                </option>
                                 {facturas.map(f => (
                                     <option key={f.id_factura_pedido} value={f.id_factura_pedido}>
                                         #{f.id_factura_pedido}
-                                        {f.total ? ` — $${Number(f.total).toLocaleString()}` : ''}
-                                        {f.usuario ? ` — ${f.usuario.nombres} ${f.usuario.apellidos}` : ''}
+                                        {f.neto ? ` — $${Number(f.neto).toLocaleString()}` : ''}
                                     </option>
                                 ))}
                             </select>
+                        )}
+                        {!usuarioId && !loadingFacturas && (
+                            <p className="stepper-vacio">Selecciona un usuario para ver sus facturas</p>
+                        )}
+                        {usuarioId && !loadingFacturas && facturas.length === 0 && (
+                            <p className="stepper-vacio">Este usuario no tiene facturas disponibles</p>
                         )}
                         {fieldErrors.factura && <p className="error-field">{fieldErrors.factura}</p>}
                     </div>

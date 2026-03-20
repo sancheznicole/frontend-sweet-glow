@@ -4,74 +4,71 @@ import AdminPanel from "../../../components/admin/AdminPanel"
 
 const CategoriesIndex = () => {
 
-	const [data, setData] = useState({})
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(1)
+    const [limit] = useState(10)
+    const [lastPage, setLastPage] = useState(undefined)
 
-	const fields = {
-		id_categoria: "ID",
-		nombre: "Categoría",
-		created_at: "Fecha creación",
-	}
+    const fields = {
+        id_categoria: "ID",
+        nombre: "Categoría",
+        created_at: "Fecha creación",
+    }
 
-	async function getData(){
-		try {
+    async function getData() {
+        try {
 
-			let res = await getAllCategories()
+            const res = await getAllCategories(page, limit)
 
-			if(!res?.valid){
-				console.log(res?.error)
-				return
-			}
+            if (!res?.valid) {
+                console.log(res?.error)
+                return
+            }
 
-			setData(res?.categories)
+            const categories = res.categories.map(c => ({
+                ...c,
+                created_at: c.created_at ? c.created_at.split(" ")[0] : "",
+            }))
 
-		} catch (error) {
+            setData(categories)
+            setLastPage(Number(res?.last_page ?? 1))
 
-			console.log(error?.message)
+        } catch (error) {
+            console.log(error?.message)
+        }
+    }
 
-		}
-	}
+    useEffect(() => {
+        getData()
+    }, [page])
 
-	useEffect(()=>{
+    const onDelete = async (id) => {
+        try {
+            const res = await deleteCategory(id)
+            if (!res?.valid) return res?.error
+        } catch (error) {
+            return error.message
+        }
+    }
 
-		getData()
-
-	},[])
-
-	const onDelete = async(id)=>{
-
-		try{
-
-			let res = await deleteCategory(id)
-
-			if(!res?.valid) return res?.error
-
-		}catch(error){
-
-			return error.message
-
-		}
-
-	}
-
-	return(
-
-		<div>
-
-			<AdminPanel
-				data={data}
-				campos={fields}
-				titulo={"Administración de categorías"}
-				texto={"Administra las categorías de los productos"}
-				linkCrear={"/admin/categories/crear"}
-				linkEditar={"/admin/categories/editar"}
-				onDelete={onDelete}
-				getData={getData}
-			/>
-
-		</div>
-
-	)
-
+    return (
+        <div>
+            <AdminPanel
+                data={data}
+                campos={fields}
+                titulo={"Administración de categorías"}
+                texto={"Administra las categorías de los productos"}
+                linkCrear={"/admin/categories/crear"}
+                linkEditar={"/admin/categories/editar"}
+                onDelete={onDelete}
+                getData={getData}
+                page={page}
+                lastPage={lastPage}
+                setPage={setPage}
+                idKey="id_categoria"
+            />
+        </div>
+    )
 }
 
 export default CategoriesIndex
