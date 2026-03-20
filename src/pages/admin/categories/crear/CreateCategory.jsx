@@ -24,21 +24,19 @@ const CreateCategory = () => {
 
 	}
 
-	function validateFields(){
+	function validateFields() {
+    const errors = {}
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
 
-		const errors = {}
+    if (!nombre || nombre.trim() === '') {
+        errors.nombre = "El nombre no puede ir vacío"
+    } else if (!nameRegex.test(nombre)) {
+        errors.nombre = "El nombre solo debe contener letras"
+    }
 
-		const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/
-
-		if(nombre != "" && !nameRegex.test(nombre)){
-			errors.nombre = "El nombre solo debe contener letras"
-		}
-
-		setFieldErrors(errors)
-
-		return Object.keys(errors).length > 0
-
-	}
+    setFieldErrors(errors)
+    return Object.keys(errors).length > 0
+}
 
 	const sendData = async ()=>{
 

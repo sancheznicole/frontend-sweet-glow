@@ -33,9 +33,13 @@ const GiftCardsIndex = () => {
                 usuario_nombre: t.usuario
                     ? `${t.usuario.nombres} ${t.usuario.apellidos}`
                     : `Usuario #${t.id_usuario}`,
-                estado: t.estado === 'activa' ? '✅ Activa' : '❌ Usada'
+                estado: t.estado === 'activa' ? 'Activa' : 'Usada',
+                // Agrega estas 3 líneas:
+                fecha_expiracion: t.fecha_expiracion ? t.fecha_expiracion.split(" ")[0] : "",
+                fecha_de_uso:     t.fecha_de_uso     ? t.fecha_de_uso.split(" ")[0]     : "",
+                created_at:       t.created_at       ? t.created_at.split(" ")[0]       : "",
             }))
-
+            
             setData(tarjetas)
             setLastPage(Number(res?.last_page ?? 1))
 

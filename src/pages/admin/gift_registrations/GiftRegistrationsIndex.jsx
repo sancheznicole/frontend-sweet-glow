@@ -13,6 +13,7 @@ const GiftRegistrationsIndex = () => {
         "usuario_nombre":     "Usuario",
         "factura_id":         "Factura",
         "estado":             "Estado",
+        "created_at":      "Fecha creación",
     }
 
     async function getData() {
@@ -32,7 +33,8 @@ const GiftRegistrationsIndex = () => {
                 factura_id: i.factura
                     ? `#${i.id_factura_pedido}`
                     : `#${i.id_factura_pedido}`,
-                estado: i.estado ?? '—'
+                estado: i.estado ?? '—',
+                created_at: i.created_at ? i.created_at.split(" ")[0] : "—",  // ← agrega esta línea
             }))
 
             setData(inscripciones)

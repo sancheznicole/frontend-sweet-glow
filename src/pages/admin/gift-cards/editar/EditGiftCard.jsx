@@ -3,8 +3,8 @@ import { useParams, Link } from 'react-router-dom'
 import { getGiftCard, updateGiftCard } from '../../../../services/giftCardService'
 
 const estadoOptions = {
-    'activa': '✅ Activa',
-    'usada':  '❌ Usada'
+    'activa': 'Activa',
+    'usada':  'Usada'
 }
 
 const EditGiftCard = () => {
@@ -108,7 +108,7 @@ const EditGiftCard = () => {
                 {!mostrarDatos ? (
 
                     <>
-                        <h1 className="titulo-por-h1">Detalles de la tarjeta #{id}</h1>
+                        <h1 className="titulo-por-h1">Detalles de la tarjeta de {usuarioNombre}</h1>
 
                         <div className="contenedor-campos">
                             <p><strong>Usuario:</strong> {usuarioNombre}</p>
@@ -123,7 +123,7 @@ const EditGiftCard = () => {
                 ) : (
 
                     <div>
-                        <h1 className="titulo-por-h1">Editar tarjeta #{id}</h1>
+                        <h1 className="titulo-por-h1">Editar tarjeta</h1>
 
                         {/* Usuario — solo lectura */}
                         <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
@@ -177,7 +177,7 @@ const EditGiftCard = () => {
                         {error && <p className="error-message">{error}</p>}
 
                         <button
-                            className="modificar-profile"
+                            className="modificar-profile guardar-cambios"
                             onClick={sendData}
                             disabled={loading}
                             style={{ marginTop: '24px', width: '100%' }}
@@ -190,7 +190,7 @@ const EditGiftCard = () => {
 
                 <div className="contenedor-editar-botones">
                     <button
-                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
                         onClick={() => setMostrarDatos(!mostrarDatos)}
                     >
                         {mostrarDatos ? "Cancelar" : "Modificar"}
