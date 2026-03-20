@@ -31,8 +31,8 @@ const EditUser = () => {
   }
 
   const roles = {
-    "1": "Cliente",
-    "2": "Administrador",
+    "1": "Administrador",
+    "2": "Cliente",
   }
 
   function validateFields() {
@@ -236,16 +236,14 @@ const EditUser = () => {
             </h1>
 
             <div className="contenedor-campos">
-
-              <strong>
-                <p>{nombres} {apellidos}</p>
-              </strong>
-
-              <p>{tipoDocumento}</p>
-              <p>{numeroDocumento}</p>
-              <p>{correo}</p>
-              <p>{telefono}</p>
-              <p>{direccion}</p>
+              
+              <p><strong>Rol:</strong> {roles[String(role)] || "Sin rol"}</p>
+              <p><strong>Nombres y Apellidos:</strong> {nombres} {apellidos}</p>
+              <p><strong>Tipo de documento:</strong> {tipoDocumento}</p>
+              <p><strong>Numero de documento:</strong> {numeroDocumento}</p>
+              <p><strong>Correo: </strong> {correo}</p>
+              <p><strong>telefono:</strong> {telefono}</p>
+              <p><strong>Direccion:</strong> {direccion}</p>
 
             </div>
           </>

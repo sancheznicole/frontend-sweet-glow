@@ -102,3 +102,19 @@ export async function deleteProduct(id_producto) {
         return { valid: false, error: error?.message }
     }
 }
+
+export async function searchProduct(search) {
+    try {
+        const res = await axios.get(`${API_URL}/products?search=${search}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}

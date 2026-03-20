@@ -34,26 +34,16 @@ const ProductosIndex = () => {
 			const products = res.products.data.map(product => ({
 				...product,
 
-				// =========================================
-				// RELACIONES VISIBLES
-				// =========================================
-				categoria: `Categoría ${product.id_categoria}`,
-				marca: `Marca ${product.id_marca}`,
-				referencia: `REF-${product.id_referencia}`,
+				// RELACIONES VISIBLES CON NOMBRES 
+				categoria: product?.categoria?.nombre,
+				marca: product?.marca?.nombre,
+				referencia: `${product?.referencia_producto?.color} | ${product?.referencia_producto.tamano}`,
+				guia_regalo: product?.guia_regalo?.nombre,
 
-				// =========================================
-				// GUIA REGALO
-				// Si existe id_guia se muestra la ocasión,
-				// si no existe se muestra texto por defecto
-				// =========================================
-				guia_regalo:
-					product.id_guia !== null
-						? `Ocasión ${product.id_guia}`
-						: "Sin guía asociada",
+				precio: `$${parseInt(product?.precio).toLocaleString('en-US')}`,
 
-				// =========================================
 				// BOOLEANOS EN TEXTO DE NEGOCIO
-				// =========================================
+
 				tendencia:
 					product.tendencia
 						? "En tendencia"
@@ -105,9 +95,9 @@ const ProductosIndex = () => {
 				data={data}
 				campos={fields}
 				titulo={"Administración de productos"}
-				texto={"Gestión técnica de productos, relaciones y atributos comerciales"}
-				linkCrear={"/admin/roles/crear"}
-				linkEditar={"/admin/roles/editar"}
+				texto={"Administra el catálogo de productos disponibles y actualiza su información dentro del sistema"}
+				linkCrear={"/admin/products/create"}
+				linkEditar={"/admin/products/edit"}
 				onDelete={onDelete}
 				getData={getData}
 			/>
