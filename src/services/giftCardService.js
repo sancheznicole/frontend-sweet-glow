@@ -100,3 +100,19 @@ export const buscarUsuariosGiftCard = async (query) => {
         return { valid: false, error: error?.response?.data?.message || error.message }
     }
 }
+
+export async function searchGiftCard(search) {
+    try {
+        const res = await axios.get(`${API_URL}/gift_cards?search=${search}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, tarjetas: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}

@@ -112,7 +112,7 @@ const EditGiftRegistration = () => {
 
                         <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
                             <p><strong>Usuario:</strong> {usuarioNombre}</p>
-                            <p><strong>Factura:</strong> #{facturaId}</p>
+                            <p><strong>Factura:</strong> {facturaId}</p>
                         </div>
 
                         <div className="campo-grupo">

@@ -185,3 +185,19 @@ export async function deleteUser(id_usuario) {
     }
   
 }
+
+export async function searchUsers(search) {
+    try {
+        const res = await axios.get(`${API_URL}/users?search=${search}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, users: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}

@@ -128,7 +128,7 @@ const EditCategory = () => {
 						</h1>
 
 						<div className="contenedor-campos">
-							<strong><p>Nombre: {nombre}</p></strong>
+							<p><strong>Nombre:</strong> {nombre}</p>
 						</div>
 
 					</>
