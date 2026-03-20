@@ -7,14 +7,17 @@ const getHeaders = () => ({
 })
 
 // Listar todas las inscripciones
-export const getAllGiftRegistrations = async () => {
+export const getAllGiftRegistrations = async (page = 1, limit = 10) => {
     try {
-        const res = await axios.get(`${API_URL}/gift_registrations`, {
+        const res = await axios.get(`${API_URL}/gift_registrations?page=${page}&limit=${limit}`, {
             headers: getHeaders()
         })
         console.log("getAllGiftRegistrations raw:", res.data)
+
         const lista = Array.isArray(res.data) ? res.data : res.data?.data ?? []
-        return { valid: true, inscripciones: lista }
+        const last_page = res.data?.last_page ?? 1
+
+        return { valid: true, inscripciones: lista, last_page }
     } catch (error) {
         return { valid: false, error: error?.response?.data?.message || error.message }
     }
@@ -95,9 +98,13 @@ export const buscarUsuariosInscripcion = async (query) => {
 }
 
 // Obtener facturas disponibles
-export const getAllFacturas = async () => {
+export const getAllFacturas = async (id_usuario = null) => {
     try {
-        const res = await axios.get(`${API_URL}/order_invoice`, {
+        const url = id_usuario
+            ? `${API_URL}/order_invoice?id_usuario=${id_usuario}`
+            : `${API_URL}/order_invoice`
+
+        const res = await axios.get(url, {
             headers: getHeaders()
         })
         const lista = Array.isArray(res.data) ? res.data : res.data?.data ?? []
