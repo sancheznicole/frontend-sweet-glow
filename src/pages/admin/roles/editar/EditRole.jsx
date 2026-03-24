@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { updateRole, getRole } from "../../../../services/rolesService"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const EditRole = () => {
 
   // obtener id desde la url
   const { id } = useParams()
+  const navigate = useNavigate()
 
   // estados generales
   const [loading, setLoading] = useState(false)
@@ -104,7 +106,7 @@ const EditRole = () => {
     <div className="page-container">
         {!mostrarDatos && (
           <div className="back-link-container">
-            <Link className="link-regresar" to="/admin/roles">Regresar</Link>
+            <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
           </div>
         )}
 

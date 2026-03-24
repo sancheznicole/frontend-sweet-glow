@@ -1243,11 +1243,35 @@ footer {
     background-color: #393939;
 }
 
-/* Corrige el ancho del botón continuar dentro del stepper */
-.stepper-panel .modificar-profile {
-    width: 100% !important;
-    box-sizing: border-box;
-    margin-top: 16px;
-    display: block;
-    margin-bottom: 0;
+.products-cards-container{
+    display: grid;
+    gap: 20px;
+    grid-template-columns: auto auto auto auto auto;
+
+    .proyect-card{
+        border-radius: 10px;
+    }
+}
+
+.cart-container{
+    display: flex;
+    align-items: center;
+
+    .empty-cart{
+        text-align: center;
+
+        a, p{
+            margin: 20px;
+        }
+    }
+}
+
+.cart-between{
+    justify-content: space-between;
+}
+.cart-center {
+    justify-content: center;
+}
+button{
+    cursor: pointer;
 }

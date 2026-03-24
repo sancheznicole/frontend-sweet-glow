@@ -1,10 +1,12 @@
 /*TABLA DE REGISTROS*/
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDelete, getData, page = 1, lastPage = undefined, setPage }) => {
+const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDelete, getData, page = 1, lastPage = undefined, setPage, elementsLink = "" }) => {
 	const [id, setId] = useState(undefined)
 	const idKey = Object.keys(campos)[0]
+	const navigate = useNavigate()
 
 	return (
 		<section className="section-admin-panel">
@@ -25,7 +27,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 			) : (
 				<>
 					<div className="back-link-container">
-						<Link className='link-regresar' to="/admin">Regresar</Link>
+						<button className='link-regresar' onClick={() => navigate(-1)}>Regresar</button>
 					</div>
 
 					{/* titulo */}
@@ -69,9 +71,25 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 										<tr key={index}>
 											{Object.keys(campos).map((key) => (
 												<td key={key}>
-													{key === "created_at"
-														? row[key]?.slice(0, 10)
-														: row[key]}
+													{key === "created_at" ? (
+														row[key]?.slice(0, 10)
+													) : key === "elementos" ? (
+														row[key]?.length > 0 ? (
+															row[key].map((el) => (
+																<Link 
+																	key={el.id_elemento_carrito}
+																	to={`${elementsLink}/${el.id_elemento_carrito}`}
+																	style={{ display: "block" }}
+																>
+																	Registro ID:{el.id_elemento_carrito}
+																</Link>
+															))
+														) : (
+															"Sin elementos"
+														)
+													) : (
+														row[key]
+													)}
 												</td>
 											))}
 

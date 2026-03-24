@@ -52,6 +52,10 @@ const AdminIndex = () => {
                     </div>
 
                     <div>
+                        <Link to={"/admin/cart-elements"}>Administrar elementos de carritos</Link>
+                    </div>
+
+                    <div>
                         <Link to={"/admin/gift_registrations"}>Administrar inscripciones regalo</Link>
                     </div>
 

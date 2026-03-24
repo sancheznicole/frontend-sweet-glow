@@ -1,6 +1,7 @@
 /*FORMULARIO DE CREAR*/
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, fieldErrors, button, loading}) => {
 	const [searchResults, setSearchResults] = useState([])
@@ -8,11 +9,12 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 	const [searchError, setSearchError] = useState('')
 	const [timeoutId, setTimeoutId] = useState(null)
 	const [inputValue, setInputValue] = useState('')
+	const navigate = useNavigate()
 
 	return (
 		<div>
 			<div className="back-link-container">
-        		<Link className="link-regresar" to={linkRegresar}>Regresar</Link>
+        		<button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
       		</div>
 
 			<section className="section-create-admin">
