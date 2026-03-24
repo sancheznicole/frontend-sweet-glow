@@ -12,17 +12,11 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 	useEffect(() => {
 		setInputValue(prev => {
 			const initialValues = { ...prev }
-
 			Object.entries(campos).forEach(([key, value]) => {
-				if (
-					value.type === "text-search" &&
-					value.initial_show_value &&
-					!prev[value.name]
-				) {
+				if (value.type === "text-search" && value.initial_show_value && !prev[value.name]) {
 					initialValues[value.name] = value.initial_show_value
 				}
 			})
-
 			return initialValues
 		})
 	}, [campos])
@@ -30,38 +24,26 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 	return (
 		<div>
 			<section className="section-form-edit">
-				{/* titulo del formulario */}
 				<h1 className="titulo-por-h1">{titulo}</h1>
 
-				{/* formulario */}
-				<form
-					onSubmit={async (e) => {
-						e.preventDefault()
-						await onSendForm()
-					}}
-				>
+				<form onSubmit={async (e) => {
+					e.preventDefault()
+					await onSendForm()
+				}}>
 
-					{/* recorrer los campos dinámicamente */}
 					{Object.entries(campos).map(([key, value], index) => (
-
 						<div key={index}>
 
-							{/* titulo del campo */}
 							<label htmlFor={value?.name} className="admin-edit-label">
 								{value?.titulo}
 							</label>
 
 							{value?.type == "select" ? (
-								// select
 								<select name={value?.name}>
 									<option value="">Seleccionar opción</option>
-									{Object.entries(value?.options).map(([optionKey, optionValue], optionIndex) => {
-										console.log(value?.value, optionValue)
-
-										return (
-											<option value={optionKey} key={optionIndex} selected={value?.value == optionKey}>{optionValue}</option>
-										)
-									})}
+									{Object.entries(value?.options).map(([optionKey, optionValue], optionIndex) => (
+										<option value={optionKey} key={optionIndex} selected={value?.value == optionKey}>{optionValue}</option>
+									))}
 								</select>
 							) : value?.type == "radio-y-n" ? (
 								<div className="radio-container">
@@ -75,7 +57,7 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 									</div>
 								</div>
 							) : value?.type == "text-search" ? (
-									<>
+								<>
 									<input
 										type="text"
 										name={value?.name}
@@ -126,20 +108,16 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 										<div>
 											{searchResults[value.name].map((r, index) => {
 												let keys = value?.text_keys.split(",")
-
 												return (
 													<button
 														type="button"
 														key={index}
 														onClick={() => {
 															value?.onChange(r?.[value?.save_data_key])
-															console.log(r?.[value?.save_data_key])
-
 															setInputValue(prev => ({
 																...prev,
 																[value.name]: keys.map(k => r?.[k]).join(" ")
 															}))
-
 															setSearchResults(prev => ({
 																...prev,
 																[value.name]: []
@@ -156,10 +134,9 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 									)}
 
 									{searching && (<p>Buscando...</p>)}
-
 									{searchError && (<p className="form-input-error">{searchError}</p>)}
 								</>
-							): (
+							) : (
 								<input
 									type={value?.type}
 									name={value?.name}
@@ -169,30 +146,25 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 											: value?.value || ""
 									}
 									onChange={(e) => {
-										value?.onChange(e.target.value)
+										value?.onChange(value?.type === "file" ? e.target.files[0] : e.target.value)
 									}}
 								/>
 							)}
 
-							{/* error específico del campo */}
 							<p>{fieldErrors?.[key] || ""}</p>
 
 						</div>
-
 					))}
 
-					{/* botón enviar */}
 					<button type="submit" disabled={loading}>
 						{loading ? "Cargando..." : button}
 					</button>
 
-					{/* error general */}
 					{error != "" && (
 						<p>{error}</p>
 					)}
 
 				</form>
-
 			</section>
 		</div>
 	)

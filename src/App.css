@@ -1253,6 +1253,7 @@ footer {
     }
 }
 
+<<<<<<< HEAD
 .cart-container{
     display: flex;
     align-items: center;
@@ -1274,4 +1275,106 @@ footer {
 }
 button{
     cursor: pointer;
+=======
+/*blog*/
+.blog-container{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  padding: 40px 20px;
+  margin-top: 20px;
+}
+
+.Blog{
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.img{
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.Blog:hover .img{
+  transform: scale(1.05);
+}
+
+.Blog a{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  color: white;
+  font-size: 22px;
+  font-family: Heading;
+  text-decoration: none;
+}
+
+/* BLOG: SKINCARE - COLORIMETRIA - FRAGANCIAS - PRODUCTOS RECOMENDADOS - CONSEJOS DE BELLEZA*/
+
+
+/* Contenedor principal*/
+.skin, .colorimetria, .fragancias, .recomendaciones, .consejos {
+  max-width: 800px; 
+  margin: 60px auto;
+  padding: 40px 20px;
+  font-family: 'Heading', sans-serif;
+  color: #444;
+}
+
+/* Título principal */
+.titulo {
+  text-align: center;
+  color: #b3848f;
+  font-size: 32px;
+  font-weight: 300; 
+  font-family: 'Heading', sans-serif;
+  letter-spacing: 4px; 
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* El párrafo intro */
+.parrafo-titulo {
+  text-align: center;
+  color: #666;
+  margin-bottom: 60px;
+  font-size: 16px;
+  line-height: 1.8;
+  padding-bottom: 30px;
+}
+
+/* Los títulos de secciones*/
+.tipo-piel, .piel, .fragancia, .productos, .belleza {
+  color: #b3848f;
+  margin-top: 50px;
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding-left: 15px;
+}
+
+/* Los párrafos */
+.piel-p, .tonos, .p, .prod, .pb {
+  padding: 10px 0; 
+  color: #4a4a4a;
+  font-size: 15px;
+  line-height: 1.8; 
+  margin-bottom: 40px;
+  text-align: justify;
+}
+
+/* Los subtítulos (h4) */
+.piel-p h4, .tonos h4, .p h4, .prod h4, .pb h4{
+  margin-top: 25px;
+  margin-bottom: 12px;
+  color: #efd7e5; 
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+>>>>>>> 25baa4b (panel de administracion funcionando luisa)
 }

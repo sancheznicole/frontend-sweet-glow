@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
+import { getGiftGuide, updateGiftGuide } from "../../../../services/giftGuideService"
 
-const EditReferenceProduct = () => {
+const EditGiftGuide = () => {
 
     const { id } = useParams()
 
-    const [codigo, setCodigo] = useState("")
-    const [color, setColor] = useState("")
-    const [tamano, setTamano] = useState("")
+    const [nombre, setNombre] = useState("")
+    const [descripcion, setDescripcion] = useState("")
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [fieldErrors, setFieldErrors] = useState({})
@@ -18,14 +17,13 @@ const EditReferenceProduct = () => {
     useEffect(() => {
         async function getData() {
             try {
-                const res = await getReferenceProduct(id)
+                const res = await getGiftGuide(id)
                 if (!res?.valid) {
-                    setError("Error al obtener la referencia")
+                    setError("Error al obtener la guía")
                     return
                 }
-                setCodigo(res?.reference?.codigo)
-                setColor(res?.reference?.color)
-                setTamano(res?.reference?.tamano)
+                setNombre(res?.giftGuide?.nombre)
+                setDescripcion(res?.giftGuide?.descripcion)
             } catch (error) {
                 setError(error.message)
             }
@@ -36,9 +34,7 @@ const EditReferenceProduct = () => {
     async function sendData() {
         try {
             const errors = {}
-            if (codigo.trim().length < 1) errors.codigo = "El código es obligatorio"
-            if (color.trim().length < 1) errors.color = "El color es obligatorio"
-            if (tamano.trim().length < 1) errors.tamano = "El tamaño es obligatorio"
+            if (nombre.trim().length < 1) errors.nombre = "El nombre es obligatorio"
 
             if (Object.keys(errors).length > 0) {
                 setFieldErrors(errors)
@@ -48,10 +44,10 @@ const EditReferenceProduct = () => {
             setLoading(true)
             setError("")
 
-            const res = await updateReferenceProduct(id, codigo, color, tamano)
+            const res = await updateGiftGuide(id, nombre, descripcion)
 
             if (!res?.valid) {
-                setError("Error al actualizar la referencia")
+                setError("Error al actualizar la guía")
                 return
             }
 
@@ -65,26 +61,19 @@ const EditReferenceProduct = () => {
     }
 
     const campos = {
-        codigo: {
-            titulo: "Código",
-            name: "codigo",
+        nombre: {
+            titulo: "Nombre",
+            name: "nombre",
             type: "text",
-            value: codigo,
-            onChange: setCodigo
+            value: nombre,
+            onChange: setNombre
         },
-        color: {
-            titulo: "Color",
-            name: "color",
+        descripcion: {
+            titulo: "Descripción",
+            name: "descripcion",
             type: "text",
-            value: color,
-            onChange: setColor
-        },
-        tamano: {
-            titulo: "Tamaño",
-            name: "tamano",
-            type: "text",
-            value: tamano,
-            onChange: setTamano
+            value: descripcion,
+            onChange: setDescripcion
         }
     }
 
@@ -93,7 +82,7 @@ const EditReferenceProduct = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/referenciaProductos">Regresar</Link>
+                    <Link className="link-regresar" to="/admin/giftGuide">Regresar</Link>
                 </div>
             )}
 
@@ -101,16 +90,15 @@ const EditReferenceProduct = () => {
 
                 {!mostrarDatos ? (
                     <>
-                        <h1 className="titulo-por-h1">Detalles de la referencia</h1>
+                        <h1 className="titulo-por-h1">Detalles de la guía</h1>
                         <div className="contenedor-campos">
-                            <p><strong>Código:</strong> {codigo}</p>
-                            <p><strong>Color:</strong> {color}</p>
-                            <p><strong>Tamaño:</strong> {tamano}</p>
+                            <p><strong>Nombre:</strong> {nombre}</p>
+                            <p><strong>Descripción:</strong> {descripcion}</p>
                         </div>
                     </>
                 ) : (
                     <AdminFormEdit
-                        titulo={"Editar referencia"}
+                        titulo={"Editar guía de regalos"}
                         campos={campos}
                         onSendForm={sendData}
                         error={error}
@@ -134,4 +122,4 @@ const EditReferenceProduct = () => {
     )
 }
 
-export default EditReferenceProduct
+export default EditGiftGuide
