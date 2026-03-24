@@ -12,6 +12,7 @@ const CreateReview = () => {
     const [loading, setLoading] = useState(false)
     const [loadingOptions, setLoadingOptions] = useState(false)
     const [error, setError] = useState('')
+    const [stepErrors, setStepErrors] = useState({})  // ← nuevo
 
     const [categorias, setCategorias] = useState([])
     const [marcas, setMarcas] = useState([])
@@ -29,7 +30,6 @@ const CreateReview = () => {
     const [resultadosUsuarios, setResultadosUsuarios] = useState([])
     const [buscando, setBuscando] = useState(false)
 
-    // Paso 0: cargar categorías al montar
     useEffect(() => {
         const fetchCategorias = async () => {
             setLoadingOptions(true)
@@ -45,7 +45,6 @@ const CreateReview = () => {
         fetchCategorias()
     }, [])
 
-    // Paso 1: cargar marcas cuando se elige categoría
     useEffect(() => {
         if (!categoriaId) return
         const fetchMarcas = async () => {
@@ -62,7 +61,6 @@ const CreateReview = () => {
         fetchMarcas()
     }, [categoriaId])
 
-    // Paso 2: cargar y filtrar productos por categoría + marca
     useEffect(() => {
         if (!marcaId) return
         const fetchProductos = async () => {
@@ -85,7 +83,6 @@ const CreateReview = () => {
         fetchProductos()
     }, [marcaId])
 
-    // Paso 3: debounce búsqueda de usuarios
     useEffect(() => {
         if (!busqueda.trim()) {
             setResultadosUsuarios([])
@@ -105,6 +102,30 @@ const CreateReview = () => {
         return () => clearTimeout(timer)
     }, [busqueda])
 
+    // ← validación por paso
+    function validateStep(currentStep) {
+        const errors = {}
+
+        if (currentStep === 0 && !categoriaId) {
+            errors.categoria = "Debes seleccionar una categoría"
+        }
+        if (currentStep === 1 && !marcaId) {
+            errors.marca = "Debes seleccionar una marca"
+        }
+        if (currentStep === 2 && !productoId) {
+            errors.producto = "Debes seleccionar un producto"
+        }
+        if (currentStep === 3 && !usuarioId) {
+            errors.usuario = "Debes seleccionar un usuario"
+        }
+        if (currentStep === 4 && (!calificacion || calificacion < 1 || calificacion > 5)) {
+            errors.calificacion = "La calificación debe estar entre 1 y 5"
+        }
+
+        setStepErrors(errors)
+        return Object.keys(errors).length > 0
+    }
+
     const handleSelectCategoria = (id) => {
         setCategoriaId(id)
         setMarcaId('')
@@ -112,6 +133,7 @@ const CreateReview = () => {
         setProductoNombre('')
         setUsuarioId('')
         setUsuarioNombre('')
+        setStepErrors({})   // ← limpiar error al seleccionar
         setStep(1)
     }
 
@@ -119,12 +141,14 @@ const CreateReview = () => {
         setMarcaId(id)
         setProductoId('')
         setProductoNombre('')
+        setStepErrors({})
         setStep(2)
     }
 
     const handleSelectProducto = (id, nombre) => {
         setProductoId(id)
         setProductoNombre(nombre)
+        setStepErrors({})
         setStep(3)
     }
 
@@ -133,10 +157,17 @@ const CreateReview = () => {
         setUsuarioNombre(nombre)
         setBusqueda(nombre)
         setResultadosUsuarios([])
+        setStepErrors({})
     }
 
     const handleSubmit = async () => {
-        if (!productoId || !usuarioId) return
+        if (validateStep(4)) return   // ← validar paso final
+
+        if (!productoId || !usuarioId) {
+            setError("Faltan campos requeridos")
+            return
+        }
+
         try {
             setLoading(true)
             setError('')
@@ -154,7 +185,10 @@ const CreateReview = () => {
     }
 
     const goToStep = (s) => {
-        if (s < step) setStep(s)
+        if (s < step) {
+            setStepErrors({})   // ← limpiar errores al navegar hacia atrás
+            setStep(s)
+        }
     }
 
     const categoriaSeleccionada = categorias.find(c => String(c.id_categoria) === String(categoriaId))
@@ -172,7 +206,6 @@ const CreateReview = () => {
 
                 <h1 className="titulo-por-h1">Crear reseña</h1>
 
-                {/* Indicador de pasos */}
                 <div className="stepper-indicador">
                     {STEPS.map((label, i) => (
                         <div
@@ -189,7 +222,6 @@ const CreateReview = () => {
                     ))}
                 </div>
 
-                {/* Resumen de selecciones anteriores */}
                 {(categoriaId || marcaId || productoId || usuarioId) && (
                     <div className="stepper-resumen">
                         {categoriaSeleccionada && (
@@ -239,6 +271,8 @@ const CreateReview = () => {
                                     )}
                                 </div>
                             )}
+                            {/* ← error del paso */}
+                            {stepErrors.categoria && <p className="error-field">{stepErrors.categoria}</p>}
                         </div>
                     )}
 
@@ -264,6 +298,7 @@ const CreateReview = () => {
                                     )}
                                 </div>
                             )}
+                            {stepErrors.marca && <p className="error-field">{stepErrors.marca}</p>}
                         </div>
                     )}
 
@@ -297,6 +332,7 @@ const CreateReview = () => {
                                     )}
                                 </div>
                             )}
+                            {stepErrors.producto && <p className="error-field">{stepErrors.producto}</p>}
                         </div>
                     )}
 
@@ -314,6 +350,7 @@ const CreateReview = () => {
                                         setBusqueda(e.target.value)
                                         setUsuarioId('')
                                         setUsuarioNombre('')
+                                        setStepErrors({})   // ← limpiar al escribir
                                     }}
                                     autoFocus
                                 />
@@ -341,17 +378,32 @@ const CreateReview = () => {
                                 <p className="stepper-vacio">No se encontraron usuarios con "{busqueda}"</p>
                             )}
 
+                            {stepErrors.usuario && <p className="error-field">{stepErrors.usuario}</p>}
+
                             {usuarioId && (
                                 <div className="stepper-seleccion-confirmada">
-                                    ✓ Seleccionado: <strong>{usuarioNombre}</strong>
+                                    <span>✓ Seleccionado: <strong>{usuarioNombre}</strong></span>
                                     <button
                                         className="modificar-profile"
-                                        style={{ marginLeft: '12px' }}
-                                        onClick={() => setStep(4)}
+                                        onClick={() => {
+                                            if (validateStep(3)) return   // ← validar antes de continuar
+                                            setStep(4)
+                                        }}
                                     >
                                         Continuar →
                                     </button>
                                 </div>
+                            )}
+
+                            {/* ← botón continuar si no hay usuario seleccionado aún */}
+                            {!usuarioId && (
+                                <button
+                                    className="modificar-profile"
+                                    style={{ marginTop: '16px' }}
+                                    onClick={() => validateStep(3)}
+                                >
+                                    Continuar →
+                                </button>
                             )}
                         </div>
                     )}
@@ -367,7 +419,10 @@ const CreateReview = () => {
                                         <span
                                             key={s}
                                             className={`estrella ${s <= calificacion ? 'activa' : ''}`}
-                                            onClick={() => setCalificacion(s)}
+                                            onClick={() => {
+                                                setCalificacion(s)
+                                                setStepErrors({})   // ← limpiar al seleccionar
+                                            }}
                                         >
                                             ★
                                         </span>
@@ -380,19 +435,23 @@ const CreateReview = () => {
                                     max="5"
                                     step="1"
                                     value={calificacion}
-                                    onChange={e => setCalificacion(Number(e.target.value))}
+                                    onChange={e => {
+                                        setCalificacion(Number(e.target.value))
+                                        setStepErrors({})
+                                    }}
                                     className="slider-estrellas"
                                 />
 
                                 <p className="calificacion-texto">
-                                    {calificacion === 1 && '😞 Muy malo'}
-                                    {calificacion === 2 && '😕 Malo'}
-                                    {calificacion === 3 && '😐 Regular'}
-                                    {calificacion === 4 && '😊 Bueno'}
-                                    {calificacion === 5 && '🤩 Excelente'}
+                                    {calificacion === 1 && 'Muy malo'}
+                                    {calificacion === 2 && 'Malo'}
+                                    {calificacion === 3 && 'Regular'}
+                                    {calificacion === 4 && 'Bueno'}
+                                    {calificacion === 5 && 'Excelente'}
                                 </p>
                             </div>
 
+                            {stepErrors.calificacion && <p className="error-field">{stepErrors.calificacion}</p>}
                             {error && <p className="error-message">{error}</p>}
 
                             <button

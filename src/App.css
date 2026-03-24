@@ -906,6 +906,10 @@ footer {
     width: 83.2%;
 }
 
+.cancelar-tarjeta, .modificar{
+    width: 120%;
+}
+
 .contenedor-campos{
     margin: 0 auto;
     width: 92.6%;
@@ -997,9 +1001,10 @@ footer {
 }
 
 .stepper-paso.completado:not(:last-child)::after {
-    background-color: var(--color-primary, #4f46e5);
+    background-color: #c9a0a0;
 }
 
+/* Círculos — tono rosado igual al botón continuar */
 .stepper-circulo {
     width: 32px;
     height: 32px;
@@ -1018,14 +1023,14 @@ footer {
 }
 
 .stepper-paso.activo .stepper-circulo {
-    border-color: var(--color-primary, #4f46e5);
-    background: var(--color-primary, #4f46e5);
+    border-color: #c9a0a0;
+    background: #c9a0a0;
     color: #fff;
 }
 
 .stepper-paso.completado .stepper-circulo {
-    border-color: var(--color-primary, #4f46e5);
-    background: var(--color-primary, #4f46e5);
+    border-color: #c9a0a0;
+    background: #c9a0a0;
     color: #fff;
 }
 
@@ -1042,7 +1047,7 @@ footer {
 }
 
 .stepper-paso.completado .stepper-label {
-    color: var(--color-primary, #4f46e5);
+    color: #c9a0a0;
 }
 
 /* Resumen de tags seleccionados */
@@ -1052,8 +1057,8 @@ footer {
     gap: 8px;
     margin-bottom: 20px;
     padding: 12px 16px;
-    background: var(--color-background-secondary, #f5f5f5);
     border-radius: 8px;
+    border: 1px solid #b3848f;
 }
 
 .stepper-tag {
@@ -1071,7 +1076,7 @@ footer {
 }
 
 .stepper-tag:hover {
-    border-color: var(--color-primary, #4f46e5);
+    border-color: #c9a0a0;
 }
 
 /* Panel de contenido */
@@ -1129,13 +1134,13 @@ footer {
 }
 
 .stepper-item:hover {
-    border-color: var(--color-primary, #4f46e5);
+    border-color: #c9a0a0;
     background: var(--color-background-secondary, #f5f5f5);
 }
 
 .stepper-item.seleccionado {
-    border-color: var(--color-primary, #4f46e5);
-    background: var(--color-primary, #4f46e5);
+    border-color: #c9a0a0;
+    background: #c9a0a0;
     color: #fff;
     font-weight: 500;
 }
@@ -1159,26 +1164,42 @@ footer {
 }
 
 .input-busqueda:focus {
-    border-color: var(--color-primary, #4f46e5);
+    border-color: #c9a0a0;
 }
 
+/* Selección confirmada — todo apilado, sin salirse */
 .stepper-seleccion-confirmada {
     display: flex;
-    align-items: center;
-    margin-top: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 12px;
     padding: 12px 16px;
     border-radius: 8px;
     background: var(--color-background-secondary, #f5f5f5);
     font-size: 14px;
     color: var(--color-text-primary, #111);
+    box-sizing: border-box;
+    width: 100%;
 }
 
-/* Estrellas */
+.stepper-seleccion-confirmada span {
+    display: block;
+    width: 100%;
+}
+
+.stepper-seleccion-confirmada .modificar-profile {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 !important;
+}
+
+/* Estrellas — sin slider, sin emoji, inactivas gris oscuro */
 .stepper-estrellas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
     padding: 24px 0;
 }
 
@@ -1188,15 +1209,17 @@ footer {
 }
 
 .estrella {
-    font-size: 40px;
-    color: var(--color-border-secondary, #ddd);
+    font-size: 28px;
+    color: transparent;
+    -webkit-text-stroke: 2px #888;
     cursor: pointer;
     transition: color 0.15s ease, transform 0.1s ease;
     line-height: 1;
 }
 
 .estrella.activa {
-    color: #f59e0b;
+    color: #444;
+    -webkit-text-stroke: 2px #444;
 }
 
 .estrella:hover {
@@ -1204,127 +1227,20 @@ footer {
 }
 
 .slider-estrellas {
-    width: 100%;
-    max-width: 300px;
-    accent-color: #f59e0b;
-    cursor: pointer;
+    display: none;
 }
 
 .calificacion-texto {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--color-text-primary, #111);
+    display: none;
 }
 
-.product-details{
-    justify-content: space-around;
-    display: flex;
-
-    .details{
-        width: 30%;
-        padding: 10px;
-
-        h1{
-            text-transform: capitalize;
-        }
-
-        h2{
-            margin-top: 15px;
-        }
-
-        .add-to-cart{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 15px;
-
-            .quantity-buttons{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                font-size: 20px;
-                font-weight: bolder;
-                width: 80%;
-                margin: 0 auto;
-                border: 1px solid black;
-
-                button{
-                    min-width: 37%;
-                    padding: 10px;
-                    background-color: transparent;
-                    cursor: pointer;
-                    transition: 200ms all ease-in-out;
-                    border: none;
-
-                    &:hover{
-                        background-color: #f7e9ed;
-                    }
-                }
-
-                p{
-                    min-width: 20%;
-                    height: 100%;
-                    text-align: center;
-                }
-            }
-
-            .quantity-buttons + div{
-                width: 80%;
-                margin-top: 15px;
-
-                button{
-                    display: block;
-                    margin: 0 auto;
-                    width: 100%;
-                    font-size: 18px;
-                    font-weight: bolder;
-                    padding: 10px;
-
-                    min-width: 37%;
-                    border: 1px solid black;
-                    background-color: transparent;
-                    cursor: pointer;
-                    transition: 200ms all ease-in-out;
-
-                    &:hover{
-                        background-color: #f7e9ed;
-                    }
-                }
-            }
-        }
-    }
+.guardar-cambios{
+    border: 1px solid #393939;
+    color: #393939;
 }
 
-.radio-container{
-    display: flex;
-    padding-top: 20px;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row !important;
-
-    div{
-        display: flex;
-
-        label{
-            position: relative;
-        }
-    }
-}
-
-.details-reviews-container{
-    border-bottom: 1px solid black;
-    padding: 20px 0px;
-    display: flex;
-    gap: 40px;
-    margin: 20px 0px;
-}
-
-.more-products-container{
-    h2{
-        margin: 20px 0px;
-    }
+.guardar-cambios:hover{
+    background-color: #393939;
 }
 
 .products-cards-container{

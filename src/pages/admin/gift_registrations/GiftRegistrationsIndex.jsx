@@ -6,18 +6,20 @@ const GiftRegistrationsIndex = () => {
 
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
-    const [lastPage, setLastPage] = useState(1)
+    const [limit] = useState(10)
+    const [lastPage, setLastPage] = useState(undefined)
 
     const fields = {
-        "id_inscripcion":     "Id",
-        "usuario_nombre":     "Usuario",
-        "factura_id":         "Factura",
-        "estado":             "Estado",
+        "id_inscripcion": "Id",
+        "usuario_nombre": "Usuario",
+        "factura_id":     "Factura",
+        "estado":         "Estado",
+        "created_at":     "Fecha creación",
     }
 
     async function getData() {
         try {
-            const res = await getAllGiftRegistrations()
+            const res = await getAllGiftRegistrations(page, limit)
 
             if (!res?.valid) {
                 console.log("Error inscripciones:", res?.error)
@@ -29,14 +31,13 @@ const GiftRegistrationsIndex = () => {
                 usuario_nombre: i.usuario
                     ? `${i.usuario.nombres} ${i.usuario.apellidos}`
                     : `Usuario #${i.id_usuario}`,
-                factura_id: i.factura
-                    ? `#${i.id_factura_pedido}`
-                    : `#${i.id_factura_pedido}`,
-                estado: i.estado ?? '—'
+                factura_id: `#${i.id_factura_pedido}`,
+                estado: i.estado ?? '—',
+                created_at: i.created_at ? i.created_at.split(" ")[0] : "—",
             }))
 
             setData(inscripciones)
-            setLastPage(1)
+            setLastPage(Number(res?.last_page ?? 1))
 
         } catch (error) {
             console.log(error?.message)
