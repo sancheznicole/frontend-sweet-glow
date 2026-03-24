@@ -1253,7 +1253,6 @@ footer {
     }
 }
 
-<<<<<<< HEAD
 .cart-container{
     display: flex;
     align-items: center;
@@ -1275,7 +1274,7 @@ footer {
 }
 button{
     cursor: pointer;
-=======
+}
 /*blog*/
 .blog-container{
   display: grid;
@@ -1376,5 +1375,4 @@ button{
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
->>>>>>> 25baa4b (panel de administracion funcionando luisa)
 }

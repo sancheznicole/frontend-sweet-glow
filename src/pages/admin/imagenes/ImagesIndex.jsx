@@ -8,9 +8,10 @@ const ImagesIndex = () => {
     const [page, setPage] = useState(1)
     const [lastPage, setLastPage] = useState(undefined)
 
+    // Cambié fields para usar la nueva clave 'producto_nombre'
     const fields = {
         id_imagen: "ID",
-        "producto.nombre": "Producto",
+        producto_nombre: "Producto",
         created_at: "Fecha creación"
     }
 
@@ -41,10 +42,16 @@ const ImagesIndex = () => {
         }
     }
 
+    // Aquí proceso data para agregar 'producto_nombre' desde la propiedad anidada
+    const processedData = data.map(item => ({
+        ...item,
+        producto_nombre: item.producto?.nombre || ""
+    }))
+
     return (
         <div>
             <AdminPanel
-                data={data}
+                data={processedData}  // Uso processedData aquí
                 page={page}
                 lastPage={lastPage}
                 setPage={setPage}

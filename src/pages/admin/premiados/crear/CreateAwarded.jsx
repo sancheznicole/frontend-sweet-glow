@@ -51,10 +51,14 @@ const CreateAwarded = () => {
 
     const campos = {
         id_premio: {
-            titulo: "Premio",
-            name: "id_premio",
-            type: "number",
-            onChange: setIdPremio
+        titulo: "Premio",
+        name: "id_premio",
+        type: "text-search",
+        searchFunction: searchProduct,  // la función que trae los premios
+        data_key: "products",           // clave donde viene el array en la respuesta
+        save_data_key: "id_producto",   // la propiedad que guardarás al seleccionar
+        text_keys: "nombre",            // campos que se muestran en la búsqueda
+        onChange: setIdPremio
         },
         id_usuario: {
             titulo: "Usuario",

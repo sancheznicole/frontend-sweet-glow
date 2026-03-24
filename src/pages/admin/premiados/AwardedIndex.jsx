@@ -10,8 +10,8 @@ const AwardedIndex = () => {
 
     const fields = {
         id_premiado: "ID",
-        "usuario.nombres": "Usuario",
-        "premio.id_premio": "Premio",
+        usuario: "Usuario",
+        premio: "Premio",
         created_at: "Fecha creación"
     }
 
@@ -22,8 +22,17 @@ const AwardedIndex = () => {
                 console.log(res?.error)
                 return
             }
-            setData(res?.winners?.data)
-            setLastPage(res?.winners?.last_page)
+
+            // Procesar los datos para extraer propiedades planas y mostrar nombre del producto
+            const processedWinners = res.winners.data.map(winner => ({
+                ...winner,
+                usuario: winner.usuario ? `${winner.usuario.nombres} ${winner.usuario.apellidos}` : "",
+                premio: winner.premio?.producto?.nombre || `ID ${winner.premio.id_producto}`
+            }))
+
+            setData(processedWinners) // Actualizamos el estado con los datos procesados
+            setLastPage(res.winners.last_page)
+
         } catch (error) {
             console.log(error?.message)
         }
@@ -37,6 +46,7 @@ const AwardedIndex = () => {
         try {
             const res = await deleteWinner(id)
             if (!res?.valid) return res?.error
+            getData() // Refrescar lista tras eliminar
         } catch (error) {
             return error.message
         }
