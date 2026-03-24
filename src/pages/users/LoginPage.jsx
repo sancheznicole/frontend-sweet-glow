@@ -60,7 +60,7 @@ const LoginPage = () => {
   
       //si no es respuesta valida no manda la ejecucion y corta la ejecución
       if(!res.valid){
-        setError(res.error)
+        setError("Error al inicar sesión")
         return
       }
   

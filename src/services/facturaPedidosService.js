@@ -34,10 +34,10 @@ export async function getInvoiceOrders(id_factura_pedido) {
     }
 }
 
-export async function createInvoiceOrders(id_usuario, neto) {
+export async function createInvoiceOrders(id_usuario, id_carrito, id_tarjeta, neto, descuento, status = "pending") {
 
     try {
-        const payload = { id_usuario, neto }
+        const payload = { id_usuario, neto, id_carrito, id_tarjeta, descuento, status }
 
         const res = await axios.post(`${API_URL}/order_invoice`, payload)
 
@@ -45,7 +45,7 @@ export async function createInvoiceOrders(id_usuario, neto) {
             return { valid: false, error: res.data?.errors }
         }
 
-        return { valid: true }
+        return { valid: true, order_invoice: res?.data }
     } 
 
     catch (error) {
@@ -54,13 +54,17 @@ export async function createInvoiceOrders(id_usuario, neto) {
     
 }
 
-export async function updateInvoiceOrders(id_factura_pedido, id_usuario, neto) {
+export async function updateInvoiceOrders(id_factura_pedido, id_usuario, id_carrito, id_tarjeta, neto, descuento, status) {
      try {
         const datos = {}
 
         if (id_factura_pedido) datos.id_factura_pedido = id_factura_pedido
-        if (id_usuario) datos.id_usuario = id_usuario
+        if (id_carrito) datos.id_carrito = id_carrito
+        if (id_tarjeta) datos.id_tarjeta = id_tarjeta
+        if (descuento) datos.descuento = descuento
         if (neto) datos.neto = neto
+        if (status) datos.status = status
+        if (id_usuario) datos.id_usuario = id_usuario
 
         const res = await axios.put(`${API_URL}/order_invoice/${id_factura_pedido}`, datos)
 

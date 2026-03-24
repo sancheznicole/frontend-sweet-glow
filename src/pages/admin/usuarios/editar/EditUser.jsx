@@ -2,10 +2,12 @@ import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getUser, userUpdate } from "../../../../services/authService"
+import { useNavigate } from "react-router-dom"
 
 const EditUser = () => {
 
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -220,9 +222,9 @@ const EditUser = () => {
 
       {!mostrarDatos && (
         <div className="back-link-container">
-          <Link className="link-regresar" to="/admin/users">
+          <button className="link-regresar" onClick={() => navigate(-1)}>
             Regresar
-          </Link>
+          </button>
         </div>
       )}
 

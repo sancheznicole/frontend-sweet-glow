@@ -57,6 +57,9 @@ import EditGiftRegistration    from "../pages/admin/gift_registrations/editar/Ed
 import CarritoIndex from "../pages/admin/carritos/CarritoIndex"
 import CreateCarrito from "../pages/admin/carritos/crear/CreateCarrito."
 import EditCart from "../pages/admin/carritos/editar/EditCart"
+import ElementosCarritos from "../pages/admin/elementos_carritos/ElementosCarritos"
+import CreateCartElements from "../pages/admin/elementos_carritos/crear/CreateCartElements"
+import EditElementsCart from "../pages/admin/elementos_carritos/editar/EditElementsCart"
 import PedidosFacturaIndex from "../pages/admin/factura_pedidos/PedidosFacturaIndex"
 import ProductsDetails from "../pages/products/ProductsDetails"
 import CreateOrderInvoice from "../pages/admin/factura_pedidos/crear/CreateOrderInvoice"
@@ -259,6 +262,24 @@ export const router = createBrowserRouter([
       { path: "admin/cart/edit/:id", element: 
         <ProtectedAdmin>
           <EditCart />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/cart-elements", element: 
+        <ProtectedAdmin>
+          <ElementosCarritos />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/elements-cart/create", element: 
+        <ProtectedAdmin>
+          <CreateCartElements />
+        </ProtectedAdmin> 
+      },
+
+      { path: "admin/elements-cart/edit/:id", element: 
+        <ProtectedAdmin>
+          <EditElementsCart />
         </ProtectedAdmin> 
       },
 

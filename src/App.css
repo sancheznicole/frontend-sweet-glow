@@ -1336,3 +1336,26 @@ footer {
         border-radius: 10px;
     }
 }
+
+.cart-container{
+    display: flex;
+    align-items: center;
+
+    .empty-cart{
+        text-align: center;
+
+        a, p{
+            margin: 20px;
+        }
+    }
+}
+
+.cart-between{
+    justify-content: space-between;
+}
+.cart-center {
+    justify-content: center;
+}
+button{
+    cursor: pointer;
+}

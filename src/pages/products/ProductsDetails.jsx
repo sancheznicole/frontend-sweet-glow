@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { getProduct, getAllProducts } from "../../services/productsService"
 import Loader from "../../components/Loader"
 import { getCategory } from "../../services/categoriesService"
 import { getBrand } from "../../services/brands"
 import { searchReviewsByProductId } from "../../services/reviewsService"
 import ProductsCards from "../../components/ProductsCards"
+import { addToCart } from "../../services/cartService"
 
 const ProductsDetails = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const [product, setProduct] = useState({})
     const [category, setCategory] = useState({})
@@ -18,6 +20,8 @@ const ProductsDetails = () => {
     const [products, setProducts] = useState([])
     
     const [quantity, setQuantity] = useState(1)
+
+    const [cartError, setCartError] = useState('')
 
     const getData = async () => {
         try {
@@ -70,6 +74,15 @@ const ProductsDetails = () => {
         }
     }
 
+    const handleAddToCart = async () => {
+        const res = await addToCart(product, quantity)
+
+        if(!res?.valid){
+            setCartError(res?.error)
+        }
+
+        navigate("/cart")
+    }
 
     useEffect(() => {
         getData()
@@ -80,8 +93,6 @@ const ProductsDetails = () => {
             getBrandAndCategory()
         }
     }, [product])
-
-    console.log(reviews)
 
     return (
         <div>
@@ -107,18 +118,18 @@ const ProductsDetails = () => {
 
                             <div className="add-to-cart">
                                 <div className="quantity-buttons">
-                                    <button onClick={() => {setQuantity(quantity+1)}}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
+                                    <button onClick={() => {if(quantity > 1) setQuantity(quantity-1)}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
                                     </button>
                                     <p>
                                         {quantity}
                                     </p>
-                                    <button onClick={() => {if(quantity > 1) setQuantity(quantity-1)}}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
+                                    <button onClick={() => {setQuantity(quantity+1)}}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
                                     </button>
                                 </div>
                                 <div>
-                                    <button>
+                                    <button onClick={() => {handleAddToCart()}}>
                                         Añadir al carrito ${quantity*product?.precio} COP
                                     </button>
                                 </div>
@@ -144,7 +155,7 @@ const ProductsDetails = () => {
 
                     {/* productos  */}
                     <div className="more-products-container">
-                        <h2 clas>Mas de nustros productos</h2>
+                        <h2 className="">Mas de nustros productos</h2>
                         <ProductsCards 
                             products={products}
                         ></ProductsCards>

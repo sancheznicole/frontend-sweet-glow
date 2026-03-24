@@ -2,9 +2,9 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function getAllCart(page, limit) {
+export async function getAllCart(page = 1, limit = 5, search = '') {
     try {
-        const res = await axios.get(`${API_URL}/carts?page=${page}&limit=${limit}`)
+        const res = await axios.get(`${API_URL}/carts?page=${page}&limit=${limit}&search=${search}`)
 
         if (res?.status != 200) {
             return { valid: false, error: res.data?.errors }
@@ -16,7 +16,6 @@ export async function getAllCart(page, limit) {
         return { valid: false, error: error?.message }
     }
 }
-
 
 export async function getCart(id_carrito) {
     try {
@@ -34,9 +33,9 @@ export async function getCart(id_carrito) {
     }
 }
 
-export async function createCart(id_usuario, cantidad, descuento, id_producto, id_factura_pedido, id_tarjeta) {
+export async function createCart(id_usuario, status = "active") {
     try {
-        const payload = { id_carrito, id_usuario, cantidad, descuento, id_producto, id_factura_pedido, id_tarjeta }
+        const payload = { id_usuario, status }
 
         const res = await axios.post(`${API_URL}/carts`, payload)
 
@@ -44,7 +43,7 @@ export async function createCart(id_usuario, cantidad, descuento, id_producto, i
             return { valid: false, error: res.data?.errors }
         }
 
-        return { valid: true }
+        return { valid: true, cart: res?.data }
     } 
 
     catch (error) {
@@ -53,17 +52,12 @@ export async function createCart(id_usuario, cantidad, descuento, id_producto, i
     
 }
 
-export async function updateCart(id_carrito, id_usuario, cantidad, descuento, id_producto, id_factura_pedido, id_tarjeta) {
+export async function updateCart(id_usuario, status) {
      try {
         const datos = {}
 
-        if (id_carrito) datos.id_carrito = id_carrito
         if (id_usuario) datos.id_usuario = id_usuario
-        if (cantidad) datos.cantidad = cantidad
-        if (descuento) datos.descuento = descuento
-        if (id_producto) datos.id_producto = id_producto
-        if (id_factura_pedido) datos.id_factura_pedido = id_factura_pedido
-        if (id_tarjeta) datos.id_tarjeta = id_tarjeta
+        if (status) datos.cantidad = status
 
         const res = await axios.put(`${API_URL}/carts/${id_carrito}`, datos)
 
@@ -93,4 +87,110 @@ export async function deleteCart(id_carrito) {
     catch (error) {
         return { valid: false, error: error?.message }
     }
+}
+
+export async function searchCart(search = '') {
+    try {
+        const res = await axios.get(`${API_URL}/carts?search=${search}`)
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+
+        return { valid: true, carts: res?.data }
+
+    } catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function getUserCarts(user_id){
+    try {
+        const res = await axios.get(`${API_URL}/user/carts/${user_id}`)
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+
+        return { valid: true, carts: res?.data }
+
+    } catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+// front cart functions
+
+
+export const addToCart = async (product, quantity) => {
+    try {
+        let saved = localStorage.getItem("cart")
+        let cart = saved != null ? JSON.parse(saved) : saved
+
+        const productFormatted = {
+            ...product,
+            quantity: quantity
+        };
+
+       cart = {
+            ...cart,
+            [product?.id_producto]: productFormatted
+       }
+
+       localStorage.setItem("cart", JSON.stringify(cart))
+
+        return { valid: true }
+    } catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export const removeFromCart = async (id) => {
+    try {
+        let saved = localStorage.getItem("cart");
+        let cart = saved != null ? JSON.parse(saved) : {};
+
+        if (cart && cart[id]) {
+            delete cart[id];
+        }
+
+        if(Object.keys(cart).length == 1){
+            localStorage.setItem("cart", null);
+        } else{
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+
+        return { valid: true };
+    } catch (error) {
+        return { valid: false, error: error?.message };
+    }
+};
+
+export const addOne = (id) => {
+    let saved = localStorage.getItem("cart")
+    let cart = saved != null ? JSON.parse(saved) : saved
+
+    if (cart[id]) {
+        cart[id].quantity += 1;
+    } else {
+        console.warn("Producto no existe en el carrito");
+        return;
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+export const deleteOne = (id) => {
+    let saved = localStorage.getItem("cart")
+    let cart = saved != null ? JSON.parse(saved) : saved
+
+    if (cart[id]) {
+        cart[id].quantity -= 1;
+    } else {
+        console.warn("Producto no existe en el carrito");
+        return;
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
