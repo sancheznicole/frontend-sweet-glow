@@ -8,9 +8,10 @@ const AwardsIndex = () => {
     const [page, setPage] = useState(1)
     const [lastPage, setLastPage] = useState(undefined)
 
+    // Campos para mostrar en la tabla
     const fields = {
         id_premio: "ID",
-        "producto.nombre": "Producto",
+        producto: "Producto",
         created_at: "Fecha creación"
     }
 
@@ -21,8 +22,15 @@ const AwardsIndex = () => {
                 console.log(res?.error)
                 return
             }
-            setData(res?.awards?.data)
-            setLastPage(res?.awards?.last_page)
+
+            // Procesar para extraer nombre del producto
+            const processedAwards = res.awards.data.map(award => ({
+                ...award,
+                producto: award.producto?.nombre || ""
+            }))
+
+            setData(processedAwards)
+            setLastPage(res.awards.last_page)
         } catch (error) {
             console.log(error?.message)
         }
@@ -36,6 +44,8 @@ const AwardsIndex = () => {
         try {
             const res = await deleteAward(id)
             if (!res?.valid) return res?.error
+            // Opcional: refrescar datos tras eliminar
+            getData()
         } catch (error) {
             return error.message
         }
