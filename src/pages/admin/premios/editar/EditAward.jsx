@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
+import { getAward, updateAward } from "../../../../services/awardsService"
+import { searchProduct } from "../../../../services/productsService"
 
-const EditReferenceProduct = () => {
+const EditAward = () => {
 
     const { id } = useParams()
 
-    const [codigo, setCodigo] = useState("")
-    const [color, setColor] = useState("")
-    const [tamano, setTamano] = useState("")
+    const [id_producto, setIdProducto] = useState("")
+    const [producto, setProducto] = useState({})
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [fieldErrors, setFieldErrors] = useState({})
@@ -18,14 +18,13 @@ const EditReferenceProduct = () => {
     useEffect(() => {
         async function getData() {
             try {
-                const res = await getReferenceProduct(id)
+                const res = await getAward(id)
                 if (!res?.valid) {
-                    setError("Error al obtener la referencia")
+                    setError("Error al obtener el premio")
                     return
                 }
-                setCodigo(res?.reference?.codigo)
-                setColor(res?.reference?.color)
-                setTamano(res?.reference?.tamano)
+                setIdProducto(res?.award?.id_producto)
+                setProducto(res?.award?.producto)
             } catch (error) {
                 setError(error.message)
             }
@@ -35,27 +34,28 @@ const EditReferenceProduct = () => {
 
     async function sendData() {
         try {
-            const errors = {}
-            if (codigo.trim().length < 1) errors.codigo = "El código es obligatorio"
-            if (color.trim().length < 1) errors.color = "El color es obligatorio"
-            if (tamano.trim().length < 1) errors.tamano = "El tamaño es obligatorio"
-
-            if (Object.keys(errors).length > 0) {
-                setFieldErrors(errors)
+            if (!id_producto) {
+                setFieldErrors({ id_producto: "El producto es obligatorio" })
                 return
             }
 
             setLoading(true)
             setError("")
 
-            const res = await updateReferenceProduct(id, codigo, color, tamano)
+            const res = await updateAward(id, id_producto)
 
             if (!res?.valid) {
-                setError("Error al actualizar la referencia")
+                setError("Error al actualizar el premio")
                 return
             }
 
             setMostrarDatos(false)
+
+            const updated = await getAward(id)
+            if (updated?.valid) {
+                setIdProducto(updated?.award?.id_producto)
+                setProducto(updated?.award?.producto)
+            }
 
         } catch (error) {
             setError(error.message)
@@ -65,26 +65,17 @@ const EditReferenceProduct = () => {
     }
 
     const campos = {
-        codigo: {
-            titulo: "Código",
-            name: "codigo",
-            type: "text",
-            value: codigo,
-            onChange: setCodigo
-        },
-        color: {
-            titulo: "Color",
-            name: "color",
-            type: "text",
-            value: color,
-            onChange: setColor
-        },
-        tamano: {
-            titulo: "Tamaño",
-            name: "tamano",
-            type: "text",
-            value: tamano,
-            onChange: setTamano
+        id_producto: {
+            titulo: "Producto",
+            name: "id_producto",
+            type: "text-search",
+            searchFunction: searchProduct,
+            data_key: "products",
+            save_data_key: "id_producto",
+            text_keys: "nombre",
+            value: id_producto,
+            initial_show_value: producto?.nombre ?? "",
+            onChange: setIdProducto
         }
     }
 
@@ -93,7 +84,7 @@ const EditReferenceProduct = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/referenciaProductos">Regresar</Link>
+                    <Link className="link-regresar" to="/admin/premios">Regresar</Link>
                 </div>
             )}
 
@@ -101,16 +92,14 @@ const EditReferenceProduct = () => {
 
                 {!mostrarDatos ? (
                     <>
-                        <h1 className="titulo-por-h1">Detalles de la referencia</h1>
+                        <h1 className="titulo-por-h1">Detalles del premio</h1>
                         <div className="contenedor-campos">
-                            <p><strong>Código:</strong> {codigo}</p>
-                            <p><strong>Color:</strong> {color}</p>
-                            <p><strong>Tamaño:</strong> {tamano}</p>
+                            <p><strong>Producto:</strong> {producto?.nombre}</p>
                         </div>
                     </>
                 ) : (
                     <AdminFormEdit
-                        titulo={"Editar referencia"}
+                        titulo={"Editar premio"}
                         campos={campos}
                         onSendForm={sendData}
                         error={error}
@@ -134,4 +123,4 @@ const EditReferenceProduct = () => {
     )
 }
 
-export default EditReferenceProduct
+export default EditAward

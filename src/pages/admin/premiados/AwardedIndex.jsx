@@ -1,30 +1,29 @@
 import { useState, useEffect } from "react"
-import { getAllReferenceProducts, deleteReferenceProduct } from "../../../services/referenceProductsService"
+import { getAllWinners, deleteWinner } from "../../../services/winnersService"
 import AdminPanel from "../../../components/admin/AdminPanel"
 
-const ReferenceProductsIndex = () => {
+const AwardedIndex = () => {
 
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
     const [lastPage, setLastPage] = useState(undefined)
 
     const fields = {
-        id_referencia: "ID",
-        codigo: "Código",
-        color: "Color",
-        tamano: "Tamaño",
+        id_premiado: "ID",
+        "usuario.nombres": "Usuario",
+        "premio.id_premio": "Premio",
         created_at: "Fecha creación"
     }
 
     async function getData() {
         try {
-            const res = await getAllReferenceProducts(page)
+            const res = await getAllWinners(page)
             if (!res?.valid) {
                 console.log(res?.error)
                 return
             }
-            setData(res?.references?.data)
-            setLastPage(res?.references?.last_page)
+            setData(res?.winners?.data)
+            setLastPage(res?.winners?.last_page)
         } catch (error) {
             console.log(error?.message)
         }
@@ -36,7 +35,7 @@ const ReferenceProductsIndex = () => {
 
     const onDelete = async (id) => {
         try {
-            const res = await deleteReferenceProduct(id)
+            const res = await deleteWinner(id)
             if (!res?.valid) return res?.error
         } catch (error) {
             return error.message
@@ -51,10 +50,10 @@ const ReferenceProductsIndex = () => {
                 lastPage={lastPage}
                 setPage={setPage}
                 campos={fields}
-                titulo={"Administración de referencias de productos"}
-                texto={"Administra las referencias de los productos"}
-                linkCrear={"/admin/referenciaProductos/crear"}
-                linkEditar={"/admin/referenciaProductos/editar"}
+                titulo={"Administración de premiados"}
+                texto={"Administra los premiados"}
+                linkCrear={"/admin/premiados/crear"}
+                linkEditar={"/admin/premiados/editar"}
                 onDelete={onDelete}
                 getData={getData}
             />
@@ -62,4 +61,4 @@ const ReferenceProductsIndex = () => {
     )
 }
 
-export default ReferenceProductsIndex
+export default AwardedIndex

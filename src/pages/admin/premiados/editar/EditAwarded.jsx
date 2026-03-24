@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
+import { getWinner, updateWinner } from "../../../../services/winnersService"
+import { searchUsers } from "../../../../services/authService"
 
-const EditReferenceProduct = () => {
+const EditAwarded = () => {
 
     const { id } = useParams()
 
-    const [codigo, setCodigo] = useState("")
-    const [color, setColor] = useState("")
-    const [tamano, setTamano] = useState("")
+    const [id_premio, setIdPremio] = useState("")
+    const [id_usuario, setIdUsuario] = useState("")
+    const [id_inscripcion, setIdInscripcion] = useState("")
+    const [usuario, setUsuario] = useState({})
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [fieldErrors, setFieldErrors] = useState({})
@@ -18,14 +20,15 @@ const EditReferenceProduct = () => {
     useEffect(() => {
         async function getData() {
             try {
-                const res = await getReferenceProduct(id)
+                const res = await getWinner(id)
                 if (!res?.valid) {
-                    setError("Error al obtener la referencia")
+                    setError("Error al obtener el premiado")
                     return
                 }
-                setCodigo(res?.reference?.codigo)
-                setColor(res?.reference?.color)
-                setTamano(res?.reference?.tamano)
+                setIdPremio(res?.winner?.id_premio)
+                setIdUsuario(res?.winner?.id_usuario)
+                setIdInscripcion(res?.winner?.id_inscripcion)
+                setUsuario(res?.winner?.usuario)
             } catch (error) {
                 setError(error.message)
             }
@@ -36,9 +39,9 @@ const EditReferenceProduct = () => {
     async function sendData() {
         try {
             const errors = {}
-            if (codigo.trim().length < 1) errors.codigo = "El código es obligatorio"
-            if (color.trim().length < 1) errors.color = "El color es obligatorio"
-            if (tamano.trim().length < 1) errors.tamano = "El tamaño es obligatorio"
+            if (!id_premio) errors.id_premio = "El premio es obligatorio"
+            if (!id_usuario) errors.id_usuario = "El usuario es obligatorio"
+            if (!id_inscripcion) errors.id_inscripcion = "La inscripción es obligatoria"
 
             if (Object.keys(errors).length > 0) {
                 setFieldErrors(errors)
@@ -48,10 +51,10 @@ const EditReferenceProduct = () => {
             setLoading(true)
             setError("")
 
-            const res = await updateReferenceProduct(id, codigo, color, tamano)
+            const res = await updateWinner(id, id_premio, id_usuario, id_inscripcion)
 
             if (!res?.valid) {
-                setError("Error al actualizar la referencia")
+                setError("Error al actualizar el premiado")
                 return
             }
 
@@ -65,26 +68,31 @@ const EditReferenceProduct = () => {
     }
 
     const campos = {
-        codigo: {
-            titulo: "Código",
-            name: "codigo",
-            type: "text",
-            value: codigo,
-            onChange: setCodigo
+        id_premio: {
+            titulo: "ID Premio",
+            name: "id_premio",
+            type: "number",
+            value: id_premio,
+            onChange: setIdPremio
         },
-        color: {
-            titulo: "Color",
-            name: "color",
-            type: "text",
-            value: color,
-            onChange: setColor
+        id_usuario: {
+            titulo: "Usuario",
+            name: "id_usuario",
+            type: "text-search",
+            searchFunction: searchUsers,
+            data_key: "users",
+            save_data_key: "id_usuario",
+            text_keys: "nombres,apellidos,correo",
+            value: id_usuario,
+            initial_show_value: `${usuario?.nombres ?? ""} ${usuario?.apellidos ?? ""} ${usuario?.correo ?? ""}`,
+            onChange: setIdUsuario
         },
-        tamano: {
-            titulo: "Tamaño",
-            name: "tamano",
-            type: "text",
-            value: tamano,
-            onChange: setTamano
+        id_inscripcion: {
+            titulo: "ID Inscripción",
+            name: "id_inscripcion",
+            type: "number",
+            value: id_inscripcion,
+            onChange: setIdInscripcion
         }
     }
 
@@ -93,7 +101,7 @@ const EditReferenceProduct = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/referenciaProductos">Regresar</Link>
+                    <Link className="link-regresar" to="/admin/premiados">Regresar</Link>
                 </div>
             )}
 
@@ -101,16 +109,16 @@ const EditReferenceProduct = () => {
 
                 {!mostrarDatos ? (
                     <>
-                        <h1 className="titulo-por-h1">Detalles de la referencia</h1>
+                        <h1 className="titulo-por-h1">Detalles del premiado</h1>
                         <div className="contenedor-campos">
-                            <p><strong>Código:</strong> {codigo}</p>
-                            <p><strong>Color:</strong> {color}</p>
-                            <p><strong>Tamaño:</strong> {tamano}</p>
+                            <p><strong>Usuario:</strong> {usuario?.nombres} {usuario?.apellidos}</p>
+                            <p><strong>ID Premio:</strong> {id_premio}</p>
+                            <p><strong>ID Inscripción:</strong> {id_inscripcion}</p>
                         </div>
                     </>
                 ) : (
                     <AdminFormEdit
-                        titulo={"Editar referencia"}
+                        titulo={"Editar premiado"}
                         campos={campos}
                         onSendForm={sendData}
                         error={error}
@@ -134,4 +142,4 @@ const EditReferenceProduct = () => {
     )
 }
 
-export default EditReferenceProduct
+export default EditAwarded

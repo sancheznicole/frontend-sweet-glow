@@ -10,7 +10,13 @@ import ProtectedAdmin from "./ProtectedAdmin"
 // paginas
 import HomePage from "../pages/HomePage"
 import CategoriesPage from "../pages/products/CategoriesPage"
-import BlogPage from "../pages/Blog/BlogPage"
+import BlogPage from "../pages/blog/BlogPage"
+import Skincare from "../pages/blog/Skincare"
+import Colorimetria from "../pages/blog/Colorimetria"
+import Fragrance from "../pages/blog/Fragrance"
+import Recommended from "../pages/blog/Recommended"
+import Advice from "../pages/blog/Advice"
+
 import GiftGuidePage from "../pages/products/GiftGuidePage"
 import GiveAwaysPage from "../pages/raffle/GiveAwaysPage"
 import AboutUsPage from "../pages/aboutUs/AboutUsPage"
@@ -31,9 +37,6 @@ import RolesIndex from "../pages/admin/roles/RolesIndex"
 import CreateRole from "../pages/admin/roles/crear/CreateRole"
 import EditRole from "../pages/admin/roles/editar/EditRole"
 import UsuariosIndex from "../pages/admin/usuarios/UsuariosIndex"
-import ReferenceProductsIndex from "../pages/admin/referenciaProductos/ReferenceProductsIndex"
-import CreateReferenceProduct from "../pages/admin/referenciaProductos/crear/CreateReferenceProduct"
-import EditReferenceProduct from "../pages/admin/referenciaProductos/editar/EditReferenceProduct"
 import CreateUser from "../pages/admin/usuarios/crear/CreateUser"
 import CategoriesIndex from "../pages/admin/categories/CategoriesIndex"
 import CreateCategory from "../pages/admin/categories/crear/CreateCategory"
@@ -64,6 +67,21 @@ import PedidosFacturaIndex from "../pages/admin/factura_pedidos/PedidosFacturaIn
 import ProductsDetails from "../pages/products/ProductsDetails"
 import CreateOrderInvoice from "../pages/admin/factura_pedidos/crear/CreateOrderInvoice"
 import EditOrderInvoice from "../pages/admin/factura_pedidos/editar/EditOrderInvoice"
+import ImagesIndex from "../pages/admin/imagenes/ImagesIndex"
+import CreateImages from "../pages/admin/imagenes/crear/CreateImages"
+import EditImages from "../pages/admin/imagenes/editar/EditImages"
+import ReferenceProductsIndex from "../pages/admin/referenciaProductos/ReferenceProductsIndex"
+import CreateReferenceProduct from "../pages/admin/referenciaProductos/crear/CreateReferenceProduct"
+import EditReferenceProduct from "../pages/admin/referenciaProductos/editar/EditReferenceProduct"
+import GiftGuideIndex from "../pages/admin/guiaRegalos/giftguideIndex"
+import CreateGiftGuide from "../pages/admin/guiaRegalos/crear/CreateGiftGuide"
+import EditGiftGuide from "../pages/admin/guiaRegalos/editar/EditGiftGuide"
+import AwardsIndex from "../pages/admin/premios/AwardsIndex"
+import CreateAward from "../pages/admin/premios/crear/CreateAward"
+import EditAward from "../pages/admin/premios/editar/EditAward"
+import AwardedIndex from "../pages/admin/premiados/AwardedIndex"
+import CreateAwarded from "../pages/admin/premiados/crear/CreateAwarded"
+import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
 
 
 export const router = createBrowserRouter([
@@ -112,13 +130,13 @@ export const router = createBrowserRouter([
         </ProtectedAdmin>
       },
 
-      { path: "admin/referenciaProductos/create", element: 
+      { path: "admin/referenciaProductos/crear", element: 
         <ProtectedAdmin>
           <CreateReferenceProduct/>
         </ProtectedAdmin>
       },
 
-      { path: "admin/referenciaProductos/edit/:id", element: 
+      { path: "admin/referenciaProductos/editar/:id", element: 
         <ProtectedAdmin>
           <EditReferenceProduct/>
         </ProtectedAdmin>
@@ -301,6 +319,78 @@ export const router = createBrowserRouter([
         </ProtectedAdmin> 
       },
 
+      { path: "admin/imagenes", element: 
+        <ProtectedAdmin>
+          <ImagesIndex/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/imagenes/crear", element: 
+        <ProtectedAdmin>
+          <CreateImages/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/imagenes/editar/:id", element: 
+        <ProtectedAdmin>
+          <EditImages/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/giftGuide", element:
+        <ProtectedAdmin>
+          <GiftGuideIndex/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/giftGuide/crear", element:
+        <ProtectedAdmin>
+          <CreateGiftGuide/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/giftGuide/editar/:id", element:
+        <ProtectedAdmin>
+          <EditGiftGuide/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/premios", element:
+        <ProtectedAdmin>
+          <AwardsIndex/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/premios/crear", element:
+        <ProtectedAdmin>
+          <CreateAward/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/premios/editar/:id", element:
+        <ProtectedAdmin>
+          <EditAward/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/premiados", element:
+        <ProtectedAdmin>
+          <AwardedIndex/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/premiados/crear", element:
+        <ProtectedAdmin>
+          <CreateAwarded/>
+        </ProtectedAdmin>
+      },
+
+      { path: "admin/premiados/editar/:id", element:
+        <ProtectedAdmin>
+          <EditAwarded/>
+        </ProtectedAdmin>
+      },
+
       // products routes
       { path: 'products/details/:id', element: <ProductsDetails /> },
 
@@ -310,6 +400,16 @@ export const router = createBrowserRouter([
       { path: 'categories', element: <CategoriesPage /> },
 
       { path: 'blog', element: <BlogPage /> },
+
+      { path: '/blog/Skincare', element: <Skincare /> },
+
+      { path: '/blog/Colorimetria', element: <Colorimetria/> },
+
+      { path: '/blog/Fragrance', element: <Fragrance/> },
+
+      { path: '/blog/Recommended', element: <Recommended/> },
+
+      { path: '/blog/Advice', element: <Advice/> },
 
       { path: 'gift-guide', element: <GiftGuidePage /> },
 

@@ -1,30 +1,29 @@
 import { useState, useEffect } from "react"
-import { getAllReferenceProducts, deleteReferenceProduct } from "../../../services/referenceProductsService"
+import { getAllGiftGuides, deleteGiftGuide } from "../../../services/giftGuideService"
 import AdminPanel from "../../../components/admin/AdminPanel"
 
-const ReferenceProductsIndex = () => {
+const GiftGuideIndex = () => {
 
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
     const [lastPage, setLastPage] = useState(undefined)
 
     const fields = {
-        id_referencia: "ID",
-        codigo: "Código",
-        color: "Color",
-        tamano: "Tamaño",
+        id_guia: "ID",
+        nombre: "Nombre",
+        descripcion: "Descripción",
         created_at: "Fecha creación"
     }
 
     async function getData() {
         try {
-            const res = await getAllReferenceProducts(page)
+            const res = await getAllGiftGuides(page)
             if (!res?.valid) {
                 console.log(res?.error)
                 return
             }
-            setData(res?.references?.data)
-            setLastPage(res?.references?.last_page)
+            setData(res?.giftGuides?.data)
+            setLastPage(res?.giftGuides?.last_page)
         } catch (error) {
             console.log(error?.message)
         }
@@ -36,7 +35,7 @@ const ReferenceProductsIndex = () => {
 
     const onDelete = async (id) => {
         try {
-            const res = await deleteReferenceProduct(id)
+            const res = await deleteGiftGuide(id)
             if (!res?.valid) return res?.error
         } catch (error) {
             return error.message
@@ -51,10 +50,10 @@ const ReferenceProductsIndex = () => {
                 lastPage={lastPage}
                 setPage={setPage}
                 campos={fields}
-                titulo={"Administración de referencias de productos"}
-                texto={"Administra las referencias de los productos"}
-                linkCrear={"/admin/referenciaProductos/crear"}
-                linkEditar={"/admin/referenciaProductos/editar"}
+                titulo={"Administración de guía de regalos"}
+                texto={"Administra las guías de regalos"}
+                linkCrear={"/admin/giftGuide/crear"}
+                linkEditar={"/admin/giftGuide/editar"}
                 onDelete={onDelete}
                 getData={getData}
             />
@@ -62,4 +61,4 @@ const ReferenceProductsIndex = () => {
     )
 }
 
-export default ReferenceProductsIndex
+export default GiftGuideIndex
