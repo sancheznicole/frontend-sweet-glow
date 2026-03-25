@@ -2,10 +2,12 @@ import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getGiftGuide, updateGiftGuide } from "../../../../services/giftGuideService"
+import { useNavigate } from "react-router-dom"
 
 const EditGiftGuide = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [nombre, setNombre] = useState("")
     const [descripcion, setDescripcion] = useState("")
@@ -81,10 +83,12 @@ const EditGiftGuide = () => {
         <div className="page-container">
 
             {!mostrarDatos && (
-                <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/giftGuide">Regresar</Link>
-                </div>
-            )}
+				<div className="back-link-container">
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
+				</div>
+			)}
 
             <section className="section-editar">
 

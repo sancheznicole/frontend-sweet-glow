@@ -141,49 +141,49 @@ const RegisterPage = () => {
                 <option defaultValue="PP">Pasaporte</option>
               </select>
               <label htmlFor="">Seleccione tipo documento</label>
-              {fieldErrors?.tipoDocumento && <p className="form-input-error">{fieldErrors?.tipoDocumento}</p>}
+              {fieldErrors?.tipoDocumento && <p className="form-input-error-register">{fieldErrors?.tipoDocumento}</p>}
           </div>
 
           <div>
             <input type="text" placeholder=" " onChange={(e) => {setNumeroDocumento(e.target.value)}} />
             <label htmlFor="">numero de documento</label>
-            {fieldErrors?.numeroDocumento && <p className="form-input-error">{fieldErrors?.numeroDocumento}</p>}
+            {fieldErrors?.numeroDocumento && <p className="form-input-error-register">{fieldErrors?.numeroDocumento}</p>}
           </div>
 
           <div>
             <input type="text" placeholder=" " onChange={(e) => {setNombres(e.target.value)}} />
             <label htmlFor="">nombres</label>
-            {fieldErrors?.nombres && <p className="form-input-error">{fieldErrors?.nombres}</p>}
+            {fieldErrors?.nombres && <p className="form-input-error-register">{fieldErrors?.nombres}</p>}
           </div>
 
           <div>
             <input type="text" placeholder=" " onChange={(e) => {setApellidos(e.target.value)}} />
             <label htmlFor="">apellidos</label>
-            {fieldErrors?.apellidos && <p className="form-input-error">{fieldErrors?.apellidos}</p>}
+            {fieldErrors?.apellidos && <p className="form-input-error-register">{fieldErrors?.apellidos}</p>}
           </div>
 
           <div>
             <input type="text" placeholder=" " onChange={(e) => {setCorreo(e.target.value)}} />
             <label htmlFor="">correo electrónico</label>
-            {fieldErrors?.correo && <p className="form-input-error">{fieldErrors?.correo}</p>}
+            {fieldErrors?.correo && <p className="form-input-error-register">{fieldErrors?.correo}</p>}
           </div>
 
           <div>
             <input type="password" placeholder=" " onChange={(e) => {setContrasena(e.target.value)}} />
             <label htmlFor="">contraseña</label>
-            {fieldErrors?.contrasena && <p className="form-input-error">{fieldErrors?.contrasena}</p>}
+            {fieldErrors?.contrasena && <p className="form-input-error-register">{fieldErrors?.contrasena}</p>}
           </div>
 
           <div>
             <input type="text" placeholder=" " onChange={(e) => {setTelefono(e.target.value)}} />
             <label htmlFor="">telefono</label>
-            {fieldErrors?.telefono && <p className="form-input-error">{fieldErrors?.telefono}</p>}
+            {fieldErrors?.telefono && <p className="form-input-error-register">{fieldErrors?.telefono}</p>}
           </div>
 
           <div>
             <input type="text" placeholder=" " onChange={(e) => {setDireccion(e.target.value)}} />
             <label htmlFor="">dirección</label>
-            {fieldErrors?.direccion && <p className="form-input-error">{fieldErrors?.direccion}</p>}
+            {fieldErrors?.direccion && <p className="form-input-error-register">{fieldErrors?.direccion}</p>}
           </div>
 
           <div>
@@ -198,7 +198,7 @@ const RegisterPage = () => {
                     políticas de privacidad
                   </Link>
             </p>
-            {fieldErrors?.terms && <p className="form-input-error">{fieldErrors?.terms}</p>}
+            {fieldErrors?.terms && <p className="form-input-error-register">{fieldErrors?.terms}</p>}
           </div>
 
           {/* error al enviar el formulario */}
@@ -206,12 +206,12 @@ const RegisterPage = () => {
             typeof error !== "string"
               ? Object.entries(error).map(([field, messages]) =>
                   messages.map((message, index) => (
-                    <p key={`${field}-${index}`} className="form-input-error">
+                    <p key={`${field}-${index}`} className="form-input-error-register">
                       {message}
                     </p>
                   ))
                 )
-              : error !== "" && <p className="form-input-error">{error}</p>
+              : error !== "" && <p className="form-input-error-register">{error}</p>
           }
           
           <div>

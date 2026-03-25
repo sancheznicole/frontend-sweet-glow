@@ -1,6 +1,7 @@
 import axios from "axios"
 
 const API_URL = import.meta.env.VITE_API_URL
+const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
 
 export async function getAllImages(page = 1) {
     try {
@@ -63,4 +64,9 @@ export async function deleteImage(id) {
     } catch (error) {
         return { valid: false, error: error?.message }
     }
+}
+
+// create image URl
+export function createImageURL(filename){
+    return `${STORAGE_URL}/${filename}`
 }

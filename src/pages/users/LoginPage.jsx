@@ -92,10 +92,10 @@ const LoginPage = () => {
         <form action="" method="post" onSubmit={(e) => {sendData(e)}}>
           <div>
             <input type="email" value={correo} placeholder="correo electrónico" onChange={(e) => setCorreo(e.target.value)} />
-            {fieldErrors?.correo && <p className="form-input-error">{fieldErrors?.correo}</p>}
+            {fieldErrors?.correo && <p className="form-input-error-login">{fieldErrors?.correo}</p>}
 
             <input type="password" value={contrasena} placeholder="contraseña" onChange={(e) => setContrasena(e.target.value)} />
-            {fieldErrors?.contrasena && <p className="form-input-error">{fieldErrors?.contrasena}</p>}
+            {fieldErrors?.contrasena && <p className="form-input-error-login">{fieldErrors?.contrasena}</p>}
           </div>
           <div className='form-terms'>
               <p>

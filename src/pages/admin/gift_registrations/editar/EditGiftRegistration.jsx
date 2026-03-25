@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getGiftRegistration, updateGiftRegistration } from '../../../../services/giftRegistrationService'
+import { useNavigate } from 'react-router-dom'
 
 const estadoOptions = {
     'pendiente':  'Pendiente',
@@ -12,6 +13,7 @@ const estadoOptions = {
 const EditGiftRegistration = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
@@ -88,7 +90,7 @@ const EditGiftRegistration = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/gift_registrations">Regresar</Link>
+                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                 </div>
             )}
 

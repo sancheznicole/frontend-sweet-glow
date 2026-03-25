@@ -107,31 +107,31 @@ const ProfilePage = () => {
             <div>
               <label htmlFor="">nombres</label>
               <input type="text" placeholder=" " onChange={(e) => {setNombres(e.target.value)}} defaultValue={user?.nombres || ''} />
-              {fieldErrors?.nombres && <p className="form-input-error">{fieldErrors?.nombres}</p>}
+              {fieldErrors?.nombres && <p className="form-input-error-profile">{fieldErrors?.nombres}</p>}
             </div>
 
             <div>
               <label htmlFor="">apellidos</label>
               <input type="text" placeholder=" " onChange={(e) => {setApellidos(e.target.value)}} defaultValue={user?.apellidos || ''}/>
-              {fieldErrors?.apellidos && <p className="form-input-error">{fieldErrors?.apellidos}</p>}
+              {fieldErrors?.apellidos && <p className="form-input-error-profile">{fieldErrors?.apellidos}</p>}
             </div>
 
             <div>
               <label htmlFor="">correo electrónico</label>
               <input type="text" placeholder=" " onChange={(e) => {setCorreo(e.target.value)}} defaultValue={user?.correo || ''}/>
-              {fieldErrors?.correo && <p className="form-input-error">{fieldErrors?.correo}</p>}
+              {fieldErrors?.correo && <p className="form-input-error-profile">{fieldErrors?.correo}</p>}
             </div>
 
             <div>
               <label htmlFor="">telefono</label>
               <input type="text" placeholder=" " onChange={(e) => {setTelefono(e.target.value)}} defaultValue={user?.telefono || ''}/>
-              {fieldErrors?.telefono && <p className="form-input-error">{fieldErrors?.telefono}</p>}
+              {fieldErrors?.telefono && <p className="form-input-error-profile">{fieldErrors?.telefono}</p>}
             </div>
 
             <div>
               <label htmlFor="">dirección</label>
               <input type="text" placeholder=" " onChange={(e) => {setDireccion(e.target.value)}} defaultValue={user?.direccion || ''}/>
-              {fieldErrors?.direccion && <p className="form-input-error">{fieldErrors?.direccion}</p>}
+              {fieldErrors?.direccion && <p className="form-input-error-profile">{fieldErrors?.direccion}</p>}
             </div>
 
             {/* error al enviar el formulario */}
@@ -139,12 +139,12 @@ const ProfilePage = () => {
               typeof error !== "string"
                 ? Object.entries(error).map(([field, messages]) =>
                     messages.map((message, index) => (
-                      <p key={`${field}-${index}`} className="form-input-error">
+                      <p key={`${field}-${index}`} className="form-input-error-profile">
                         {message}
                       </p>
                     ))
                   )
-                : error !== "" && <p className="form-input-error">{error}</p>
+                : error !== "" && <p className="form-input-error-profile">{error}</p>
             }
             
             <div>

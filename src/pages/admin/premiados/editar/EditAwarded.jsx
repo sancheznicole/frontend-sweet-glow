@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getWinner, updateWinner } from "../../../../services/winnersService"
 import { searchUsers } from "../../../../services/authService"
@@ -7,6 +7,7 @@ import { searchUsers } from "../../../../services/authService"
 const EditAwarded = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [id_premio, setIdPremio] = useState("")
     const [id_usuario, setIdUsuario] = useState("")
@@ -101,7 +102,7 @@ const EditAwarded = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/premiados">Regresar</Link>
+                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                 </div>
             )}
 

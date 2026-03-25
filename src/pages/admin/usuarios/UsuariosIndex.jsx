@@ -5,7 +5,7 @@ import AdminPanel from "../../../components/admin/AdminPanel"
 const UsuariosIndex = () => {
     const [data, setData] = useState({})
     const [page, setPage] = useState(1)
-    const [limit, setLimit] = useState(50)
+    const [limit, setLimit] = useState(5)
     const [lastPage, setLastPage] = useState(undefined)
 
     const fields = {

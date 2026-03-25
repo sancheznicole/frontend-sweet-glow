@@ -3,10 +3,13 @@ import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { updateBrand, getBrand } from "../../../../services/brands"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+
 
 const EditBrand = () => {
 
 	const { id } = useParams()
+	const navigate = useNavigate()
 
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState("")
@@ -123,7 +126,9 @@ const EditBrand = () => {
 
 			{!mostrarDatos && (
 				<div className="back-link-container">
-					<Link className="link-regresar" to="/admin/brands">Regresar</Link>
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
 				</div>
 			)}
 
