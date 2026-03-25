@@ -1251,6 +1251,7 @@ footer {
     display: block;
     margin-bottom: 0;
 }
+
 /* ════════════════════════════════════════════════════
    CATEGORIES PAGE — tarjetas de selección
 ════════════════════════════════════════════════════ */
@@ -1327,7 +1328,7 @@ footer {
 
 .category-banner {
     width: 100%;
-    height: 65vh; /* ← era 50vh */
+    height: 65vh;
     background-size: cover;
     background-position: center;
     background-color: #e7dae2;
@@ -1339,7 +1340,7 @@ footer {
 .category-banner-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.00), rgba(0,0,0,0.25)); /* ← era 0.10 → 0.55 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.00), rgba(0,0,0,0.25));
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -1500,7 +1501,6 @@ footer {
     background-color: #fdf7f9;
 }
 
-/* ── Split section ── */
 .giveaways-split {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1513,7 +1513,6 @@ footer {
     background: white;
 }
 
-/* Lado imagen */
 .giveaways-split-imagen {
     background: linear-gradient(160deg, #f2dde5, #e7cdd6);
     display: flex;
@@ -1543,7 +1542,6 @@ footer {
     display: block;
 }
 
-/* Lado contenido */
 .giveaways-split-contenido {
     padding: 56px 52px;
     display: flex;
@@ -1551,7 +1549,6 @@ footer {
     justify-content: center;
 }
 
-/* ── Textos dentro del cuadro ── */
 .giveaways-eyebrow {
     font-size: 12px;
     letter-spacing: 3px;
@@ -1578,7 +1575,6 @@ footer {
     margin: 0 0 24px;
 }
 
-/* ── Lista requisitos ── */
 .giveaways-requisitos-lista {
     list-style: none;
     padding: 0;
@@ -1619,7 +1615,6 @@ footer {
     line-height: 1.55;
 }
 
-/* ── Botón ── */
 .giveaways-btn {
     align-self: flex-start;
     background: #3a3a3a;
@@ -1644,7 +1639,6 @@ footer {
     cursor: not-allowed;
 }
 
-/* ── Modal overlay ── */
 .giveaways-modal-overlay {
     position: fixed;
     inset: 0;
@@ -1663,7 +1657,6 @@ footer {
     to   { opacity: 1; }
 }
 
-/* ── Modal ── */
 .giveaways-modal {
     background: white;
     border-radius: 16px;
@@ -1753,7 +1746,6 @@ footer {
     margin-top: 10px;
 }
 
-/* ── Éxito ── */
 .giveaways-modal-exito {
     text-align: center;
     padding: 16px 0 8px;
@@ -1781,7 +1773,6 @@ footer {
     margin: 0 0 8px;
 }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
     .giveaways-page {
         padding: 32px 16px 60px;
@@ -1807,4 +1798,223 @@ footer {
     .giveaways-modal {
         padding: 36px 24px 28px;
     }
+}
+
+/* ════════════════════════════════════════════════════
+   ESTILOS DE MAIN (rama main)
+════════════════════════════════════════════════════ */
+
+.products-cards-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.products-cards-container .proyect-card {
+    border-radius: 10px;
+}
+
+.cart-container {
+    display: flex;
+    align-items: center;
+}
+
+.cart-container .empty-cart {
+    text-align: center;
+}
+
+.cart-container .empty-cart a,
+.cart-container .empty-cart p {
+    margin: 20px;
+}
+
+.cart-between {
+    justify-content: space-between;
+}
+
+.cart-center {
+    justify-content: center;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* blog */
+.blog-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    padding: 40px 20px;
+    margin-top: 20px;
+}
+
+.Blog {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.Blog:hover .img {
+    transform: scale(1.05);
+}
+
+.Blog a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 22px;
+    font-family: Heading;
+    text-decoration: none;
+}
+
+/* BLOG: SKINCARE - COLORIMETRIA - FRAGANCIAS - PRODUCTOS RECOMENDADOS - CONSEJOS DE BELLEZA */
+
+.skin, .colorimetria, .fragancias, .recomendaciones, .consejos {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 40px 20px;
+    font-family: 'Heading', sans-serif;
+    color: #444;
+}
+
+.titulo {
+    text-align: center;
+    color: #b3848f;
+    font-size: 32px;
+    font-weight: 300;
+    font-family: 'Heading', sans-serif;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.parrafo-titulo {
+    text-align: center;
+    color: #666;
+    margin-bottom: 60px;
+    font-size: 16px;
+    line-height: 1.8;
+    padding-bottom: 30px;
+}
+
+.tipo-piel, .piel, .fragancia, .productos, .belleza {
+    color: #b3848f;
+    margin-top: 50px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 15px;
+}
+
+.piel-p, .tonos, .p, .prod, .pb {
+    padding: 10px 0;
+    color: #4a4a4a;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    text-align: justify;
+}
+
+.piel-p h4, .tonos h4, .p h4, .prod h4, .pb h4 {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    color: #efd7e5;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.product-details {
+    justify-content: space-around;
+    display: flex;
+}
+
+.product-details .details {
+    width: 30%;
+    padding: 10px;
+}
+
+.product-details .details h1 {
+    text-transform: capitalize;
+}
+
+.product-details .details h2 {
+    margin-top: 15px;
+}
+
+.product-details .details .add-to-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.product-details .details .add-to-cart .quantity-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bolder;
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid black;
+}
+
+.product-details .details .add-to-cart .quantity-buttons button {
+    min-width: 37%;
+    padding: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 200ms all ease-in-out;
+    border: none;
+}
+
+.product-details .details .add-to-cart .quantity-buttons button:hover {
+    background-color: #f7e9ed;
+}
+
+.product-details .details .add-to-cart .quantity-buttons p {
+    min-width: 20%;
+    height: 100%;
+    text-align: center;
+}
+
+.product-details .details .add-to-cart .quantity-buttons + div {
+    width: 80%;
+    margin-top: 15px;
+}
+
+.product-details .details .add-to-cart .quantity-buttons + div button {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bolder;
+    padding: 10px;
+    min-width: 37%;
+    border: 1px solid black;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 200ms all ease-in-out;
+}
+
+.product-details .details .add-to-cart .quantity-buttons + div button:hover {
+    background-color: #f7e9ed;
+}
+
+.product-details .details .more-products-container {
+    margin-top: 20px;
 }
