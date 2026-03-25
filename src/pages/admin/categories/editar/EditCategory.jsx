@@ -2,11 +2,12 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { updateCategory, getCategory } from "../../../../services/categoriesService"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const EditCategory = () => {
 
 	const { id } = useParams()
+	const navigate = useNavigate()
 
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState("")
@@ -113,7 +114,9 @@ const EditCategory = () => {
 
 			{!mostrarDatos && (
 				<div className="back-link-container">
-					<Link className="link-regresar" to="/admin/categories">Regresar</Link>
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
 				</div>
 			)}
 

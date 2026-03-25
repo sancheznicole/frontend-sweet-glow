@@ -18,9 +18,7 @@ const ProductsDetails = () => {
     const [reviews, setReviews] = useState({})
 
     const [products, setProducts] = useState([])
-    
     const [quantity, setQuantity] = useState(1)
-
     const [cartError, setCartError] = useState('')
 
     const getData = async () => {

@@ -4,6 +4,8 @@ import AdminPanel from "../../../components/admin/AdminPanel"
 
 const PedidosFacturaIndex = () => {
 	const [data, setData] = useState([])
+	const [page, setPage] = useState(0)
+	const [lastPage, setLastPage] = useState(0)
 
 	const fields = {
 		id_factura_pedido: "Id factura",
@@ -18,7 +20,7 @@ const PedidosFacturaIndex = () => {
 
 	async function getData() {
 		try {
-			let res = await getAllInvoiceOrders()
+			let res = await getAllInvoiceOrders(page)
 
 			if (!res?.valid) {
 				console.log(res?.error)
@@ -38,6 +40,8 @@ const PedidosFacturaIndex = () => {
 			}))
 
 			setData(facturas)
+			setPage(res?.InvoiceOrders?.current_page)
+			setLastPage(res?.InvoiceOrders?.last_page)
 
 		} catch (error) {
 			console.log(error?.message)
@@ -47,6 +51,10 @@ const PedidosFacturaIndex = () => {
 	useEffect(() => {
 		getData()
 	}, [])
+
+	useEffect(() => {
+        getData()
+    }, [page])
 
   	console.log(data)
 
@@ -74,6 +82,9 @@ const PedidosFacturaIndex = () => {
 				linkEditar={"/admin/invoice-orders/edit"}
 				onDelete={onDelete}
 				getData={getData}
+				setPage={setPage}
+				page={page}
+				lastPage={lastPage}
 			/>
 		</div>
 	)

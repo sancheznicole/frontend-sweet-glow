@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function getAllInvoiceOrders(page, limit) {
+export async function getAllInvoiceOrders(page, limit = 10) {
     try {
         const res = await axios.get(`${API_URL}/order_invoice?page=${page}&limit=${limit}`)
 

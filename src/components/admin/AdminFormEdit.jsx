@@ -39,7 +39,11 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 							</label>
 
 							{value?.type == "select" ? (
-								<select name={value?.name}>
+								<select 
+									name={value?.name} 
+									value={value?.value || ""}
+									onChange={(e) => value?.onChange(e.target.value)}
+								>
 									<option value="">Seleccionar opción</option>
 									{Object.entries(value?.options).map(([optionKey, optionValue], optionIndex) => (
 										<option value={optionKey} key={optionIndex} selected={value?.value == optionKey}>{optionValue}</option>

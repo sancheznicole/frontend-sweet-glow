@@ -3,10 +3,12 @@ import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getAward, updateAward } from "../../../../services/awardsService"
 import { searchProduct } from "../../../../services/productsService"
+import { useNavigate } from "react-router-dom"
 
 const EditAward = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [id_producto, setIdProducto] = useState("")
     const [producto, setProducto] = useState({})
@@ -84,7 +86,7 @@ const EditAward = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/premios">Regresar</Link>
+                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                 </div>
             )}
 

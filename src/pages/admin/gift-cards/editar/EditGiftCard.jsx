@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getGiftCard, updateGiftCard } from '../../../../services/giftCardService'
+import { useNavigate } from 'react-router-dom'
 
 const estadoOptions = {
     'activa': 'Activa',
@@ -10,6 +11,7 @@ const estadoOptions = {
 const EditGiftCard = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
@@ -99,7 +101,7 @@ const EditGiftCard = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/gift-cards">Regresar</Link>
+                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                 </div>
             )}
 

@@ -41,7 +41,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
 					</div>
 
-					{lastPage != undefined && (
+					{lastPage > 1 && (
 						<div className="paginations-buttons">
 							<p>Página {page} de {lastPage}</p>
 							<div>

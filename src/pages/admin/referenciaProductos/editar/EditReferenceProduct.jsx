@@ -2,10 +2,12 @@ import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
+import { useNavigate } from "react-router-dom"
 
 const EditReferenceProduct = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [codigo, setCodigo] = useState("")
     const [color, setColor] = useState("")
@@ -92,10 +94,12 @@ const EditReferenceProduct = () => {
         <div className="page-container">
 
             {!mostrarDatos && (
-                <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/referenciaProductos">Regresar</Link>
-                </div>
-            )}
+				<div className="back-link-container">
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
+				</div>
+			)}
 
             <section className="section-editar">
 

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
-import { getImage, updateImage } from "../../../../services/imagesService"
+import { useParams } from "react-router-dom"
+import { getImage, updateImage, createImageURL } from "../../../../services/imagesService"
 import { searchProduct } from "../../../../services/productsService"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-
-const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
+import { useNavigate } from "react-router-dom"
 
 const EditImages = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [file, setFile] = useState(null)
     const [id_producto, setIdProducto] = useState("")
@@ -94,10 +94,12 @@ const EditImages = () => {
         <div className="page-container">
 
             {!mostrarDatos && (
-                <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/imagenes">Regresar</Link>
-                </div>
-            )}
+				<div className="back-link-container">
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
+				</div>
+			)}
 
             <section className="section-editar">
 
@@ -107,7 +109,7 @@ const EditImages = () => {
                         <div className="contenedor-campos">
                             {filename && (
                                 <img
-                                    src={`${STORAGE_URL}/${filename}`}
+                                    src={createImageURL(filename)}
                                     alt="Imagen producto"
                                     style={{ maxWidth: "300px", borderRadius: "8px" }}
                                 />

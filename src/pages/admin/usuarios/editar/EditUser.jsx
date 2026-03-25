@@ -33,8 +33,8 @@ const EditUser = () => {
   }
 
   const roles = {
-    "1": "Administrador",
-    "2": "Cliente",
+    1: "Administrador",
+    2: "Cliente",
   }
 
   function validateFields() {
@@ -209,9 +209,9 @@ const EditUser = () => {
       value: role,
       onChange: setRole,
       type: "select",
-      options: roles,
       name: "id_rol",
-      titulo: "Rol"
+      titulo: "Rol",
+      options: roles,
     }
 
   }
