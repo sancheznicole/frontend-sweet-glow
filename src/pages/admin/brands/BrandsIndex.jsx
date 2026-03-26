@@ -58,8 +58,8 @@ const BrandsIndex = () => {
                 campos={fields}
                 titulo={"Administración de marcas"}
                 texto={"Administra las marcas registradas"}
-                linkCrear={"/admin/brands/crear"}
-                linkEditar={"/admin/brands/editar"}
+                linkCrear={"/admin/brands/create"}
+                linkEditar={"/admin/brands/edit"}
                 onDelete={onDelete}
                 getData={getData}
                 page={page}

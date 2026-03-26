@@ -1,176 +1,141 @@
-import { useState, useEffect} from "react"
-import { useParams } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
-import { updateReferencia, getReferencia } from "../../../../services/referenceProductsService"
-import { Link } from "react-router-dom"
+import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
+import { useNavigate } from "react-router-dom"
 
 const EditReferenceProduct = () => {
 
-  // obtener id desde la url
-  const { id } = useParams()
+    const { id } = useParams()
+    const navigate = useNavigate()
 
-  // estados generales
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [codigo, setCodigo] = useState("")
+    const [color, setColor] = useState("")
+    const [tamano, setTamano] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [mostrarDatos, setMostrarDatos] = useState(false)
 
-  // mostrar información o formulario
-  const [mostrarDatos, setMostrarDatos] = useState(false)
-
-  // estados de los campos
-  const [codigo, setCodigo] = useState("")
-  const [color, setColor] = useState("")
-  const [tamaño, setTamaño] = useState("")
-
-  // validación
-  function validateFields(){
-
-    const errors = {}
-
-    if(codigo === "") errors.codigo = "El codigo es obligatorio"
-    if(color === "") errors.color = "El color es obligatorio"
-    if(tamaño === "") errors.tamaño = "El tamaño es obligatorio"
-
-    setFieldErrors(errors)
-
-    return Object.keys(errors).length > 0
-  }
-
-  // enviar formulario
-  async function sendData(){
-    try{
-
-      const validation = validateFields();
-                  
-      if(validation) return
-      
-      setLoading(true)
-      
-      setError("")
-      let res = await updateReferencia(id, codigo, color, tamaño)
-              
-      if(!res?.valid){
-        setError("Error al enviar el formulario")
-        return
-      }
-
-      // volver a mostrar datos
-      setMostrarDatos(false)
-
-    }
-    catch(error){
-
-      setError(error.message)
-
-    }
-    finally{
-      setLoading(false)
-    }
-  }
-
-  useEffect(()=>{
-    const getData = async () => {
-      try {
-
-        const res = await getReferencia(id)
-
-        if(!res?.valid){
-          setError("Error al obtener dato")
-        return
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await getReferenceProduct(id)
+                if (!res?.valid) {
+                    setError("Error al obtener la referencia")
+                    return
+                }
+                setCodigo(res?.reference?.codigo)
+                setColor(res?.reference?.color)
+                setTamano(res?.reference?.tamano)
+            } catch (error) {
+                setError(error.message)
+            }
         }
+        getData()
+    }, [id])
 
-        setCodigo(res?.referencia?.codigo)
-        setColor(res?.referencia?.color)
-        setTamaño(res?.referencia?.tamaño)
-        
-      } catch (error) {
-        setError(error.message)
-      }
+    async function sendData() {
+        try {
+            const errors = {}
+            if (codigo.trim().length < 1) errors.codigo = "El código es obligatorio"
+            if (color.trim().length < 1) errors.color = "El color es obligatorio"
+            if (tamano.trim().length < 1) errors.tamano = "El tamaño es obligatorio"
+
+            if (Object.keys(errors).length > 0) {
+                setFieldErrors(errors)
+                return
+            }
+
+            setLoading(true)
+            setError("")
+
+            const res = await updateReferenceProduct(id, codigo, color, tamano)
+
+            if (!res?.valid) {
+                setError("Error al actualizar la referencia")
+                return
+            }
+
+            setMostrarDatos(false)
+
+        } catch (error) {
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
     }
-    getData()
-  }, [])
 
-  // campos para el formulario
-  const campos = {
-     codigo: {
-      titulo: "Codigo",
-      name: "codigo",
-      type: "text",
-      value: codigo,
-      onChange: setCodigo
-    },
-
-    color: {
-      titulo: "Color",
-      name: "color",
-      type: "text",
-      value: color,
-      onChange: setColor
-    },
-
-    tamaño: {
-      titulo: "Tamaño",
-      name: "tamaño",
-      type: "text",
-      value: tamaño,
-      onChange: setTamaño
+    const campos = {
+        codigo: {
+            titulo: "Código",
+            name: "codigo",
+            type: "text",
+            value: codigo,
+            onChange: setCodigo
+        },
+        color: {
+            titulo: "Color",
+            name: "color",
+            type: "text",
+            value: color,
+            onChange: setColor
+        },
+        tamano: {
+            titulo: "Tamaño",
+            name: "tamano",
+            type: "text",
+            value: tamano,
+            onChange: setTamano
+        }
     }
-  }
 
-  return (
+    return (
+        <div className="page-container">
 
-    <div className="page-container">
+            {!mostrarDatos && (
+				<div className="back-link-container">
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
+				</div>
+			)}
 
-      <section className="section-admin-edit">
+            <section className="section-editar">
 
-        {/* vista información */}
-        {!mostrarDatos ? (
+                {!mostrarDatos ? (
+                    <>
+                        <h1 className="titulo-por-h1">Detalles de la referencia</h1>
+                        <div className="contenedor-campos">
+                            <p><strong>Código:</strong> {codigo}</p>
+                            <p><strong>Color:</strong> {color}</p>
+                            <p><strong>Tamaño:</strong> {tamano}</p>
+                        </div>
+                    </>
+                ) : (
+                    <AdminFormEdit
+                        titulo={"Editar referencia"}
+                        campos={campos}
+                        onSendForm={sendData}
+                        error={error}
+                        fieldErrors={fieldErrors}
+                        button={"Guardar cambios"}
+                        loading={loading}
+                    />
+                )}
 
-          <>
-            <Link to="/admin/referencia">Regresar</Link>
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
 
-            <h1>Detalles de referencia: {codigo}</h1>
-
-            <div>
-              <p>Codigo: {codigo}</p>
-            </div>
-
-            <div>
-              <p>Color: {color}</p>
-            </div>
-
-            <div>
-              <p>Tamaño: {tamaño}</p>
-            </div>
-          </>
-
-        ) : (
-
-          <AdminFormEdit
-            titulo="Editar referencia"
-            campos={campos}
-            onSendForm={sendData}
-            linkRegresar="/admin/referencia"
-            error={error}
-            fieldErrors={fieldErrors}
-            button="Guardar cambios"
-            loading={loading}
-          />
-
-        )}
-
-        {/* botón modificar / cancelar */}
-        <button
-          onClick={() => setMostrarDatos(!mostrarDatos)}
-        >
-          {mostrarDatos ? "Cancelar" : "Modificar"}
-        </button>
-
-      </section>
-
-    </div>
-
-  )
+            </section>
+        </div>
+    )
 }
 
 export default EditReferenceProduct

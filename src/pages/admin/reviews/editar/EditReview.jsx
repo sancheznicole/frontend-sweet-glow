@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getReview, updateReview } from "../../../../services/reviewsService"
 
 const EditReview = () => {
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
@@ -86,9 +87,7 @@ const EditReview = () => {
 
             {!mostrarDatos && (
                 <div className="back-link-container">
-                    <Link className="link-regresar" to="/admin/reviews">
-                        Regresar
-                    </Link>
+                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                 </div>
             )}
 

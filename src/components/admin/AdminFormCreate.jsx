@@ -1,6 +1,7 @@
 /*FORMULARIO DE CREAR*/
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, fieldErrors, button, loading}) => {
 	const [searchResults, setSearchResults] = useState([])
@@ -8,18 +9,18 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 	const [searchError, setSearchError] = useState('')
 	const [timeoutId, setTimeoutId] = useState(null)
 	const [inputValue, setInputValue] = useState('')
+	const navigate = useNavigate()
 
 	return (
 		<div>
 			<div className="back-link-container">
-        		<Link className="link-regresar" to={linkRegresar}>Regresar</Link>
+        		<button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
       		</div>
 
 			<section className="section-create-admin">
 
 				<h1 className="titulo-por-h1">{titulo}</h1>
 
-				{/* la funcion que se va a ejecutar cuando se envie el formulario */}
 				<form method="post" onSubmit={async (e) => {
 					e.preventDefault()
 					await onSendForm()
@@ -48,7 +49,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 									</div>
 								</div>
 							) : value?.type == "text-search" ? (
-									<>
+								<>
 									<input
 										type="text"
 										name={value?.name}
@@ -99,19 +100,16 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 										<div>
 											{searchResults[value.name].map((r, index) => {
 												let keys = value?.text_keys.split(",")
-
 												return (
 													<button
 														type="button"
 														key={index}
 														onClick={() => {
 															value?.onChange(r?.[value?.save_data_key])
-
 															setInputValue(prev => ({
 																...prev,
 																[value.name]: keys.map(k => r?.[k]).join(" ")
 															}))
-
 															setSearchResults(prev => ({
 																...prev,
 																[value.name]: []
@@ -128,7 +126,6 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 									)}
 
 									{searching && (<p>Buscando...</p>)}
-
 									{searchError && (<p className="form-input-error">{searchError}</p>)}
 								</>
 							) : (
@@ -136,7 +133,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 									type={value?.type}
 									name={value?.name}
 									placeholder=" "
-									onChange={(e) => { value?.onChange(e.target.value) }}
+									onChange={(e) => { value?.onChange(value?.type === "file" ? e.target.files[0] : e.target.value) }}
 								/>
 							)}
 

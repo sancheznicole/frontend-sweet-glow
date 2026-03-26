@@ -34,7 +34,7 @@ export async function registerUser(
     
     //si falla el try se ejecuta el catch devolviendo un error 
     catch (error) {
-        return { valid: false, error: error?.message }
+        return { valid: false, error: "Error al registrarse" }
     }
 }
 
