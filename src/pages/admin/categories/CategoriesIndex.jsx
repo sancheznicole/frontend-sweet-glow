@@ -58,8 +58,8 @@ const CategoriesIndex = () => {
                 campos={fields}
                 titulo={"Administración de categorías"}
                 texto={"Administra las categorías de los productos"}
-                linkCrear={"/admin/categories/crear"}
-                linkEditar={"/admin/categories/editar"}
+                linkCrear={"/admin/categories/create"}
+                linkEditar={"/admin/categories/edit"}
                 onDelete={onDelete}
                 getData={getData}
                 page={page}

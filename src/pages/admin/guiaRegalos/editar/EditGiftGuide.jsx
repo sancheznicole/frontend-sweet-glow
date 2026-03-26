@@ -1,0 +1,129 @@
+import { useState, useEffect } from "react"
+import { useParams, Link } from "react-router-dom"
+import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
+import { getGiftGuide, updateGiftGuide } from "../../../../services/giftGuideService"
+import { useNavigate } from "react-router-dom"
+
+const EditGiftGuide = () => {
+
+    const { id } = useParams()
+    const navigate = useNavigate()
+
+    const [nombre, setNombre] = useState("")
+    const [descripcion, setDescripcion] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [fieldErrors, setFieldErrors] = useState({})
+    const [mostrarDatos, setMostrarDatos] = useState(false)
+
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await getGiftGuide(id)
+                if (!res?.valid) {
+                    setError("Error al obtener la guía")
+                    return
+                }
+                setNombre(res?.giftGuide?.nombre)
+                setDescripcion(res?.giftGuide?.descripcion)
+            } catch (error) {
+                setError(error.message)
+            }
+        }
+        getData()
+    }, [id])
+
+    async function sendData() {
+        try {
+            const errors = {}
+            if (nombre.trim().length < 1) errors.nombre = "El nombre es obligatorio"
+
+            if (Object.keys(errors).length > 0) {
+                setFieldErrors(errors)
+                return
+            }
+
+            setLoading(true)
+            setError("")
+
+            const res = await updateGiftGuide(id, nombre, descripcion)
+
+            if (!res?.valid) {
+                setError("Error al actualizar la guía")
+                return
+            }
+
+            setMostrarDatos(false)
+
+        } catch (error) {
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const campos = {
+        nombre: {
+            titulo: "Nombre",
+            name: "nombre",
+            type: "text",
+            value: nombre,
+            onChange: setNombre
+        },
+        descripcion: {
+            titulo: "Descripción",
+            name: "descripcion",
+            type: "text",
+            value: descripcion,
+            onChange: setDescripcion
+        }
+    }
+
+    return (
+        <div className="page-container">
+
+            {!mostrarDatos && (
+				<div className="back-link-container">
+					<button className="link-regresar" onClick={() => navigate(-1)}>
+						Regresar
+					</button>
+				</div>
+			)}
+
+            <section className="section-editar">
+
+                {!mostrarDatos ? (
+                    <>
+                        <h1 className="titulo-por-h1">Detalles de la guía</h1>
+                        <div className="contenedor-campos">
+                            <p><strong>Nombre:</strong> {nombre}</p>
+                            <p><strong>Descripción:</strong> {descripcion}</p>
+                        </div>
+                    </>
+                ) : (
+                    <AdminFormEdit
+                        titulo={"Editar guía de regalos"}
+                        campos={campos}
+                        onSendForm={sendData}
+                        error={error}
+                        fieldErrors={fieldErrors}
+                        button={"Guardar cambios"}
+                        loading={loading}
+                    />
+                )}
+
+                <div className="contenedor-editar-botones">
+                    <button
+                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                        onClick={() => setMostrarDatos(!mostrarDatos)}
+                    >
+                        {mostrarDatos ? "Cancelar" : "Modificar"}
+                    </button>
+                </div>
+
+            </section>
+        </div>
+    )
+}
+
+export default EditGiftGuide

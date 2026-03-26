@@ -1,4 +1,3 @@
-import React from 'react'
 import ProductCard from './ProductCard'
 
 const ProductsCards = ({products}) => {
@@ -9,6 +8,7 @@ const ProductsCards = ({products}) => {
                 return (
                     <ProductCard 
                         key={index}
+                        id={p?.id_producto}
                         categoria={p?.categoria?.nombre}
                         marca={p?.marca?.nombre}
                         precio={p?.precio}

@@ -7,13 +7,9 @@ const CarritoIndex = () => {
 
 	const fields = {
 		id_carrito: "Id carrito",
-		documento_usuario: "Documento Usuario",
 		usuario: "Usuario",
-		cantidad: "Cantidad",
-		descuento: "Descuento",
-		producto: "Producto",
-		id_factura_pedido: "Id factura",
-		id_tarjeta: "Id tarjeta",
+		elementos: "Elementos",
+		status: "Estado",
 		created_at: "Fecha creación",
 	}
 
@@ -26,15 +22,12 @@ const CarritoIndex = () => {
 				return
 			}
 
+			console.log(res?.carts?.data)
+
 			const carts = res.carts.data.map(cart => ({
 				...cart,
-
-				documento_usuario: cart?.usuario?.num_documento,
 				usuario: `${cart?.usuario?.nombres} ${cart?.usuario?.apellidos}`,
-				producto: cart?.producto?.nombre,
-
-				descuento: `$ ${cart.descuento.slice(0, -3)}`
-
+				status: cart?.status == "active" ? "Activo" : cart?.status == "checked_out" ? "Procesado" : 'Desconocido'
 			}))
 
 			setData(carts)
@@ -70,6 +63,7 @@ const CarritoIndex = () => {
 				texto={"Administra los carritos de compra registrados dentro del sistema"}
 				linkCrear={"/admin/cart/create"}
 				linkEditar={"/admin/cart/edit"}
+				elementsLink="/admin/elements-cart/edit"
 				onDelete={onDelete}
 				getData={getData}
 			/>

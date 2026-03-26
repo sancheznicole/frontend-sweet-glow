@@ -1,68 +1,65 @@
 import { useState, useEffect } from "react"
-import { getAllReferencias, deleteReferencia } from "../../../services/referenceProductsService"
+import { getAllReferenceProducts, deleteReferenceProduct } from "../../../services/referenceProductsService"
 import AdminPanel from "../../../components/admin/AdminPanel"
 
 const ReferenceProductsIndex = () => {
-	const [data, setData] = useState({})
-	// los campos que se reciben del back y el nombre de la tabla del front 
-	const fields = {
-		id_referencia: "id referencia",
-		codigo: "codigo",
-		color: "color",
-		tamano: "tamaño",
-		created_at: "Fecha creación",
-	}
 
-	//funcion que llama la funcion getall
-	async function getData(){
-		try {
-			let res = await getAllReferencias(1,10)
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(1)
+    const [lastPage, setLastPage] = useState(undefined)
 
-		if(!res?.valid){
-			console.log(res?.error)
-			return
-		}
+    const fields = {
+        id_referencia: "ID",
+        codigo: "Código",
+        color: "Color",
+        tamano: "Tamaño",
+        created_at: "Fecha creación"
+    }
 
-		console.log(res?.referencia)
+    async function getData() {
+        try {
+            const res = await getAllReferenceProducts(page)
+            if (!res?.valid) {
+                console.log(res?.error)
+                return
+            }
+            setData(res?.references?.data)
+            setLastPage(res?.references?.last_page)
+        } catch (error) {
+            console.log(error?.message)
+        }
+    }
 
-		setData(res?.referencia)
-		} catch (error) {
-			console.log(error?.message)
-		}
-	}
+    useEffect(() => {
+        getData()
+    }, [page])
 
-	// funcion que llama al getdata cuando carga la pagina
-	useEffect(() => {
-		getData()
-	}, [])
+    const onDelete = async (id) => {
+        try {
+            const res = await deleteReferenceProduct(id)
+            if (!res?.valid) return res?.error
+        } catch (error) {
+            return error.message
+        }
+    }
 
-	// función para llamar al delete rol 
-	const onDelete = async (id) => {
-		try {
-			let res = await deleteReferencia(id)
-
-			if(!res?.valid) return res?.error
-
-		} catch (error) {
-			return error.message
-		}
-	}
-
-	//retornamos la plantilla para administradores 
-  	return (
-		<div>
-			<AdminPanel 
-				data={data}
-				campos={fields}
-				titulo={"Administración de referencias productos"}
-				texto={"Administra los tipos de referencias"}
-				linkCrear={"/admin/referencia/create"}
-				linkEditar={"/admin/referencia/edit"}
-				onDelete={onDelete}
-				getData={getData}
-			></AdminPanel>
-		</div>
-  	)
+    return (
+        <div>
+            <AdminPanel
+                data={data}
+                page={page}
+                lastPage={lastPage}
+                setPage={setPage}
+                campos={fields}
+                titulo={"Administración de referencias de productos"}
+                texto={"Administra las referencias de los productos"}
+                linkCrear={"/admin/referenciaProductos/crear"}
+                linkEditar={"/admin/referenciaProductos/editar"}
+                onDelete={onDelete}
+                getData={getData}
+            />
+        </div>
+    )
 }
 
 export default ReferenceProductsIndex
