@@ -166,7 +166,8 @@ const ProductCreate = () => {
 			name: 'id_categoria',
             //nombre visible 
 			titulo: 'Categoria',
-            options: categories
+            options: categories,
+            value: id_categoria
 		},
 
         id_marca: {
@@ -178,7 +179,8 @@ const ProductCreate = () => {
 			name: 'id_marca',
             //nombre visible 
 			titulo: 'Marca',
-            options: brands
+            options: brands,
+            value: id_marca
 		},
 
         id_referencia: {
@@ -206,7 +208,8 @@ const ProductCreate = () => {
 			name: 'id_guia',
             //nombre visible 
 			titulo: 'Guia regalo',
-            options: giftGuides
+            options: giftGuides,
+            value: id_guia
 		}
 
     }
