@@ -100,7 +100,7 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
                             )}
                         </div>
                     ) : (
-                        <p>Ocurrió un error al cargar los procutos </p>
+                        <p>Ocurrió un error al cargar los productos</p>
                     )} 
                 </>
             )}

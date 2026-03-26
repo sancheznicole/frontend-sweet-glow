@@ -159,7 +159,7 @@ const EditOrderInvoice = () => {
             //nombre del input 
             name: 'id_carrito',
             //nombre visible 
-            titulo: 'Carrito',
+            titulo: 'ID carrito',
 
             searchFunction: searchCart,
             data_key: 'carts',
@@ -176,7 +176,7 @@ const EditOrderInvoice = () => {
             //nombre del input 
             name: 'id_tarjeta',
             //nombre visible 
-            titulo: 'Tarjeta',
+            titulo: 'Tarjeta regalo',
 
             searchFunction: searchGiftCard,
             data_key: 'tarjetas',

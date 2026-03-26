@@ -107,7 +107,8 @@ const CreateOrderInvoice = () => {
 			name: 'status',
             //nombre visible 
 			titulo: 'Estado',
-            options: options
+            options: options,
+            value: status
 		},
     }
 
