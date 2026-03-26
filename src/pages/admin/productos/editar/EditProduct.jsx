@@ -5,6 +5,7 @@ import { getProduct, updateProduct } from "../../../../services/productsService"
 import { buildJson } from "../../../../helpers/json.helpers"
 import { getAllBrands } from "../../../../services/brands"
 import { getAllCategories } from "../../../../services/categoriesService"
+import { searchReferences } from '../../../../services/referenceProductsService'
 
 const EditProduct = () => {
 
@@ -33,6 +34,7 @@ const EditProduct = () => {
 
   const [categories, setCategories] = useState({})
   const [brands, setBrands] = useState({})
+  const [reference, setReference] = useState({})
 
   async function sendData() {
     try {
@@ -147,6 +149,7 @@ const EditProduct = () => {
 
         setCategories(buildJson(catRes?.categories, "id_categoria", "nombre"))
         setBrands(buildJson(brandRes?.brands, "id_marca", "nombre"))
+        setReference(res.product?.referencia_producto)
 
       } catch (error) {
         setError(error.message)
@@ -156,6 +159,8 @@ const EditProduct = () => {
     getData()
 
   }, [id])
+
+  console.log(reference)
 
     const fields = {
         //nombre de bd 
@@ -283,15 +288,21 @@ const EditProduct = () => {
 		},
 
         id_referencia: {
+            value: reference?.id_referencia,
             //la funcion que va a cambiar el dato
 			onChange: setId_referencia,
             //tipo de input
-			type: 'select',
+			type: 'text-search',
             //nombre del input 
 			name: 'id_referencia',
             //nombre visible 
 			titulo: 'Referencia',
-            options: {}
+            
+            searchFunction: searchReferences,
+            data_key: 'references',
+            save_data_key: 'id_referencia',
+            text_keys: 'id_referencia,tamano,color',
+            initial_show_value: `${reference?.id_referencia} ${reference?.color} | ${reference?.tamano}`
 		},
 
         id_guia: {

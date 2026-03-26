@@ -78,7 +78,7 @@ const CreateCartElements = () => {
 
         // Producto obligatorio
         if (!id_producto) {
-            errors.id_producto = "Debe seleccionar un producto"
+            errors.producto = "Debe seleccionar un producto"
         }
 
         // Carrito obligatorio
@@ -120,7 +120,7 @@ const CreateCartElements = () => {
                 return
             }
 
-            navigate("/admin/cart-elements")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

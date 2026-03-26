@@ -38,7 +38,7 @@ const CreateReferenceProduct = () => {
                 return
             }
 
-            navigate("/admin/referenciaProductos")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

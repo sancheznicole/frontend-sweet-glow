@@ -69,7 +69,7 @@ const CreateBrand = () => {
 				return
 			}
 
-			navigate("/admin/brands")
+			navigate(-1)
 
 		}catch(error){
 

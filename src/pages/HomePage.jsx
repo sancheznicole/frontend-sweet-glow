@@ -1,11 +1,13 @@
 import { useAuth } from "../contexts/AuthContext"
+import ProductsCards from "../components/ProductsCards"
 
 const HomePage = () => {
   const {user} = useAuth()
 
   return (
     <div className='page-container'>
-      <p></p>
+                              <ProductsCards 
+                        ></ProductsCards>
     </div>
   )
 }

@@ -29,10 +29,10 @@ const CreateRole = () => {
     function validateFields(){
         const errors = {};
 
-            const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/;
-            if (nombre != '' && !nameRegex.test(nombre)) {
-                errors.nombre = "El nombre solo debe contener letras y espacios";
-            }
+        const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/;
+        if (nombre == '' && !nameRegex.test(nombre)) {
+            errors.nombre = "El nombre solo debe contener letras y espacios";
+        }
             
         setFieldErrors(errors)
         return Object.keys(errors).length > 0
@@ -51,11 +51,11 @@ const CreateRole = () => {
             let res = await createRol(nombre)
         
             if(!res?.valid){
-                setError("Error al enviar el formulario")
+                setError("Error al crear rol")
                 return
             }
 
-            navigate("/admin/roles")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

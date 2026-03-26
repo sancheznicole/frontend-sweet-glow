@@ -40,6 +40,7 @@ const CreateUser = () => {
             type: 'select',
             name: 'tipo_documento',
             titulo: 'Tipo Documento',
+            value: tipoDocumento,
             options: documents
         },
 
@@ -66,7 +67,7 @@ const CreateUser = () => {
 
         correo: {
             onChange: setCorreo,
-            type: 'email',
+            type: 'text',
             name: 'correo',
             titulo: 'Correo',
         },
@@ -97,7 +98,8 @@ const CreateUser = () => {
             type: 'select',
             name: 'id_rol',
             titulo: 'Rol',
-            options: roles
+            options: roles, 
+            value: role
         }
 
     }
@@ -187,7 +189,7 @@ const CreateUser = () => {
                 return
             }
 
-            navigate("/admin/users")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

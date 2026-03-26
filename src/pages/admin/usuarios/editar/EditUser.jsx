@@ -184,7 +184,7 @@ const EditUser = () => {
     correo: {
       value: correo,
       onChange: setCorreo,
-      type: "email",
+      type: "text",
       name: "correo",
       titulo: "Correo"
     },

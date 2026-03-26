@@ -79,13 +79,11 @@ const ProductosIndex = () => {
 	const onDelete = async (id) => {
 		try {
 			let res = await deleteProduct(id)
-
-			if (!res?.valid) return res?.error
-
-			getData()
-
+	
+			if(!res?.valid) return res?.error
+	
 		} catch (error) {
-			return error.message
+				return error.message
 		}
 	}
 

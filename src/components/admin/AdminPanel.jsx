@@ -7,6 +7,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 	const [id, setId] = useState(undefined)
 	const idKey = Object.keys(campos)[0]
 	const navigate = useNavigate()
+	const max_length = 50
 
 	const getValor = (row, key) => {
 		if (key === "created_at") return row[key]?.slice(0, 10)
@@ -88,7 +89,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 															"Sin elementos"
 														)
 													) : (
-														row[key]
+														typeof row[key] == "string" ? `${row[key].slice(0, max_length)}...` : row[key]
 													)}
 												</td>
 											))}

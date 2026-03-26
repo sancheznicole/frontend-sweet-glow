@@ -138,7 +138,7 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 									)}
 
 									{searching && (<p>Buscando...</p>)}
-									{searchError && (<p className="form-input-error">{searchError}</p>)}
+									{searchError && (<p className="form-input-error-edit">{searchError}</p>)}
 								</>
 							) : (
 								<input
@@ -155,7 +155,7 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 								/>
 							)}
 
-							<p>{fieldErrors?.[key] || ""}</p>
+							<p className="form-input-error-edit">{fieldErrors?.[key] || ""}</p>
 
 						</div>
 					))}

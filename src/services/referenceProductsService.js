@@ -53,3 +53,19 @@ export async function deleteReferenceProduct(id) {
         return { valid: false, error: error?.message }
     }
 }
+
+export async function searchReferences(search) {
+    try {
+        const res = await axios.get(`${API_URL}/product_references?search=${search}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, references: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}

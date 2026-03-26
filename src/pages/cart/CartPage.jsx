@@ -6,6 +6,8 @@ import { useAuth } from "../../contexts/AuthContext"
 import { useNavigate } from "react-router-dom"
 import { createPreference } from "../../services/paymentService"
 import { createInvoiceOrders } from "../../services/facturaPedidosService"
+import { createImageURL } from "../../services/imagesService"
+import { parsePrice } from "../../helpers/json.helpers"
 
 const cartPage = () => {
     const navigate = useNavigate()
@@ -121,25 +123,25 @@ const cartPage = () => {
                 </div>
             ) : (
                 <>
-                    <div>
+                    <div className="filled-cart">
                         <h1>Productos en tú carrito de compras</h1>
 
-                        <div>
+                        <div className="products-container">
                             {Object.values(cart).map((r, index) => {
 
                                 return (
                                     <div key={index} className="product-container">
-                                        <div>
-                                            <img src="" alt={`Portada ${r?.nombre}`} />
+                                        <div className="image-container">
+                                            <img src={createImageURL(r?.imagenes[0]?.filename)} alt={`Portada ${r?.nombre}`} />
                                         </div>
                                         <div>
                                             <p>{r?.nombre}</p>
                                             <p>{r?.referencia_producto?.color} | {r?.referencia_producto?.tamano}</p>
                                         </div>
-                                        <div>
-                                            <div>
+                                        <div className="quantities-container">
+                                            <div className="info">
                                                 <p>{r?.quantity} unidad{r?.quantity > 1 && 'es'}</p>
-                                                <p>Valor: ${r?.quantity*Number(r?.precio)}</p>
+                                                <p>Valor: {parsePrice(r?.quantity*Number(r?.precio))}</p>
                                             </div>
                                             <div>
                                                 <button title="Aumentar cantidad" onClick={() => {addOne(r?.id_producto); getCart()}}>
@@ -163,7 +165,7 @@ const cartPage = () => {
                         <h1>Acciones de carrito</h1>
                         <button onClick={() => {handleDeleteCart()}}>Eliminar carrito</button>
 
-                        <h2>Total: $ {total}</h2>
+                        <h2>Total: {parsePrice(total)}</h2>
 
                         <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
 

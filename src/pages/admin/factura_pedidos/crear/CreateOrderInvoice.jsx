@@ -68,7 +68,7 @@ const CreateOrderInvoice = () => {
             //nombre del input 
 			name: 'id_tarjeta',
             //nombre visible 
-			titulo: 'Tarjeta',
+			titulo: 'Tarjeta regalo',
 
             searchFunction: searchGiftCard,
             data_key: 'tarjetas',
@@ -95,7 +95,7 @@ const CreateOrderInvoice = () => {
             //nombre del input 
 			name: 'descuento',
             //nombre visible 
-			titulo: 'Descuento',
+			titulo: 'Descuento'
 		},
 
         status: {
@@ -130,8 +130,7 @@ const CreateOrderInvoice = () => {
             errors.id_carrito = "Debe seleccionar un carrito"
         }
 
-        // Descuento: opcional pero si existe, debe ser >=0
-        if (descuento && (isNaN(descuento) || parseFloat(descuento) < 0)) {
+        if (descuento !== '' && (isNaN(descuento) || Number(descuento) < 0)) {
             errors.descuento = "El descuento debe ser un número igual o mayor a 0"
         }
 
@@ -162,7 +161,7 @@ const CreateOrderInvoice = () => {
                 return
             }
 
-            navigate("/admin/invoice-orders")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

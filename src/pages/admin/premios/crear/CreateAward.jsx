@@ -35,7 +35,7 @@ const CreateAward = () => {
                 return
             }
 
-            navigate("/admin/premios")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")
