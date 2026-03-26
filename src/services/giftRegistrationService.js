@@ -97,14 +97,10 @@ export const buscarUsuariosInscripcion = async (query) => {
     }
 }
 
-// Obtener facturas disponibles
-export const getAllFacturas = async (id_usuario = null) => {
+// Obtener facturas del usuario — usa el endpoint dedicado que filtra por id_usuario
+export const getAllFacturas = async (id_usuario) => {
     try {
-        const url = id_usuario
-            ? `${API_URL}/order_invoice?id_usuario=${id_usuario}`
-            : `${API_URL}/order_invoice`
-
-        const res = await axios.get(url, {
+        const res = await axios.get(`${API_URL}/gift_registrations/invoices-by-user/${id_usuario}`, {
             headers: getHeaders()
         })
         const lista = Array.isArray(res.data) ? res.data : res.data?.data ?? []
