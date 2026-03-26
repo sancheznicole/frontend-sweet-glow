@@ -3004,42 +3004,73 @@ button {
 button{
     cursor: pointer;
 }
+
 /*blog*/
-.blog-container{
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
-  padding: 40px 20px;
-  margin-top: 20px;
+.blog-header {
+    text-align: center;
+    padding: 40px 20px 10px 20px;
 }
 
-.Blog{
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
+.blog-header h1 {
+    font-family: Heading;
+    font-size: 28px;
+    color: #b3848f;
+    letter-spacing: 4px;
+    text-transform: uppercase;
 }
 
-.img{
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.3s ease;
+.blog-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    padding: 40px 20px;
+    margin-top: 20px;
 }
 
-.Blog:hover .img{
-  transform: scale(1.05);
+.Blog {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
 }
 
-.Blog a{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  color: white;
-  font-size: 22px;
-  font-family: Heading;
-  text-decoration: none;
+.Blog .img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.Blog:hover .img {
+    transform: scale(1.05);
+}
+
+.blog-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blog-overlay a {
+    color: white;
+    font-size: 16px;
+    font-family: Heading;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.blog-overlay a:hover {
+    color: #efd7e5;
 }
 
 /* BLOG: SKINCARE - COLORIMETRIA - FRAGANCIAS - PRODUCTOS RECOMENDADOS - CONSEJOS DE BELLEZA*/
