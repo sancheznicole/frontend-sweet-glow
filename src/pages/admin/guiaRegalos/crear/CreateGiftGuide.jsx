@@ -35,7 +35,7 @@ const CreateGiftGuide = () => {
                 return
             }
 
-            navigate("/admin/giftGuide")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

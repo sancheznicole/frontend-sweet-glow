@@ -87,7 +87,7 @@ const CreateCarrito = () => {
                 return
             }
 
-            navigate("/admin/cart")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

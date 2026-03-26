@@ -5,3 +5,7 @@ export const buildJson = (data, keyField, valueField) => {
 		return acc
 	}, {})
 }
+
+export const parsePrice = (decimal) => {
+	return	`$${parseInt(decimal).toLocaleString('en-US')}`
+}

@@ -37,7 +37,7 @@ const CreateImages = () => {
                 return
             }
 
-            navigate("/admin/imagenes")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

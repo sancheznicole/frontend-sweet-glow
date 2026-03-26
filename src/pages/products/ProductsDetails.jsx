@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { getProduct, getAllProducts } from "../../services/productsService"
+import { getProduct } from "../../services/productsService"
 import Loader from "../../components/Loader"
 import { getCategory } from "../../services/categoriesService"
 import { getBrand } from "../../services/brands"
 import { searchReviewsByProductId } from "../../services/reviewsService"
 import ProductsCards from "../../components/ProductsCards"
 import { addToCart } from "../../services/cartService"
+import { createImageURL } from "../../services/imagesService"
+import { parsePrice } from "../../helpers/json.helpers"
 
 const ProductsDetails = () => {
     const { id } = useParams()
@@ -17,9 +19,9 @@ const ProductsDetails = () => {
     const [brand, setBrand] = useState({})
     const [reviews, setReviews] = useState({})
 
-    const [products, setProducts] = useState([])
     const [quantity, setQuantity] = useState(1)
     const [cartError, setCartError] = useState('')
+    const [currentImage, setCurrentImage] = useState(0)
 
     const getData = async () => {
         try {
@@ -29,18 +31,23 @@ const ProductsDetails = () => {
                 console.log(res?.error)
             }
 
-            let allRes = await getAllProducts() 
-
-            if(!allRes?.valid){
-                console.log(res?.error)
-            }
-
-            setProducts(allRes?.products?.data)
             setProduct(res?.product)
         } catch (error) {
             console.log(error.message)
         }
     }
+
+    useEffect(() => {
+        if (!product?.imagenes?.length) return
+
+        const interval = setInterval(() => {
+            setCurrentImage(prev =>
+                (prev + 1) % product.imagenes.length 
+            )
+        }, 3000) // 3 segundos
+
+        return () => clearInterval(interval)
+    }, [product?.imagenes])
 
     const getBrandAndCategory = async () => {
         try {
@@ -92,6 +99,8 @@ const ProductsDetails = () => {
         }
     }, [product])
 
+    console.log(product)
+
     return (
         <div>
             {loading ? (
@@ -100,8 +109,15 @@ const ProductsDetails = () => {
                 <>
                     {/* productos */}
                     <div className="product-details">
-                        <div>
-                            <img src="" alt={`${product?.nombre} imagen sweet glow`} />
+                        <div className="images-container">
+                            {product?.imagenes?.map((i, index) => (
+                                <img
+                                    key={index}
+                                    src={createImageURL(i?.filename)}
+                                    alt={`${product?.nombre} #${index}`}
+                                    className={index === currentImage ? 'active' : 'inactive'}
+                                />
+                            ))}
                         </div>
                         <div className="details">
                             <h1>{product?.nombre}</h1>
@@ -128,7 +144,7 @@ const ProductsDetails = () => {
                                 </div>
                                 <div>
                                     <button onClick={() => {handleAddToCart()}}>
-                                        Añadir al carrito ${quantity*product?.precio} COP
+                                        Añadir al carrito {parsePrice(quantity*product?.precio)} COP
                                     </button>
                                 </div>
                             </div>
@@ -155,7 +171,6 @@ const ProductsDetails = () => {
                     <div className="more-products-container">
                         <h2 className="">Mas de nustros productos</h2>
                         <ProductsCards 
-                            products={products}
                         ></ProductsCards>
                     </div>
                 </>

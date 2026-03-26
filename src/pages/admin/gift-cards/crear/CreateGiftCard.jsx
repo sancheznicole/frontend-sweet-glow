@@ -82,7 +82,7 @@ const CreateGiftCard = () => {
                 return
             }
 
-            navigate('/admin/gift-cards')
+            navigate(-1)
 
         } catch (e) {
             setError('Error al enviar el formulario')
@@ -95,7 +95,7 @@ const CreateGiftCard = () => {
         <div className="page-container">
 
             <div className="back-link-container">
-                <Link className="link-regresar" to="/admin/gift-cards">Regresar</Link>
+                <button className="link-regresar" onClick={() => {navigate(-1)}}>Regresar</button>
             </div>
 
             <section className="section-editar">

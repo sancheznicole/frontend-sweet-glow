@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom'
 //terminar el getall de referencia y guia lo mismo en el select 
 import { getAllBrands } from '../../../../services/brands'
 import { getAllCategories } from '../../../../services/categoriesService'
+import { getAllGiftGuides } from '../../../../services/giftGuideService'
 import Loader from '../../../../components/Loader'
 import { buildJson } from '../../../../helpers/json.helpers'
+import { searchReferences } from '../../../../services/referenceProductsService'
 
 const ProductCreate = () => {
 
@@ -31,6 +33,7 @@ const ProductCreate = () => {
 
     const [brands, setBrands] = useState({})
     const [categories, setCategories] = useState({})
+    const [giftGuides, setGuiftGuide] = useState({})
 
     const getData = async () => {
         try {
@@ -46,8 +49,15 @@ const ProductCreate = () => {
                 console.log(catRes?.error)
             }
 
+            let guidesRes = await getAllGiftGuides()
+
+            if(!guidesRes?.valid){
+                console.log(guidesRes?.error)
+            }
+
             setCategories(buildJson(catRes?.categories, "id_categoria", "nombre"))
             setBrands(buildJson(res?.brands, "id_marca", "nombre"))
+            setGuiftGuide(buildJson(guidesRes?.giftGuides?.data, "id_guia", "nombre"))
         } catch (error) {
             console.log(error?.message)
         }
@@ -175,12 +185,16 @@ const ProductCreate = () => {
             //la funcion que va a cambiar el dato
 			onChange: setId_referencia,
             //tipo de input
-			type: 'select',
+			type: 'text-search',
             //nombre del input 
 			name: 'id_referencia',
             //nombre visible 
 			titulo: 'Referencia',
-            options: {}
+
+            searchFunction: searchReferences,
+            data_key: 'references',
+            save_data_key: 'id_referencia',
+            text_keys: 'id_referencia,tamano,color',
 		},
 
         id_guia: {
@@ -192,7 +206,7 @@ const ProductCreate = () => {
 			name: 'id_guia',
             //nombre visible 
 			titulo: 'Guia regalo',
-            options: {}
+            options: giftGuides
 		}
 
     }
@@ -282,7 +296,6 @@ const ProductCreate = () => {
         return Object.keys(errors).length > 0
     }
 
-
     const sendData = async () => {
         try {
 
@@ -300,7 +313,7 @@ const ProductCreate = () => {
                 return
             }
 
-            navigate("/admin/products")
+            navigate(-1)
 
         } catch (error) {
             setError("Error al enviar el formulario")

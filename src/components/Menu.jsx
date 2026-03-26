@@ -60,7 +60,7 @@ function Menu({isTransparent, bgWhite, fixed}) {
           </ul>
 
           <ul>
-              <li className="link-panel-administrativo"> {user?.id_rol === 1 && <Link to={"/admin"}>Panel administrativo</Link>}</li>
+              {user?.id_rol === 1 && <li className="link-panel-administrativo"><Link to={"/admin"}>Panel administrativo</Link></li>}
               <li><Link to={"/categories"}>Categorias</Link></li>
               {/* <li><Link to={"/"}> <CategoriasMenu titulo={"Lista de categorias"}></CategoriasMenu> </Link></li>} */}
               <li><Link to={"/blog"}>Blog</Link></li>

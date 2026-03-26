@@ -199,7 +199,7 @@ const CreateReview = () => {
         <div className="page-container">
 
             <div className="back-link-container">
-                <Link className="link-regresar" to="/admin/reviews">Regresar</Link>
+                <button className="link-regresar" onClick={() => {navigate(-1)}}>Regresar</button>
             </div>
 
             <section className="section-editar">

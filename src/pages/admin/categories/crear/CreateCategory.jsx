@@ -57,7 +57,7 @@ const CreateCategory = () => {
 				return
 			}
 
-			navigate("/admin/categories")
+			navigate(-1)
 
 		}catch(error){
 
