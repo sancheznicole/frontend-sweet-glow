@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
-import Menu from "../components/menu"
-import Footer from "../components/footer"
+import Menu from "../components/Menu"
+import Footer from "../components/Footer"
 import "../App.css"
 import { useEffect, useState } from "react"
 
