@@ -5,8 +5,8 @@ import CategoryProducts from './CategoryProducts'
 const CATEGORY_ASSETS = {
     1:  { imagen: '/assets/maquillaje.jpeg',    video: '/assets/maquillaje.mp4' },
     6:  { imagen: '/assets/haircare.jpeg',   video: '/assets/haircare.mp4' },
-    10: { imagen: '/assets/skincare.jpeg', video: '/assets/skincare.mp4' },
-    11: { imagen: '/assets/perfume.jpeg',   video: '/assets/perfume.mp4' },
+    7: { imagen: '/assets/skincare.jpeg', video: '/assets/skincare.mp4' },
+    8: { imagen: '/assets/perfume.jpeg',   video: '/assets/perfume.mp4' },
 }
 
 const CategoryCard = ({ categoria, onSelect }) => {
