@@ -5,12 +5,13 @@ import { getElementoCarrito, updateElementoCarrito } from "../../../../services/
 import { searchProduct } from "../../../../services/productsService"
 import { searchCart } from "../../../../services/cartService"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 const EditElementsCart = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
-
+  const [loadingData, setLoadingData] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [fieldErrors, setFieldErrors] = useState({})
@@ -69,6 +70,8 @@ const EditElementsCart = () => {
 
       } catch (error) {
         setError(error.message)
+      } finally {
+        setLoadingData(false)
       }
     }
 
@@ -151,6 +154,10 @@ const EditElementsCart = () => {
 
   return (
 
+    loadingData ? (
+      <Loader text="Cargando informacion del elemento del carrito..."></Loader>
+    ) : (
+
     <div className="page-container">
 
       {!mostrarDatos && (
@@ -211,6 +218,7 @@ const EditElementsCart = () => {
       </section>
 
     </div>
+    )
   )
 
 }

@@ -2,9 +2,9 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function getAllInvoiceOrders(page, limit = 10) {
+export async function getAllInvoiceOrders(page, limit = 5, search) {
     try {
-        const res = await axios.get(`${API_URL}/order_invoice?page=${page}&limit=${limit}`)
+        const res = await axios.get(`${API_URL}/order_invoice?page=${page}&limit=${limit}&search=${search}`)
 
         if(res?.status != 200){
             return { valid: false, error: res.data?.errors }
