@@ -9,6 +9,7 @@ import ProductsCards from "../../components/ProductsCards"
 import { addToCart } from "../../services/cartService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
+import { addToWishList } from "../../services/wishlist"
 
 const ProductsDetails = () => {
     const { id } = useParams()
@@ -89,6 +90,17 @@ const ProductsDetails = () => {
         navigate("/cart")
     }
 
+    const handleAddToWishList = async () => {
+        const res = await addToWishList(product)
+
+        if(!res?.valid){
+            setCartError(res?.error)
+        }
+
+        navigate("/wishlist")
+    }
+
+
     useEffect(() => {
         getData()
     }, [])
@@ -120,7 +132,12 @@ const ProductsDetails = () => {
                             ))}
                         </div>
                         <div className="details">
-                            <h1>{product?.nombre}</h1>
+                            <div className="details-menu-header">
+                                <h1>{product?.nombre}</h1>
+                                <button title="Agregar a la lista de deseos" onClick={() => {handleAddToWishList()}}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-heart"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                </button>
+                            </div>
                             {product?.stock == 0 ? (
                                 <p>Agotado</p>
                             ) : (

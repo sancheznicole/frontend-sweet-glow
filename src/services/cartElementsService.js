@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 
-export async function getAllElementosCarrito(page = 1, limit = 5, search) {
+export async function getAllElementosCarrito(page = 1, limit = 5, search = "") {
     try {
         const res = await axios.get(`${API_URL}/cart-elements?page=${page}&limit=${limit}&search=${search}`);
 
