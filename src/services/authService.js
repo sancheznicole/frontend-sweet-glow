@@ -86,7 +86,7 @@ export async function getUserData(token) {
 //funcion para usar en update del usuario
 // funcion para eliminar un usuario
 
-export async function getAllUsers(page, limit, search) {
+export async function getAllUsers(page, limit, search = "") {
     try {
         const res = await axios.get(`${API_URL}/users?page=${page}&limit=${limit}&search=${search}`)
 

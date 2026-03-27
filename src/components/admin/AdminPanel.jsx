@@ -47,7 +47,7 @@ const AdminPanel = ({
 						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
 					</div>
 
-					<p>Total de registros ({data?.length})</p>
+					<p>Total de registros ({data?.length ?? 0})</p>
 
 					{lastPage > 1 && (
 						<>

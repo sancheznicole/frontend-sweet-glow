@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function getAllProducts(page = 1, limit = 5, search) {
+export async function getAllProducts(page = 1, limit = 5, search = "") {
     try {
         const res = await axios.get(`${API_URL}/products?page=${page}&limit=${limit}&search=${search}`)
 
@@ -106,6 +106,38 @@ export async function deleteProduct(id_producto) {
 export async function searchProduct(search) {
     try {
         const res = await axios.get(`${API_URL}/products?search=${search}`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function latestInTendency() {
+    try {
+        const res = await axios.get(`${API_URL}/products/tendency-latest`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function getDiscountProducts() {
+    try {
+        const res = await axios.get(`${API_URL}/products/discount`)
 
         if(res?.status != 200){
             return { valid: false, error: res.data?.errors }
