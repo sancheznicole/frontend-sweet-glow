@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
 @font-face{
     font-family: Heading;
     src: url("/fonts/HeadingNowTrial-65Medium.ttf");
@@ -2174,12 +2176,42 @@ button {
     margin-top: 20px;
 }
 
+/* HERO BLOG */
+.blog-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 450px;
+    overflow: hidden;
+}
+
+.blog-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.blog-hero-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+}
+
+.blog-hero-overlay h1 {
+    color: #b3848f;
+    font-size: 32px;
+    font-family: Heading;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-align: left;
+   
+}
+
 /* ════════════════════════════════════════════════════════════════
    GIFT CARD PAGE — Sweet Glow
    Todas las clases usan prefijo "gc-" para no afectar otros módulos
 ════════════════════════════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
 
 /* ── Page ─────────────────────────────────────────────────────── */
 .gc-page {
@@ -3052,14 +3084,15 @@ button{
 
 .Blog {
     position: relative;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
+    aspect-ratio: 3 / 4;
 }
 
 .Blog .img {
     width: 100%;
-    height: 320px;
+    height: 100%;
     object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
@@ -3078,87 +3111,193 @@ button{
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
 }
 
 .blog-overlay a {
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     font-family: Heading;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: bold;
     text-align: center;
-    padding: 0 10px;
+    position: absolute;
+    bottom: 20px;
 }
 
 .blog-overlay a:hover {
     color: #efd7e5;
 }
 
+
 /* BLOG: SKINCARE - COLORIMETRIA - FRAGANCIAS - PRODUCTOS RECOMENDADOS - CONSEJOS DE BELLEZA*/
 
-
-/* Contenedor principal*/
+/* Contenedor principal - sin max-width para que el hero ocupe todo */
 .skin, .colorimetria, .fragancias, .recomendaciones, .consejos {
-  max-width: 800px; 
-  margin: 60px auto;
-  padding: 40px 20px;
-  font-family: 'Heading', sans-serif;
-  color: #444;
+    font-family: 'Heading', sans-serif;
+    color: #444;
 }
 
-/* Título principal */
-.titulo {
-  text-align: center;
-  color: #b3848f;
-  font-size: 32px;
-  font-weight: 300; 
-  font-family: 'Heading', sans-serif;
-  letter-spacing: 4px; 
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
 
 /* El párrafo intro */
 .parrafo-titulo {
-  text-align: center;
-  color: #666;
-  margin-bottom: 60px;
-  font-size: 16px;
-  line-height: 1.8;
-  padding-bottom: 30px;
+    text-align: center;
+    color: #666;
+    margin-bottom: 60px;
+    line-height: 1.8;
+    padding-bottom: 30px;
+    font-family: TT Chocolates;
+    font-size: 25px;
 }
 
-/* Los títulos de secciones*/
+/* Los títulos de secciones */
 .tipo-piel, .piel, .fragancia, .productos, .belleza {
-  color: #b3848f;
-  margin-top: 50px;
-  font-size: 22px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding-left: 15px;
+    color: #b3848f;
+    margin-top: 50px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 15px;
 }
 
 /* Los párrafos */
 .piel-p, .tonos, .p, .prod, .pb {
-  padding: 10px 0; 
-  color: #4a4a4a;
-  font-size: 15px;
-  line-height: 1.8; 
-  margin-bottom: 40px;
-  text-align: justify;
+    padding: 10px 0;
+    color: #4a4a4a;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    text-align: justify;
+    font-family: TT Chocolates;
+    font-size: 20px;
 }
 
 /* Los subtítulos (h4) */
-.piel-p h4, .tonos h4, .p h4, .prod h4, .pb h4{
-  margin-top: 25px;
-  margin-bottom: 12px;
-  color: #efd7e5; 
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.piel-p h4, .tonos h4, .p h4, .prod h4, .pb h4 {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    color: #b3848f;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
+.skin .blog-hero,
+.colorimetria .blog-hero,
+.fragancias .blog-hero,
+.recomendaciones .blog-hero,
+.consejos .blog-hero {
+    margin-top: -25vh;
+}
+
+/* HERO BLOG */
+.blog-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 450px;
+    overflow: hidden;
+}
+
+.blog-hero-img {
+    width: 100%;
+    height: 150%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.blog-hero-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+}
+
+.blog-hero-overlay h1 {
+    color: white;
+    font-size: 32px;
+    font-family: Heading;
+    font-weight: lighter;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+/* Contenido del blog con max-width */
+.skin-contenido {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+/* Secciones texto + imagen */
+.skin-seccion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.skin-seccion.invertida {
+    direction: rtl;
+}
+
+.skin-seccion.invertida > * {
+    direction: ltr;
+}
+
+.skin-imagen-tipo {
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.skin-imagen-tipo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.4s ease;
+}
+
+.skin-imagen-tipo img:hover {
+    transform: scale(1.05);
+}
+
+
+/* Botón */
+.skin-boton-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0 60px 0;
+}
+
+.skin-imagen-con-boton {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.skin-boton {
+    text-decoration: none;
+    color: #393939;
+    border: 1px solid #b3848f;
+    padding: 15px 40px;
+    border-radius: 4px;
+    font-family: Heading;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 300ms;
+}
+
+.skin-boton:hover {
+    background-color: #b3848f;
+    color: white;
+}
+
 
 .product-details{
     justify-content: space-around;
