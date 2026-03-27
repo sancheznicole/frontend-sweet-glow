@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
 @font-face{
     font-family: Heading;
     src: url("/fonts/HeadingNowTrial-65Medium.ttf");
@@ -2187,8 +2189,6 @@ button {
    GIFT CARD PAGE — Sweet Glow
    Todas las clases usan prefijo "gc-" para no afectar otros módulos
 ════════════════════════════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
 
 /* ── Page ─────────────────────────────────────────────────────── */
 .gc-page {
