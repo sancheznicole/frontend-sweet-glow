@@ -6,11 +6,13 @@ import { buildJson } from "../../../../helpers/json.helpers"
 import { getAllBrands } from "../../../../services/brands"
 import { getAllCategories } from "../../../../services/categoriesService"
 import { searchReferences } from '../../../../services/referenceProductsService'
+import Loader from "../../../../components/Loader"
 
 const EditProduct = () => {
 
   const { id } = useParams()
 
+  const [loadingData, setLoadingData] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [fieldErrors, setFieldErrors] = useState({})
@@ -76,7 +78,6 @@ const EditProduct = () => {
     const getData = async () => {
 
       try {
-
         const res = await getProduct(id)
 
         if (!res?.valid) {
@@ -153,6 +154,8 @@ const EditProduct = () => {
 
       } catch (error) {
         setError(error.message)
+      } finally {
+        setLoadingData(false)
       }
     }
 
@@ -321,7 +324,10 @@ const EditProduct = () => {
 
   return (
 
-    <div className="page-container">
+    loading ? (
+        <Loader text="Cargando informacion del producto..."></Loader>
+    ) : (
+        <div className="page-container">
 
       {!mostrarDatos && (
         <div className="back-link-container">
@@ -397,6 +403,7 @@ const EditProduct = () => {
       </section>
 
     </div>
+    )
   )
 }
 

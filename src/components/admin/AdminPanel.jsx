@@ -1,9 +1,14 @@
 /*TABLA DE REGISTROS*/
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDelete, getData, page = 1, lastPage = undefined, setPage, elementsLink = "" }) => {
+const AdminPanel = ({ 
+		data, titulo, texto, linkCrear, linkEditar,
+		campos, onDelete, getData, page = 1, 
+		lastPage = undefined, setPage, elementsLink = "",
+		limit, setLimit, enableSearch = false, setSearch, search
+	}) => {
 	const [id, setId] = useState(undefined)
 	const idKey = Object.keys(campos)[0]
 	const navigate = useNavigate()
@@ -42,17 +47,42 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
 					</div>
 
+					<p>Total de registros ({data?.length})</p>
+
 					{lastPage > 1 && (
-						<div className="paginations-buttons">
-							<p>Página {page} de {lastPage}</p>
-							<div>
-								<button onClick={() => { if (page >= 2) setPage(page - 1) }}>
-									Anterior
-								</button>
-								<button onClick={() => { if (page < lastPage) setPage(page + 1) }}>
-									Siguiente
-								</button>
+						<>
+							<div className="paginations-buttons">
+								{limit && limit > 5 && (
+									<div className="limit-selector">
+										<div>
+											<span>Cantidad de elementos por página</span>
+											<select name="limit" onChange={(e) => {setLimit(e.target.value);}}>
+												{data?.length < 5 && <option value={data?.length}>{data?.length}</option>}
+												<option value="5">5</option>
+												<option value="10">10</option>
+												<option value="25">25</option>
+												<option value="50">50</option>
+											</select>
+										</div>
+										<p>Página {page} de {lastPage}</p>
+									</div>
+								)}
+								<div>
+									<button onClick={() => { if (page >= 2) setPage(page - 1) }}>
+										Anterior
+									</button>
+									<button onClick={() => { if (page < lastPage) setPage(page + 1) }}>
+										Siguiente
+									</button>
+								</div>
 							</div>
+					
+						</>
+					)}
+
+					{enableSearch && (
+						<div className="search-registers-input">
+							<input type="text" name="search" value={search} placeholder="Buscar registros" onChange={(e) => {setSearch(e.target.value)}}/>
 						</div>
 					)}
 
@@ -89,7 +119,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 															"Sin elementos"
 														)
 													) : (
-														typeof row[key] == "string" ? `${row[key].slice(0, max_length)}...` : row[key]
+														typeof row[key] == "string" ? `${row[key].slice(0, max_length)}${row[key].length > max_length ? '...' : ''}` : row[key]
 													)}
 												</td>
 											))}
@@ -103,7 +133,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 									))
 								) : (
 									<tr>
-										<td colSpan={Object.keys(campos).length + 1}>No hay registros</td>
+										<td colSpan={Object.keys(campos).length + 1} className="no-registers-table">No hay registros</td>
 									</tr>
 								)}
 							</tbody>

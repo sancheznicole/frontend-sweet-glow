@@ -774,17 +774,34 @@ footer {
         display: flex;
         flex-direction: column;
 
-        p{
+        p:nth-child{
             font-weight: bolder;
             font-size: 20px;
         }
 
         div{
             display: flex;
+            align-items: center;
             justify-content: space-between;
 
             button{
                 width: 50%;
+            }
+        }
+
+        .limit-selector{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            div{
+                width: 100%;
+                justify-content: center;
+                gap: 10px;
+                padding: 10px 0px;
+                display: flex;
+                align-items: center;
             }
         }
 
@@ -1047,6 +1064,12 @@ footer {
             position: relative;
             display: flex;
             flex-direction: column;
+        }
+
+        .input-search-results{
+            transform: translateY(-30px);
+            max-height: 80px;
+            overflow-y: scroll;
         }
 
         select{
@@ -3396,4 +3419,146 @@ button{
             z-index: 0;
         }
     }
+}
+.confirmation-card{
+    margin: 0 auto;
+}
+.payment-card{
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.payment-card h1{
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+.payment-card button{
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bolder;
+    border: 1px solid black;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 200ms all ease-in-out;
+}
+
+.payment-card button:hover{
+    background-color: #f7e9ed;
+}
+
+.payment-card .pay-btn{
+    background-color: black;       
+    color: white;
+}
+
+.payment-card.pay-btn:hover{
+    background-color: #333;
+}
+
+.confirmation-card{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.confirmation-card ul{
+    text-align: left;
+}
+.confirmation-card .pay-bnt{
+    display: block;
+    width: 50%;
+}
+.search-registers-input{
+    width: 81%;
+    margin: 0 auto;
+}
+.search-registers-input input{
+    padding: 20px 10px;
+    border: 1px solid gray;
+    width: 100%;
+    font-size: 18px;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* menu responsive */
+.mobile-menu{
+    width: 104vw;
+    overflow-x: hidden;
+}
+.mobile-menu header{
+    display: flex;
+    flex-direction: column;
+}
+.mobile-menu header .mobile-main-container ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mobile-menu header .mobile-main-container a{
+    text-align: center;
+}
+.mobile-menu header .mobile-main-container h1{
+    font-size: 20px;
+}
+.mobile-menu header .mobile-main-container h2{
+    font-size: 15px;
+}
+.mobile-menu header .mobile-main-container ul li{
+    list-style: none;
+}
+
+.mobile-menu header nav{
+    border-top: 1px solid gray;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 20%;
+    position: fixed;
+    background-color: white;
+    width: 100%;
+}
+.mobile-menu header nav .bottom-line{
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.mobile-menu header nav .upper-line li{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+}
+.mobile-menu header nav .bottom-line{
+    display: flex;
+    flex-direction: column;
+}
+.mobile-menu header nav .bottom-line li{
+    border-top: 1px solid gray;
+    width: 80%;
+    border-radius: 0;
+}
+.switcher-button{
+    border: 1px solid gray;
+    padding: 10px 10px;
+    border-radius: 5px;
+}
+.mobile-menu header{
+    max-width: 100vw;
+    width: auto;
+}
+.mobile-menu .phrase-section{
+    padding: 5px;
+}
+.mobile-menu .short-header{
+    width: 100%;
 }

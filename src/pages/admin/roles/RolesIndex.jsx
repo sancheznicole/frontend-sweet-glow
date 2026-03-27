@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import { getAllRoles, deleteRole } from "../../../services/rolesService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const RolesIndex = () => {
 	const [data, setData] = useState({})
+	const [loading, setLoading] = useState(true)
 	// los campos que se reciben del back y el nombre de la tabla del front 
 	const fields = {
 		id_rol: "Id rol",
@@ -24,6 +26,8 @@ const RolesIndex = () => {
 			setData(res?.roles?.data)
 		} catch (error) {
 			console.log(error?.message)
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -47,16 +51,20 @@ const RolesIndex = () => {
 	//retornamos la plantilla para administradores 
   	return (
 		<div>
-			<AdminPanel 
-				data={data}
-				campos={fields}
-				titulo={"Administración de roles"}
-				texto={"Administra los tipos de usuario y asigna los permisos correspondientes dentro del sistema."}
-				linkCrear={"/admin/roles/create"}
-				linkEditar={"/admin/roles/edit"}
-				onDelete={onDelete}
-				getData={getData}
-			></AdminPanel>
+			{loading ? (
+				<Loader text="Cargando roles..."></Loader>
+			) : (
+				<AdminPanel 
+					data={data}
+					campos={fields}
+					titulo={"Administración de roles"}
+					texto={"Administra los tipos de usuario y asigna los permisos correspondientes dentro del sistema."}
+					linkCrear={"/admin/roles/create"}
+					linkEditar={"/admin/roles/edit"}
+					onDelete={onDelete}
+					getData={getData}
+				></AdminPanel>
+			)}
 		</div>
   	)
 }

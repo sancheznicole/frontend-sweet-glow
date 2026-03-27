@@ -3,12 +3,13 @@ import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getReferenceProduct, updateReferenceProduct } from "../../../../services/referenceProductsService"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 const EditReferenceProduct = () => {
 
     const { id } = useParams()
     const navigate = useNavigate()
-
+    const [loadingData, setLoadingData] = useState(true)
     const [codigo, setCodigo] = useState("")
     const [color, setColor] = useState("")
     const [tamano, setTamano] = useState("")
@@ -30,6 +31,8 @@ const EditReferenceProduct = () => {
                 setTamano(res?.reference?.tamano)
             } catch (error) {
                 setError(error.message)
+            } finally {
+                setLoadingData(false)
             }
         }
         getData()
@@ -91,6 +94,11 @@ const EditReferenceProduct = () => {
     }
 
     return (
+        loadingData ? (
+            <Loader text="Cargando informacion de la referencia del producto..."></Loader>
+        ) : (
+
+        
         <div className="page-container">
 
             {!mostrarDatos && (
@@ -135,6 +143,7 @@ const EditReferenceProduct = () => {
 
             </section>
         </div>
+        )
     )
 }
 

@@ -7,12 +7,13 @@ import { searchUsers } from "../../../../services/authService"
 import { searchInvoiceOrders } from "../../../../services/facturaPedidosService"
 import { searchGiftCard } from "../../../../services/giftCardService"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 const EditCart = () => {
 
     const { id } = useParams()
     const navigate = useNavigate()
-
+    const [loadingData, setLoadingData] = useState(true)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [fieldErrors, setFieldErrors] = useState({})
@@ -98,6 +99,8 @@ const EditCart = () => {
 
                 setError(error.message)
 
+            } finally {
+                setLoadingData(false)
             }
         }
         
@@ -131,6 +134,9 @@ const EditCart = () => {
     }
 
     return (
+        loadingData ? (
+            <Loader text="Cargando informacion del carrito de compra..."></Loader>
+        ) : (
 
         <div className="page-container">
 
@@ -154,7 +160,7 @@ const EditCart = () => {
                         <div className="contenedor-campos">
 
                             <p><strong>Usuario:</strong> {cart?.usuario?.nombres} {cart?.usuario?.apellidos}</p>
-                            <p><strong>Estado:</strong> {cart?.status}</p>
+                            <p><strong>Estado:</strong> {cart?.status == "active" ? "Activo" : cart?.status == "checked_out" ? "Revisado" : "Desconocido"}</p>
 
                         </div>
                     </>
@@ -187,6 +193,7 @@ const EditCart = () => {
             </section>
 
         </div>
+        )
     )
 }
 
