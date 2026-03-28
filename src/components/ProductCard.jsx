@@ -64,7 +64,7 @@ const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categori
                 </div>
                 <div>
                     <button onClick={() => {addToCart(product, quantity); navigate("/cart")}}>
-                        Agregar al carrito {parsePrice(total)}
+                        añadir al carrito {parsePrice(total)}
                     </button>
                 </div>
             </div>
