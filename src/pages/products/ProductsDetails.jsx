@@ -133,23 +133,23 @@ const ProductsDetails = () => {
                             <div className="add-to-cart">
                                 <div className="quantity-buttons">
                                     <button onClick={() => {if(quantity > 1) setQuantity(quantity-1)}}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
+                                       <p>-</p> 
                                     </button>
                                     <p>
                                         {quantity}
                                     </p>
                                     <button onClick={() => {setQuantity(quantity+1)}}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
+                                        <p>+</p>
                                     </button>
                                 </div>
                                 <div>
                                     <button onClick={() => {handleAddToCart()}}>
-                                        Añadir al carrito {parsePrice(quantity*product?.precio)} COP
+                                        añadir al carrito {parsePrice(quantity*product?.precio)} COP
                                     </button>
                                 </div>
                             </div>
 
-                            <h2>Descripcion</h2>
+                            <h2>Detalles</h2>
                             <p>{product?.descripcion}</p>
                         </div>
                     </div>
