@@ -4,8 +4,9 @@ import { parsePrice } from "../helpers/json.helpers"
 import { useState, useEffect } from "react"
 import { addToCart } from "../services/cartService"
 import { useNavigate } from "react-router-dom"
+import { removeFromWishList } from "../services/wishlist"
 
-const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categoria, id, product}) => {
+const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categoria, id, product, showDeletion}) => {
     const navigate = useNavigate()
     const [quantity, setQuantity] = useState(1)
     const [total, setTotal] = useState(quantity*precio)
@@ -13,6 +14,10 @@ const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categori
     useEffect(() => {
         setTotal(quantity*precio)
     }, [quantity])
+
+    const handleRemoveFromWishList = () => {
+        removeFromWishList(id)
+    }
 
     return (
         <div className='proyect-card'>
@@ -22,7 +27,15 @@ const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categori
                 </Link>
             </div>
             <div className="main-content">
-                <h2>{titulo}</h2>
+                <h2>
+                    {showDeletion && (
+                        <button className="delete-from-whislist-button" title="Eliminar de la lista de deseos" onClick={() => {handleRemoveFromWishList()}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                        </button>
+                    )}
+
+                    {titulo}
+                </h2>
                 <div>
                     <p>{parsePrice(precio)}</p>
                 </div>

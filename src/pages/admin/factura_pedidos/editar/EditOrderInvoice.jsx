@@ -6,6 +6,7 @@ import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { searchCart } from "../../../../services/cartService"
 import { searchGiftCard } from "../../../../services/giftCardService"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 
 const EditOrderInvoice = () => {
@@ -13,6 +14,7 @@ const EditOrderInvoice = () => {
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
+    const [loadingData, setLoadingData] = useState(true)
     const [error, setError] = useState("")
     const [fieldErrors, setFieldErrors] = useState({})
     const [mostrarDatos, setMostrarDatos] = useState(false)
@@ -121,16 +123,21 @@ const EditOrderInvoice = () => {
                 setDate(o?.created_at)
                 setCard(o?.tarjeta ?? {})
                 setCart(o?.carrito)
+                setStatus(o?.status)
 
             } catch (error) {
                 setError(error.message)
 
+            } finally {
+                setLoadingData(false)
             }
         }
         
         getData()
 
     }, [id])
+
+    console.log(status)
 
     const fields = {
 
@@ -182,7 +189,7 @@ const EditOrderInvoice = () => {
             data_key: 'tarjetas',
             save_data_key: 'id_tarjeta',
             text_keys: 'id_tarjeta,monto',
-            initial_show_value: `${card?.id_tarjeta}`
+            initial_show_value: `${card?.id_tarjeta ? card?.id_tarjeta : 'Sin tarjeta de regalo'}`
         },
 
         neto: {
@@ -224,62 +231,66 @@ const EditOrderInvoice = () => {
     }
 
     return (
-        <div className="page-container">
+        loadingData ? (
+            <Loader text="Cargando informacion de la factura..."></Loader>
+        ) : (
+            <div className="page-container">
 
-            {!mostrarDatos && (
-                <div className="back-link-container">
-                    <button className="link-regresar" onClick={() => navigate(-1)}>
-                        Regresar
-                    </button>
-                </div>
-            )}
-
-            <section className="section-editar">
-
-                {!mostrarDatos ? (
-
-                    <>
-                        <h1 className="titulo-por-h1">
-                            Detalles de la factura
-                        </h1>
-
-                        <div className="contenedor-campos">
-
-                            <p><strong>Usuario:</strong> {user?.nombres} {user?.apellidos}</p>
-                            <p><strong>Neto:</strong> {`$${Number(neto).toLocaleString('en-US', { maximumFractionDigits: 0 })}`}</p>
-                            <p><strong>Fecha de creación:</strong> {date.split('T')[0]}</p>
-
-                        </div>
-                    </>
-
-                ) : (
-
-                    <AdminFormEdit
-                        titulo="Editar factura"
-                        campos={fields}
-                        onSendForm={sendData}
-                        error={error}
-                        fieldErrors={fieldErrors}
-                        button="Guardar cambios"
-                        loading={loading}
-                    />
-
+                {!mostrarDatos && (
+                    <div className="back-link-container">
+                        <button className="link-regresar" onClick={() => navigate(-1)}>
+                            Regresar
+                        </button>
+                    </div>
                 )}
 
-                <div className="contenedor-editar-botones">
+                <section className="section-editar">
 
-                    <button
-                        className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
-                        onClick={() => setMostrarDatos(!mostrarDatos)}
-                    >
-                        {mostrarDatos ? "Cancelar" : "Modificar"}
-                    </button>
+                    {!mostrarDatos ? (
 
-                </div>
+                        <>
+                            <h1 className="titulo-por-h1">
+                                Detalles de la factura
+                            </h1>
 
-            </section>
+                            <div className="contenedor-campos">
 
-        </div>
+                                <p><strong>Usuario:</strong> {user?.nombres} {user?.apellidos}</p>
+                                <p><strong>Neto:</strong> {`$${Number(neto).toLocaleString('en-US', { maximumFractionDigits: 0 })}`}</p>
+                                <p><strong>Fecha de creación:</strong> {date.split('T')[0]}</p>
+
+                            </div>
+                        </>
+
+                    ) : (
+
+                        <AdminFormEdit
+                            titulo="Editar factura"
+                            campos={fields}
+                            onSendForm={sendData}
+                            error={error}
+                            fieldErrors={fieldErrors}
+                            button="Guardar cambios"
+                            loading={loading}
+                        />
+
+                    )}
+
+                    <div className="contenedor-editar-botones">
+
+                        <button
+                            className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+                            onClick={() => setMostrarDatos(!mostrarDatos)}
+                        >
+                            {mostrarDatos ? "Cancelar" : "Modificar"}
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </div>
+        )
     )
 }
 

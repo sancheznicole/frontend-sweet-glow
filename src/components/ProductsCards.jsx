@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Loader from './Loader'
 import { Link } from 'react-router-dom'
 
-const ProductsCards = ({ elementsLimit = 6 }) => {
+const ProductsCards = ({ elementsLimit = 6, data = undefined }) => {
     const [products, setProducts] = useState([])
     const [success, setSuccess] = useState(true)
     const [loading, setLoading] = useState(true)
@@ -43,11 +43,16 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
     }
 
     useEffect(() => {
-        getContent()
+        if(data){
+            setProducts(data)
+            setLoading(false)
+        }else{
+            getContent()
+        }
     }, [])
 
     useEffect(() => {
-        getContent()
+        if(!data) getContent()
     }, [page])
 
     const handleGetMore = () => {
@@ -58,7 +63,7 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
     return (
         <>
             {loading ? (
-                <Loader key={"Estamos cargando los productos"}></Loader>
+                <Loader text={"Estamos cargando los productos"}></Loader>
             ) : (
                 <>
                     {success ? (
@@ -75,6 +80,7 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
                                             precio={p?.precio}
                                             titulo={p?.nombre}
                                             stock={p?.stock}
+                                            showDeletion={!data ? false : true}
                                             referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
                                             product={p}
                                         ></ProductCard>
@@ -82,13 +88,13 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
                                 })}
                             </div>
 
-                            {lastPage > page && attemps < maxAttemps && (
+                            {!data && lastPage > page && attemps < maxAttemps && (
                                 <button onClick={() => {handleGetMore()}}>
                                     Cargar mas...
                                 </button>
                             )}
 
-                            {attemps >= maxAttemps && (
+                            {!data && attemps >= maxAttemps && (
                                 <div>
                                     <p>Te invitamos a ver nuestra lista completa de productos</p>
 
