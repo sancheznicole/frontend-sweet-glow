@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
+import CartPage from "../../pages/cart/CartPage"
 
 const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) => {
     const [visible, setVisible] = useState(false)
+    const [showCart, setShowCart] = useState(false)
 
     return (
-        <div className="mobile-menu">
+        <div className="menu-global-container mobile-menu">
+
+            {showCart && (
+                <CartPage setShowCart={setShowCart} showCart={showCart} />
+            )}
+
             <div className={`phrase-section`}>
                 <p> Disfrute de nuestras excelentes tarifas </p>
             </div>
@@ -25,7 +32,7 @@ const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
                         </li>
                         <li>
                             <button className="switcher-button" onClick={() => {setVisible(!visible)}}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeWinecap="round" stroke-linejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-menu-2"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeWinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-menu-2"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
                             </button>
                         </li>
                     </ul>
@@ -54,9 +61,9 @@ const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                                 </Link>
 
-                                <Link to={"/cart"} title="Carrito de compras">
+                                <button onClick={() => {setShowCart(!showCart)}} title="Carrito de compras" className="cart-btn-header">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-shopping-bag"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg>
-                                </Link>
+                                </button>
                             </li>
 
                         </ul>
