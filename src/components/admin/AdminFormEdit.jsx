@@ -22,7 +22,7 @@ const AdminFormEdit = ({titulo, campos, onSendForm, error, fieldErrors, button, 
 	}, [campos])
 
 	return (
-		<div>
+		<div className="edit-form-admin-panel">
 			<section className="section-form-edit">
 				<h1 className="titulo-por-h1">{titulo}</h1>
 

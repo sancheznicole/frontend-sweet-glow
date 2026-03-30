@@ -1,0 +1,184 @@
+/* tablets */
+@media only screen and (max-width: 768px){
+    /* .outlet-container{
+        padding-left: 0;
+        padding-right: 0;
+    } */
+
+    /* admin panel styles */
+    .section-admin-panel{
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .section-admin-panel .back-link-container{
+        display: none;
+    }
+    .section-admin-panel .link-agregar-registro{
+        padding: 5px;
+    }
+    .section-admin-panel .information-text{
+        width: 50%;
+    }
+    .section-admin-panel .contenedor-agregar-registro{
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+    }
+    .section-admin-panel .contenedor-agregar-registro .link-regresar{
+        padding: 12px;
+        display: block;
+        height: auto;
+    }
+
+    /* admin form create styles */
+    .section-create-admin{
+        width: 75%;
+        margin: 0 auto;
+    }
+    .section-create-admin input[type="text"],
+    .section-create-admin input[type="email"],
+    .section-create-admin input[type="password"],
+    .section-create-admin input[type="number"]{
+        width: 97%;
+    }
+    .create-form-admin-panel .back-link-container,
+    .page-container .back-link-container{
+        display: flex;
+        justify-content: center;
+    }
+    .section-admin-panel .contenedor-eliminar{
+        width: 50%;
+    }
+
+    /* admin form edit styles */
+    .section-editar{
+        width: 75%;
+    }
+    .edit-form-admin-panel .section-form-edit{
+        width: 100%;
+    }
+    .cancelar-profile{
+        width: 120%;
+    }
+
+    /* admin panel main page */
+    .links-administración{
+        width: 100%;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* main page styles */
+    .main-banner{
+        width: 97.5vw;
+    }
+
+    /* products cards & carousel */
+    .proyect-card{
+        pointer-events: none;
+        max-height: 85vh;
+    }
+    .proyect-card button,
+    .proyect-card a {
+        pointer-events: auto;
+    }
+    .products-cards-container .proyect-card{
+        grid-column: span 2;
+        height: auto;
+        overflow: hidden;
+    } 
+    .products-cards-container .proyect-card .images-container{
+        position: relative;
+        height: 100%;
+    }
+    .products-cards-container .proyect-card .main-content,
+    .products-cards-container .proyect-card .hidden-content,
+    .products-cards-container .proyect-card .second-hidden-content{
+        position: relative;
+    }
+    .products-cards-container .proyect-card .main-content{
+        transform: translateY(-330%);
+    }
+    .products-cards-container .proyect-card .hidden-content{
+        transform: translateY(-350%);
+    }
+    .products-cards-container .proyect-card .second-hidden-content{
+        transform: translateY(-580%);
+    }
+
+    .carousel-item{
+        max-height: 85vh;
+        width: 50%;
+    }
+    .carousel-item .proyect-card{
+        max-height: 100%;
+    }
+    .carousel-item .proyect-card .main-content{
+        transform: translateY(-150%);
+    }
+    .carousel-item .proyect-card .hidden-content{
+        transform: translateY(-100%);
+    }
+    .carousel-item .proyect-card .second-hidden-content{
+        transform: translateY(-160%);
+    }
+
+    .carousel-track.products-cards-container {
+        display: flex;
+        grid-template-columns: unset;
+    }
+
+    .view-cleaner-important-div{
+        margin-top: 55vh;
+    }
+
+    /* login and register and profile*/
+    .section-login{
+        width: 50%;
+    }
+
+    .section-register{
+        width: 60%;
+    }
+    
+    .section-register div input:last-child{
+        width: 105%;
+    }
+
+    
+    .section-profile{
+        width: 50%;
+    }
+    .div-profile{
+        width: 60%;
+    }
+    .profile-no-uptade{
+        height: fit-content;
+        width: 52vw;
+    }
+    .div-profile form{
+        width: 100%;
+    }
+
+    .modificar-profile{
+        width: 100%;
+    }
+
+    .cancelar-profile{
+        width: 100%;
+    }
+
+    /* detalles del producto */
+
+    /* carritos */
+}
+
+/* mobile L */
+
+/* mobile m */
+
+/* mobile s */
