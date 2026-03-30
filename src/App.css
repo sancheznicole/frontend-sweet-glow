@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+
 @font-face{
     font-family: Heading;
     src: url("/fonts/HeadingNowTrial-65Medium.ttf");
@@ -2096,24 +2098,6 @@ button {
     letter-spacing: 1px;
 }
 
-.product-details {
-    justify-content: space-around;
-    display: flex;
-}
-
-.product-details .details {
-    width: 30%;
-    padding: 10px;
-}
-
-.product-details .details h1 {
-    text-transform: capitalize;
-}
-
-.product-details .details h2 {
-    margin-top: 15px;
-}
-
 .product-details .details .add-to-cart {
     display: flex;
     flex-direction: column;
@@ -2126,66 +2110,51 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     font-size: 20px;
-    font-weight: bolder;
-    width: 80%;
-    margin: 0 auto;
-    border: 1px solid black;
 }
 
-.product-details .details .add-to-cart .quantity-buttons button {
-    min-width: 37%;
-    padding: 10px;
-    background-color: transparent;
-    cursor: pointer;
-    transition: 200ms all ease-in-out;
-    border: none;
-}
 
-.product-details .details .add-to-cart .quantity-buttons button:hover {
-    background-color: #f7e9ed;
-}
-
-.product-details .details .add-to-cart .quantity-buttons p {
-    min-width: 20%;
-    height: 100%;
-    text-align: center;
-}
-
-.product-details .details .add-to-cart .quantity-buttons + div {
-    width: 80%;
-    margin-top: 15px;
-}
-
-.product-details .details .add-to-cart .quantity-buttons + div button {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    font-size: 18px;
-    font-weight: bolder;
-    padding: 10px;
-    min-width: 37%;
-    border: 1px solid black;
-    background-color: transparent;
-    cursor: pointer;
-    transition: 200ms all ease-in-out;
-}
-
-.product-details .details .add-to-cart .quantity-buttons + div button:hover {
-    background-color: #f7e9ed;
-}
 
 .product-details .details .more-products-container {
-    margin-top: 20px;
+    margin-top: 50%;
+}
+
+/* HERO BLOG */
+.blog-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 450px;
+    overflow: hidden;
+}
+
+.blog-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.blog-hero-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+}
+
+.blog-hero-overlay h1 {
+    color: #b3848f;
+    font-size: 32px;
+    font-family: Heading;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-align: left;
+   
 }
 
 /* ════════════════════════════════════════════════════════════════
    GIFT CARD PAGE — Sweet Glow
    Todas las clases usan prefijo "gc-" para no afectar otros módulos
 ════════════════════════════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
 
 /* ── Page ─────────────────────────────────────────────────────── */
 .gc-page {
@@ -2876,6 +2845,7 @@ button {
     grid-template-columns: repeat(4, 1fr);
 
     .proyect-card{
+        
         column-span: 1;
         border-radius: 5px;
         max-width: 100%;
@@ -3032,7 +3002,7 @@ button {
             }
 
             .image-container{
-                width: 200px;
+                width: 500px;
                 height: 200px;
                 overflow: hidden;
                 display: flex;
@@ -3100,14 +3070,15 @@ button{
 
 .Blog {
     position: relative;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
+    aspect-ratio: 3 / 4;
 }
 
 .Blog .img {
     width: 100%;
-    height: 320px;
+    height: 100%;
     object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
@@ -3126,97 +3097,206 @@ button{
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
 }
 
 .blog-overlay a {
     color: white;
-    font-size: 16px;
+    font-size: 14px;
     font-family: Heading;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: bold;
     text-align: center;
-    padding: 0 10px;
+    position: absolute;
+    bottom: 20px;
 }
 
 .blog-overlay a:hover {
     color: #efd7e5;
 }
 
+
 /* BLOG: SKINCARE - COLORIMETRIA - FRAGANCIAS - PRODUCTOS RECOMENDADOS - CONSEJOS DE BELLEZA*/
 
-
-/* Contenedor principal*/
+/* Contenedor principal - sin max-width para que el hero ocupe todo */
 .skin, .colorimetria, .fragancias, .recomendaciones, .consejos {
-  max-width: 800px; 
-  margin: 60px auto;
-  padding: 40px 20px;
-  font-family: 'Heading', sans-serif;
-  color: #444;
+    font-family: 'Heading', sans-serif;
+    color: #444;
 }
 
-/* Título principal */
-.titulo {
-  text-align: center;
-  color: #b3848f;
-  font-size: 32px;
-  font-weight: 300; 
-  font-family: 'Heading', sans-serif;
-  letter-spacing: 4px; 
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
 
 /* El párrafo intro */
 .parrafo-titulo {
-  text-align: center;
-  color: #666;
-  margin-bottom: 60px;
-  font-size: 16px;
-  line-height: 1.8;
-  padding-bottom: 30px;
+    text-align: center;
+    color: #666;
+    margin-bottom: 60px;
+    line-height: 1.8;
+    padding-bottom: 30px;
+    font-family: TT Chocolates;
+    font-size: 25px;
 }
 
-/* Los títulos de secciones*/
+/* Los títulos de secciones */
 .tipo-piel, .piel, .fragancia, .productos, .belleza {
-  color: #b3848f;
-  margin-top: 50px;
-  font-size: 22px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding-left: 15px;
+    color: #b3848f;
+    margin-top: 50px;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-left: 15px;
 }
 
 /* Los párrafos */
 .piel-p, .tonos, .p, .prod, .pb {
-  padding: 10px 0; 
-  color: #4a4a4a;
-  font-size: 15px;
-  line-height: 1.8; 
-  margin-bottom: 40px;
-  text-align: justify;
+    padding: 10px 0;
+    color: #4a4a4a;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    text-align: justify;
+    font-family: TT Chocolates;
+    font-size: 20px;
 }
 
 /* Los subtítulos (h4) */
-.piel-p h4, .tonos h4, .p h4, .prod h4, .pb h4{
-  margin-top: 25px;
-  margin-bottom: 12px;
-  color: #efd7e5; 
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.piel-p h4, .tonos h4, .p h4, .prod h4, .pb h4 {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    color: #b3848f;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+.skin .blog-hero,
+.colorimetria .blog-hero,
+.fragancias .blog-hero,
+.recomendaciones .blog-hero,
+.consejos .blog-hero {
+    margin-top: -25vh;
+}
+
+/* HERO BLOG */
+.blog-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 450px;
+    overflow: hidden;
+}
+
+.blog-hero-img {
+    width: 100%;
+    height: 150%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.blog-hero-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+}
+
+.blog-hero-overlay h1 {
+    color: white;
+    font-size: 32px;
+    font-family: Heading;
+    font-weight: lighter;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+/* Contenido del blog con max-width */
+.skin-contenido {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+/* Secciones texto + imagen */
+.skin-seccion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.skin-seccion.invertida {
+    direction: rtl;
+}
+
+.skin-seccion.invertida > * {
+    direction: ltr;
+}
+
+.skin-imagen-tipo {
+    width: 100%;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.skin-imagen-tipo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.4s ease;
+}
+
+.skin-imagen-tipo img:hover {
+    transform: scale(1.05);
+}
+
+
+/* Botón */
+.skin-boton-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0 60px 0;
+}
+
+.skin-imagen-con-boton {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.skin-boton {
+    text-decoration: none;
+    color: #393939;
+    border: 1px solid #b3848f;
+    padding: 15px 40px;
+    border-radius: 4px;
+    font-family: Heading;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 300ms;
+}
+
+.skin-boton:hover {
+    background-color: #b3848f;
+    color: white;
+}
+
+
 .product-details{
-    justify-content: space-around;
+    justify-content: center; /* o flex-start */
+    gap: 100px;
     display: flex;
     align-items: center;
-    max-height: 50vh;
-    margin-bottom: 100px;
+    max-width: max-content;
+    max-height: 100vh;
+    margin-bottom: 200px;
+    background-color: white;
 
     .details{
-        width: 30%;
+        width: 40%;
         padding: 10px;
 
         h1{
@@ -3225,66 +3305,72 @@ button{
 
         h2{
             margin-top: 15px;
+            color: #b3848f;
         }
 
         .add-to-cart{
-            display: flex;
-            flex-direction: column;
+            margin-left: -122px;
+            width: 100%; /*cambiarlo*/
+            display: grid;
+            grid-template-columns: auto auto; /* cantidad | botón */
+            gap: 50px;
             align-items: center;
-            justify-content: center;
-            margin-top: 15px;
 
             .quantity-buttons{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                font-size: 20px;
-                font-weight: bolder;
-                width: 80%;
-                margin: 0 auto;
-                border: 1px solid black;
-
+                
+                font-size: 15px;
+                width: 137%; /* importante */
+                height: 38px;
+                border: 1px solid #393939;
+                border-radius: 3px;
+                
                 button{
-                    min-width: 37%;
+                    height: 35px;
+                    grid-column: span 1; 
+                    width: 37%;
                     padding: 10px;
                     background-color: transparent;
                     cursor: pointer;
                     transition: 200ms all ease-in-out;
                     border: none;
-
-                    &:hover{
-                        background-color: #f7e9ed;
-                    }
                 }
 
                 p{
-                    min-width: 20%;
+                    display: flex;
+                    align-items: center;      /* centra vertical */
+                    justify-content: center;  /* centra horizontal */
+                    flex: 1;                  /* ocupa el espacio del medio */
                     height: 100%;
-                    text-align: center;
+                    margin: 0;
                 }
             }
 
             .quantity-buttons + div{
-                width: 80%;
                 margin-top: 15px;
+                width: 100%;
+                margin-top: 0;
 
                 button{
-                    display: block;
-                    margin: 0 auto;
-                    width: 100%;
-                    font-size: 18px;
+                    
+                    grid-column: span 1; 
+                    width: 200%;
+                    height: 40px;
+                    font-size: 5px;
                     font-weight: bolder;
                     padding: 10px;
 
                     min-width: 37%;
-                    border: 1px solid black;
-                    background-color: transparent;
+                    border: 1px solid #393939;
+                    background-color: #393939;
+                    border-radius: 3px;
+                    color: white;
                     cursor: pointer;
                     transition: 200ms all ease-in-out;
+                    font-size: 15px;
 
                     &:hover{
-                        background-color: #f7e9ed;
+                        background-color:white;
+                        color: #393939;
                     }
                 }
             }
@@ -3329,6 +3415,18 @@ button{
             z-index: 0;
         }
     }
+}
+
+.product-details .images-container{
+    margin-top: 50px;
+    width: 35%;
+    height: 35%;
+    border-radius: 8px;
+    margin-bottom: 50px;
+}
+
+.product-details{
+    height: 100%;
 }
 .confirmation-card{
     margin: 0 auto;

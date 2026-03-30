@@ -1,6 +1,8 @@
 import React from "react"
 import { Link } from "react-router-dom"
 
+const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
+
 const BlogPage = () => {
   return (
     <div>
@@ -12,7 +14,7 @@ const BlogPage = () => {
 
         <div className="Blog">
           <img className="img"
-            src="http://127.0.0.1:8000/storage/imagenes_productos/skin.jpg"
+            src={`${STORAGE_URL}/imagenes_productos/skinn.jpg`}
             alt="Cuidado de la Piel"
           />
           <div className="blog-overlay">
@@ -22,7 +24,7 @@ const BlogPage = () => {
 
         <div className="Blog">
           <img className="img"
-            src="http://127.0.0.1:8000/storage/imagenes_productos/tonosideales.jpg"
+            src={`${STORAGE_URL}/imagenes_productos/tonosideales.jpg`}
             alt="Tonos ideales"
           />
           <div className="blog-overlay">
@@ -32,7 +34,7 @@ const BlogPage = () => {
 
         <div className="Blog">
           <img className="img"
-            src="http://127.0.0.1:8000/storage/imagenes_productos/fragancia.jpg"
+            src={`${STORAGE_URL}/imagenes_productos/fragancia.jpg`}
             alt="Fragancia"
           />
           <div className="blog-overlay">
@@ -42,7 +44,7 @@ const BlogPage = () => {
 
         <div className="Blog">
           <img className="img"
-            src="http://127.0.0.1:8000/storage/imagenes_productos/productos.jpg"
+            src={`${STORAGE_URL}/imagenes_productos/productos.jpg`}
             alt="Productos"
           />
           <div className="blog-overlay">
@@ -52,7 +54,7 @@ const BlogPage = () => {
 
         <div className="Blog">
           <img className="img"
-            src="http://127.0.0.1:8000/storage/imagenes_productos/belleza.jpg"
+            src={`${STORAGE_URL}/imagenes_productos/bellezaa.jpg`}
             alt="Consejos"
           />
           <div className="blog-overlay">
