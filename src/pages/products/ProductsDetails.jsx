@@ -38,17 +38,17 @@ const ProductsDetails = () => {
         }
     }
 
-    useEffect(() => {
-        if (!product?.imagenes?.length) return
+    const nextImage = () => {
+        setCurrentImage(prev =>
+            (prev + 1) % product.imagenes.length
+        )
+    }
 
-        const interval = setInterval(() => {
-            setCurrentImage(prev =>
-                (prev + 1) % product.imagenes.length 
-            )
-        }, 3000) // 3 segundos
-
-        return () => clearInterval(interval)
-    }, [product?.imagenes])
+    const prevImage = () => {
+        setCurrentImage(prev =>
+            prev === 0 ? product.imagenes.length - 1 : prev - 1
+        )
+    }
 
     const getBrandAndCategory = async () => {
         try {
@@ -123,18 +123,26 @@ const ProductsDetails = () => {
                     <div className="product-details">
                         <div className="images-container">
                             {product?.imagenes?.map((i, index) => (
-                                <img
-                                    key={index}
-                                    src={createImageURL(i?.filename)}
-                                    alt={`${product?.nombre} #${index}`}
-                                    className={index === currentImage ? 'active' : 'inactive'}
-                                />
+                                <>
+                                    <img
+                                        src={createImageURL(product.imagenes[currentImage]?.filename)}
+                                        alt={product?.nombre}
+                                        className="main-image"
+                                    />
+
+                                    {product.imagenes.length > 1 && (
+                                        <>
+                                            <button className="prev" onClick={prevImage}>‹</button>
+                                            <button className="next" onClick={nextImage}>›</button>
+                                        </>
+                                    )}
+                                </>
                             ))}
                         </div>
                         <div className="details">
                             <div className="details-menu-header">
                                 <h1>{product?.nombre}</h1>
-                                <button title="Agregar a la lista de deseos" onClick={() => {handleAddToWishList()}}>
+                                <button title="Agregar a la lista de deseos" onClick={() => {handleAddToWishList()}} className="button-add-to-wishlist">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-heart"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
                                 </button>
                             </div>

@@ -67,44 +67,48 @@ const ProductsCards = ({ elementsLimit = 6, data = undefined }) => {
             ) : (
                 <>
                     {success ? (
-                        <div>
-                            <div className='products-cards-container'>
-                                {products?.map((p, index) => {
-                                    return (
-                                        <ProductCard 
-                                            key={index}
-                                            id={p?.id_producto}
-                                            imagen={p?.imagenes}
-                                            categoria={p?.categoria?.nombre}
-                                            marca={p?.marca?.nombre}
-                                            precio={p?.precio}
-                                            titulo={p?.nombre}
-                                            stock={p?.stock}
-                                            showDeletion={!data ? false : true}
-                                            referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
-                                            product={p}
-                                        ></ProductCard>
-                                    )
-                                })}
-                            </div>
-
-                            {!data && lastPage > page && attemps < maxAttemps && (
-                                <button onClick={() => {handleGetMore()}}>
-                                    Cargar mas...
-                                </button>
-                            )}
-
-                            {!data && attemps >= maxAttemps && (
-                                <div>
-                                    <p>Te invitamos a ver nuestra lista completa de productos</p>
-
-                                    <Link to={"/"}>
-                                        Ver mas productos
-                                    </Link>
+                        products && products.length > 0 ? (
+                            <div>
+                                <div className='products-cards-container'>
+                                    {products?.map((p, index) => {
+                                        return (
+                                            <ProductCard 
+                                                key={index}
+                                                id={p?.id_producto}
+                                                imagen={p?.imagenes}
+                                                categoria={p?.categoria?.nombre}
+                                                marca={p?.marca?.nombre}
+                                                precio={p?.precio}
+                                                titulo={p?.nombre}
+                                                stock={p?.stock}
+                                                showDeletion={!data ? false : true}
+                                                referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
+                                                product={p}
+                                            ></ProductCard>
+                                        )
+                                    })}
                                 </div>
 
-                            )}
-                        </div>
+                                {!data && lastPage > page && attemps < maxAttemps && (
+                                    <button onClick={() => {handleGetMore()}}>
+                                        Cargar mas...
+                                    </button>
+                                )}
+
+                                {!data && attemps >= maxAttemps && (
+                                    <div>
+                                        <p>Te invitamos a ver nuestra lista completa de productos</p>
+
+                                        <Link to={"/"}>
+                                            Ver mas productos
+                                        </Link>
+                                    </div>
+
+                                )}
+                            </div>
+                        ) : (
+                            <p>Sin productos para mostrar</p>
+                        )
                     ) : (
                         <p>Ocurrió un error al cargar los productos</p>
                     )} 

@@ -9,7 +9,7 @@ import { createInvoiceOrders } from "../../services/facturaPedidosService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
 
-const cartPage = () => {
+const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const navigate = useNavigate()
     const { isAuthenticated, user } = useAuth()
     const [cart, setCart] = useState(null)
@@ -109,7 +109,14 @@ const cartPage = () => {
     }
 
     return (
-        <div className={`cart-container ${cart == null ? 'cart-center' : 'cart-between'}`}>
+        <div className={`cart-container`}>
+            {showCart && (
+                <div className="btn-close-cart-container">
+                    <button onClick={() => {setShowCart(false)}} className="close-cart-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
+                    </button>
+                </div>
+            )}
             {cart == null ? (
                 <div className="empty-cart">
                     <h1>
@@ -150,19 +157,27 @@ const cartPage = () => {
                             Al continuar con el pago aceptas nuestros terminos y condiciones de pago
                         </p>
 
-                        <button className="pay-btn"
-                            onClick={() => {handleProcessCart()}}
-                            disabled={loading}
-                        >
-                            {loading ? 'Procesando solicitud' : 'Pagar'}
-                        </button>
+                        <div className="pay-confirmation-buttons">
+                            <button className="pay-btn"
+                                onClick={() => {handleProcessCart()}}
+                                disabled={loading}
+                            >
+                                {loading ? 'Procesando solicitud' : 'Pagar'}
+                            </button>
+                            {error != '' && <p>{error}</p>}
+                            <button className="pay-btn"
+                                onClick={() => {setConfirm(false)}}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
                         {error != '' && <p>{error}</p>}
                         
                     </div>
                 ) : (
                     <>
                         <div className="filled-cart">
-                            <h1>Productos en tú carrito de compras</h1>
+                            <h1>Carrito de compras</h1>
 
                             <div className="products-container">
                                 {Object.values(cart).map((r, index) => {
@@ -172,25 +187,27 @@ const cartPage = () => {
                                             <div className="image-container">
                                                 <img src={createImageURL(r?.imagenes[0]?.filename)} alt={`Portada ${r?.nombre}`} />
                                             </div>
-                                            <div>
-                                                <p>{r?.nombre}</p>
-                                                <p>{r?.referencia_producto?.color} | {r?.referencia_producto?.tamano}</p>
-                                            </div>
-                                            <div className="quantities-container">
-                                                <div className="info">
-                                                    <p>{r?.quantity} unidad{r?.quantity > 1 && 'es'}</p>
-                                                    <p>Valor: {parsePrice(r?.quantity*Number(r?.precio))}</p>
-                                                </div>
+                                            <div className="product-details-cart">
                                                 <div>
-                                                    <button title="Aumentar cantidad" onClick={() => {addOne(r?.id_producto); getCart()}}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
-                                                    </button>
-                                                    <button title="Disminuir cantidad" onClick={() => {deleteOne(r?.id_producto); getCart()}}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
-                                                    </button>
-                                                    <button title="Eliminar producto del carrito" onClick={() => {removeFromCart(r?.id_producto); getCart()}}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007zm-10 4a1 1 0 0 0 -1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0 -1 -1m4 0a1 1 0 0 0 -1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0 -1 -1" /><path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005z" /></svg>
-                                                    </button>
+                                                    <p>{r?.nombre}</p>
+                                                    <p>{r?.referencia_producto?.color} | {r?.referencia_producto?.tamano}</p>
+                                                </div>
+                                                <div className="quantities-container">
+                                                    <div className="info">
+                                                        <p>{r?.quantity} unidad{r?.quantity > 1 && 'es'}</p>
+                                                        <p>Valor: {parsePrice(r?.quantity*Number(r?.precio))}</p>
+                                                    </div>
+                                                    <div className="actions-buttons-container">
+                                                        <button title="Aumentar cantidad" onClick={() => {addOne(r?.id_producto); getCart()}}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
+                                                        </button>
+                                                        <button title="Disminuir cantidad" onClick={() => {deleteOne(r?.id_producto); getCart()}}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
+                                                        </button>
+                                                        <button title="Eliminar producto del carrito" onClick={() => {removeFromCart(r?.id_producto); getCart()}}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007zm-10 4a1 1 0 0 0 -1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0 -1 -1m4 0a1 1 0 0 0 -1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0 -1 -1" /><path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005z" /></svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -222,4 +239,4 @@ const cartPage = () => {
     )
 }
 
-export default cartPage
+export default CartPage
