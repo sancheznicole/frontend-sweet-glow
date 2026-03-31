@@ -779,6 +779,7 @@ footer {
         margin: 0 auto;
         display: flex;
         flex-direction: column;
+        margin-bottom: 20px;
 
         p:nth-child{
             font-weight: bolder;
@@ -1128,6 +1129,7 @@ footer {
     align-items: center;
     justify-content: center;
     width: 100%;
+    text-align: center;
 }
 
 /* STEPPER */
@@ -3591,7 +3593,7 @@ button{
 }
 .mobile-menu .short-header{
     width: 100%;
-    position: relative;
+    position: fixed;
 }
 /* landing page styles */
 .main-banner{

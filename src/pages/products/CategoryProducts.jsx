@@ -5,9 +5,9 @@ const API_URL = import.meta.env.VITE_API_URL
 
 const CATEGORY_BANNERS = {
     1:  '/assets/kylie.jpeg',
-    6:  '/assets/banner.jpeg',
-    7: '/assets/cuidadoPiel.jpeg',
-    8: '/assets/cosmic.jpeg',
+    2:  '/assets/banner.jpeg',
+    3: '/assets/cuidadoPiel.jpeg',
+    4: '/assets/cosmic.jpeg',
 }
 
 const CategoryProducts = ({ categoria, onVolver }) => {
