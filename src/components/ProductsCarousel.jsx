@@ -33,8 +33,9 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
 
     useEffect(() => {
         const updateVisible = () => {
-            if (window.innerWidth < 600) setVisibleCards(2)
-            else if (window.innerWidth < 1024) setVisibleCards(2)
+            if (window.innerWidth < 500) setVisibleCards(1)
+            else if (window.innerWidth < 600 && window.innerWidth > 500) setVisibleCards(2)
+            else if (window.innerWidth > 500 && window.innerWidth < 1024) setVisibleCards(2)
             else setVisibleCards(4)
         }
 
