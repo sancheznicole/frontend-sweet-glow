@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import { getAllGiftCards, deleteGiftCard } from '../../../services/giftCardService'
+import { getAllOrSearch, deleteGiftCard } from '../../../services/giftCardService'
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from '../../../components/Loader'
 
 const GiftCardsIndex = () => {
-
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
-    const [limit] = useState(10)
+    const [limit, setLimit] = useState(10)
     const [lastPage, setLastPage] = useState(undefined)
+    const [search, setSearch] = useState("")
 
     const fields = {
         "id_tarjeta":       "Id Tarjeta",
@@ -21,7 +23,8 @@ const GiftCardsIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllGiftCards(page, limit)
+            setLoading(true)
+            const res = await getAllOrSearch(page, limit, search)
 
             if (!res?.valid) {
                 console.log("Error tarjetas:", res?.error)
@@ -45,12 +48,22 @@ const GiftCardsIndex = () => {
 
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
 
     const onDelete = async (id) => {
         try {
@@ -63,20 +76,29 @@ const GiftCardsIndex = () => {
 
     return (
         <div>
-            <AdminPanel
-                data={data}
-                campos={fields}
-                titulo={"Administración de tarjetas regalo"}
-                texto={"Gestiona las tarjetas regalo asignadas a los usuarios"}
-                linkCrear={"/admin/gift-cards/create"}
-                linkEditar={"/admin/gift-cards/edit"}
-                onDelete={onDelete}
-                getData={getData}
-                page={page}
-                lastPage={lastPage}
-                setPage={setPage}
-                idKey="id_tarjeta"
-            />
+            {loading ? (
+                <Loader text='Cargando tarjetas de regalo...'></Loader>
+            ) : (
+                <AdminPanel
+                    data={data}
+                    campos={fields}
+                    titulo={"Administración de tarjetas regalo"}
+                    texto={"Gestiona las tarjetas regalo asignadas a los usuarios"}
+                    linkCrear={"/admin/gift-cards/create"}
+                    linkEditar={"/admin/gift-cards/edit"}
+                    onDelete={onDelete}
+                    getData={getData}
+                    page={page}
+                    lastPage={lastPage}
+                    setPage={setPage}
+                    idKey="id_tarjeta"
+                    limit={limit}
+                    search={search}
+                    setLimit={setLimit}
+                    setSearch={setSearch}
+                    enableSearch={true}
+                />
+            )}
         </div>
     )
 }

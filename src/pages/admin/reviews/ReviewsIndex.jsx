@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { getAllReviews, deleteReview } from '../../../services/reviewsService'
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from '../../../components/Loader'
 
 const ReviewsIndex = () => {
-
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(10)
     const [lastPage, setLastPage] = useState(undefined)
+    const [search, setSearch] = useState("")
 
     const fields = {
         "id_resena":        "Id Reseña",
@@ -21,7 +23,8 @@ const ReviewsIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllReviews(page, limit)
+            setLoading(true)
+            const res = await getAllReviews(page, limit, search)
 
             if (!res?.valid) {
                 console.log("Error reviews:", res?.error)
@@ -47,12 +50,22 @@ const ReviewsIndex = () => {
 
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
 
     const onDelete = async (id) => {
         try {
@@ -65,20 +78,29 @@ const ReviewsIndex = () => {
 
     return (
         <div>
-            <AdminPanel
-                data={data}
-                campos={fields}
-                titulo={"Administración de reseñas"}
-                texto={"Administra las reseñas de productos realizadas por los usuarios"}
-                linkCrear={"/admin/reviews/create"}
-                linkEditar={"/admin/reviews/edit"}
-                onDelete={onDelete}
-                getData={getData}
-                page={page}
-                lastPage={lastPage}
-                setPage={setPage}
-                idKey="id_resena"
-            />
+            {loading ? (
+                <Loader text='Cargando reseñas...'></Loader>
+            ) : (
+                <AdminPanel
+                    data={data}
+                    campos={fields}
+                    titulo={"Administración de reseñas"}
+                    texto={"Administra las reseñas de productos realizadas por los usuarios"}
+                    linkCrear={"/admin/reviews/create"}
+                    linkEditar={"/admin/reviews/edit"}
+                    onDelete={onDelete}
+                    getData={getData}
+                    page={page}
+                    lastPage={lastPage}
+                    setPage={setPage}
+                    idKey="id_resena"
+                    limit={limit}
+                    search={search}
+                    setLimit={setLimit}
+                    setSearch={setSearch}
+                    enableSearch={true}
+                />
+            )}
         </div>
     )
 }

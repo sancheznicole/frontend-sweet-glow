@@ -8,10 +8,14 @@ import { createPreference } from "../../services/paymentService"
 import { createInvoiceOrders } from "../../services/facturaPedidosService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
+import { userUpdate } from "../../services/authService"
 
 const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const navigate = useNavigate()
     const { isAuthenticated, user } = useAuth()
+    const [shippingAdress, setShippingAdress] = useState("")
+    const [phone, setPhone] = useState("")
+    const [modifyData, setModifyData] = useState(false)
     const [cart, setCart] = useState(null)
     const [total, setTotal] = useState(0)
     const [error, setError] = useState('')
@@ -20,6 +24,16 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     const [descuento, setDescuento] = useState(0)
     const [tarjeta, setTarjeta] = useState(null)
+
+    const [loadingUserUpdate, setLoadingUserUpdate] = useState(false)
+    const [userUpdateError, setUSerUpdateError] = useState("")
+
+    useEffect(() => {
+        if(isAuthenticated){
+            setShippingAdress(user?.direccion)
+            setPhone(user?.telefono)
+        } 
+    }, [user])
 
     async function handleProcessCart(){
         try {
@@ -108,6 +122,25 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
         getCart()
     }
 
+    const handleUserDataUpdate = async () => {
+        try {
+            setLoadingUserUpdate(true)
+
+            let res = await userUpdate(null, null, null, phone, shippingAdress, user?.id_usuario, user?.id_rol)
+
+            if(!res?.valid){
+                setUSerUpdateError(res?.error)
+                return
+            }
+
+            setModifyData(false)
+        } catch (error) {
+            setUSerUpdateError(error?.message)
+        } finally {
+            setLoadingUserUpdate(false)
+        }
+    }
+
     return (
         <div className={`cart-container`}>
             {showCart && (
@@ -132,47 +165,79 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
             ) : (
                 confirm ? (
                     <div className="confirmation-card payment-card">
-                        <h1>
-                            Confirmar orden
-                        </h1>
 
-                        <p>
-                            <strong>
-                                Antes de continuar confirma tu dirección de envío y telefonode contacto, si no son correctos por favor actualizalos en tu perfil de usuario puedes hacerlo mediante el siguiente enlace
-                            </strong>
-                        </p>
+                        {modifyData ? (
+                            <>
+                                <h1>
+                                    Actualizar datos de envío
+                                </h1>
 
-                        <ul>
-                            <li><strong>Telefono de contacto:</strong> {user?.telefono}</li>
-                            <li><strong>Dirección de envío:</strong> {user?.direccion}</li>
-                        </ul>
+                                <form action="" onSubmit={(e) => {e.preventDefault(); handleUserDataUpdate()}}>
+                                    <div>
+                                        <label htmlFor="">Telefono</label>
+                                        <input type="text" name="telefono" defaultValue={phone} onChange={(e) => {setPhone(e.target.value)}}/>
+                                    </div>
+                                    <div>
+                                        <label htmlFor="">Dirección</label>
+                                        <input type="text" name="direccion" defaultValue={shippingAdress} onChange={(e) => {setShippingAdress(e.target.value)}}/>
+                                    </div>
+                                </form>
 
-                        <Link to={"/profile"}>Modificar telefono y/o dirección de envío</Link>
+                                {userUpdateError && (<p>{userUpdateError}</p>)}
+                            </>
 
-                        <p>
-                            Si estos son tus datos correctos confirma la orden haciendo clic en el siguiente botón
-                        </p>
+                        ) : (
+                            <>
+                                <h1>
+                                    Confirmar orden
+                                </h1>
 
-                        <p>
-                            Al continuar con el pago aceptas nuestros terminos y condiciones de pago
-                        </p>
+                                <p>
+                                    <strong>
+                                        Antes de continuar confirma tu dirección de envío y telefono de contacto, si no son correctos por favor actualizalos
+                                    </strong>
+                                </p>
+
+                                <ul>
+                                    <li><strong>Telefono de contacto:</strong> {phone}</li>
+                                    <li><strong>Dirección de envío:</strong> {shippingAdress}</li>
+                                </ul>
+                                
+                                <button className="pay-btn" onClick={() => {setModifyData(!modifyData)}}>{modifyData ? 'cerrar' : 'Modificar'}</button>
+
+                                <p>
+                                    Si estos son tus datos correctos confirma la orden haciendo clic en el siguiente botón
+                                </p>
+
+                                <p>
+                                    Al continuar con el pago aceptas nuestros terminos y condiciones de pago
+                                </p>
+
+                                <div className="pay-confirmation-buttons">
+                                    <button className="pay-btn"
+                                        onClick={() => {handleProcessCart()}}
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Procesando solicitud' : 'Pagar'}
+                                    </button>
+                                    {error != '' && <p>{error}</p>}
+                                    <button className="pay-btn"
+                                        onClick={() => {setConfirm(false)}}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                                {error != '' && <p>{error}</p>}
+                            </>
+                        )}
 
                         <div className="pay-confirmation-buttons">
-                            <button className="pay-btn"
-                                onClick={() => {handleProcessCart()}}
-                                disabled={loading}
-                            >
-                                {loading ? 'Procesando solicitud' : 'Pagar'}
-                            </button>
-                            {error != '' && <p>{error}</p>}
-                            <button className="pay-btn"
-                                onClick={() => {setConfirm(false)}}
-                            >
-                                Cancelar
-                            </button>
+                            {modifyData && (
+                                <button className="pay-btn" onClick={(e) => {e.preventDefault(); handleUserDataUpdate()}} disabled={loadingUserUpdate}>
+                                    {loadingUserUpdate ? "Guardando..." : "Actualizar"}
+                                </button>
+                            )}
                         </div>
-                        {error != '' && <p>{error}</p>}
-                        
                     </div>
                 ) : (
                     <>

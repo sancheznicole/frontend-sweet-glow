@@ -6,9 +6,9 @@ const getHeaders = () => ({
     Authorization: `Bearer ${localStorage.getItem("token")}`
 })
 
-export async function getAllCategories(page = 1, limit = 10) {
+export async function getAllCategories(page = 1, limit = 10, search = "") {
     try {
-        const res = await axios.get(`${API_URL}/categories?page=${page}&limit=${limit}`, {
+        const res = await axios.get(`${API_URL}/categories?page=${page}&limit=${limit}&search=${search}`, {
             headers: getHeaders()
         })
         const lista = Array.isArray(res.data) ? res.data : res.data?.data ?? []
