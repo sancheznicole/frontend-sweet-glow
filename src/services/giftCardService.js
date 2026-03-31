@@ -24,6 +24,20 @@ export const getAllGiftCards = async (page = 1, limit = 10, idUsuario = null) =>
     }
 }
 
+export const getAllOrSearch = async (page = 1, limit = 10, search = "") => {
+    try {
+        const params = `page=${page}&limit=${limit}&search=${search}`
+        const res = await axios.get(`${API_URL}/gift_cards/getOrSearch?${params}`, {
+            headers: getHeaders()
+        })
+        const lista = Array.isArray(res.data) ? res.data : res.data?.data ?? []
+        const last_page = res.data?.last_page ?? 1
+        return { valid: true, tarjetas: lista, last_page }
+    } catch (error) {
+        return { valid: false, error: error?.response?.data?.message || error.message }
+    }
+}
+
 // Obtener una tarjeta
 export const getGiftCard = async (id) => {
     try {

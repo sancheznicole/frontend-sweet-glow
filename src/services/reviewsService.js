@@ -3,10 +3,10 @@ import axios from "axios"
 const API_URL = import.meta.env.VITE_API_URL
 
 // Obtener todas las reseñas paginadas
-export const getAllReviews = async (page = 1, limit = 10) => {
+export const getAllReviews = async (page = 1, limit = 10, search = "") => {
     try {
         const token = localStorage.getItem("token")
-        const res = await axios.get(`${API_URL}/reviews?page=${page}&limit=${limit}`, {
+        const res = await axios.get(`${API_URL}/reviews?page=${page}&limit=${limit}&search=${search}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
         console.log("getAllReviews raw:", res.data)
