@@ -8,7 +8,7 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
     const [loading, setLoading] = useState(true)
 
     const [index, setIndex] = useState(0)
-    const visibleCards = 4
+    const [visibleCards, setVisibleCards] = useState(4)
 
 
     async function getProducts(){
@@ -32,6 +32,25 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
     }
 
     useEffect(() => {
+        const updateVisible = () => {
+            if (window.innerWidth < 500) setVisibleCards(1)
+            else if (window.innerWidth < 600 && window.innerWidth > 500) setVisibleCards(2)
+            else if (window.innerWidth > 500 && window.innerWidth < 1024) setVisibleCards(2)
+            else setVisibleCards(4)
+        }
+
+        updateVisible()
+        window.addEventListener("resize", updateVisible)
+        return () => window.removeEventListener("resize", updateVisible)
+    }, [])
+
+    useEffect(() => {
+        if (index > data.length - visibleCards) {
+            setIndex(Math.max(0, data.length - visibleCards))
+        }
+    }, [visibleCards])
+
+    useEffect(() => {
         getProducts()
     }, [])
 
@@ -51,8 +70,9 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
         loading ? (
             <Loader text="Cargando productos..."></Loader>
         ) : (
-            data && (
-                <div className="carousel-container">    
+            data && data.length > 0 ? (
+                <div className="carousel-container">
+                
                     {/* BOTON IZQUIERDA */}
                     {data.length > visibleCards && (
                         <button className="carousel-btn left" onClick={prev}>◀</button>
@@ -60,14 +80,12 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
 
                     {/* TRACK */}
                     <div className="carousel-wrapper">
-                        <div 
-                            className="carousel-track products-cards-container"
-                            style={{
-                                transform: `translateX(-${index * (100 / visibleCards)}%)`
-                            }}
-                        >
+                        <div className="carousel-track products-cards-container responsive-track">
                             {data.map((p, i) => (
-                                <div className="carousel-item" key={i}>
+                                <div className="carousel-item" key={i} style={{
+                                    transform: `translateX(-${index * (100 / visibleCards)}%)`, 
+                                    flexShrink: 0 
+                                }}>
                                     <ProductCard
                                         id={p?.id_producto}
                                         imagen={p?.imagenes}
@@ -89,6 +107,8 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
                         <button className="carousel-btn right" onClick={next}>▶</button>
                     )}
                 </div>
+            ) : (
+                <p>No hay productos para mostrar</p>
             )
         )
     )

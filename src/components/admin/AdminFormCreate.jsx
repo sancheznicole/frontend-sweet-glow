@@ -11,7 +11,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 	const navigate = useNavigate()
 
 	return (
-		<div>
+		<div className="create-form-admin-panel">
 			<div className="back-link-container">
         		<button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
       		</div>

@@ -9,7 +9,7 @@ const WishlistPage = () => {
 	const [data, setData] = useState(undefined)
 
 	useEffect(() => {
-		setData(normalizeProducts(wishList))
+		if(wishList) setData(normalizeProducts(wishList))
 	}, [])
 
 	return (

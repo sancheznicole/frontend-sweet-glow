@@ -41,10 +41,11 @@ const AdminPanel = ({
 					</div>
 
 					<h1 className="titulo-por-h1">{titulo}</h1>
-					<p>{texto}</p>
+					<p className="information-text">{texto}</p>
 
 					<div className="contenedor-agregar-registro">
 						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
+						<button className='link-regresar link-agregar-registro' onClick={() => navigate(-1)}>Regresar</button>
 					</div>
 
 					<p>Total de registros ({data?.length ?? 0})</p>

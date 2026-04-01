@@ -1,13 +1,21 @@
 import { Link } from "react-router-dom"
+import CartPage from "../../pages/cart/CartPage"
+import { useState } from "react"
 
 const DesktopMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) => {
+    const [showCart, setShowCart] = useState(false)
+
     return (
-        <>
+        <div className="menu-global-container">
+            {showCart && (
+                <CartPage setShowCart={setShowCart} showCart={showCart} />
+            )}
+
             <div className={`phrase-section`}>
                 <p> Disfrute de nuestras excelentes tarifas </p>
             </div>
 
-            <header id="header" className={`${bgWhite == true ? 'bg-white' : ''} ${ isTransparent == true ? '' : 'short-header' } ${ fixed == true ? 'fixed' : 'page-container' }`}>
+            <header id="header" className={`${bgWhite == true || showCart == true ? 'bg-white' : ''} ${ isTransparent == true ? '' : 'short-header' } ${ fixed == true ? 'fixed' : 'page-container' }`}>
                 <nav>
                     <ul className="upper-line">
                         <li >
@@ -44,9 +52,11 @@ const DesktopMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                             </Link>
 
-                            <Link to={"/cart"} title="Carrito de compras">
+                            <button to={""} title="Carrito de compras" className="cart-btn-header"
+                                onClick={() => {setShowCart(!showCart)}}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-shopping-bag"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg>
-                            </Link>
+                            </button>
                         </li>
 
                     </ul>
@@ -67,7 +77,7 @@ const DesktopMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#996c74" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-brand-whatsapp"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" /><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" /></svg>
                 </Link>
             </header>
-        </>
+        </div>
     )
 }
 

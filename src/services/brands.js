@@ -7,9 +7,9 @@ const getHeaders = () => ({
 })
 
 // Listar todas las marcas
-export async function getAllBrands(page = 1, limit = 10) {
+export async function getAllBrands(page = 1, limit = 10, search = "") {
     try {
-        const res = await axios.get(`${API_URL}/brands?page=${page}&limit=${limit}`, {
+        const res = await axios.get(`${API_URL}/brands?page=${page}&limit=${limit}&search=${search}`, {
             headers: getHeaders()
         })
         console.log("getAllBrands raw:", res.data)

@@ -10,8 +10,6 @@ function Menu({isTransparent, bgWhite, fixed}) {
 	const { isAuthenticated, user } = useAuth()
 	const [isMobile, setIsMobile] = useState(undefined)
 
-	console.log(isMobile)
-
 	useEffect(() => {
 		if(window.innerWidth <= 800){
 			setIsMobile(true)

@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { getAllGiftRegistrations, deleteGiftRegistration } from '../../../services/giftRegistrationService'
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from '../../../components/Loader'
 
 const GiftRegistrationsIndex = () => {
-
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
-    const [limit] = useState(10)
+    const [limit, setLimit] = useState(10)
     const [lastPage, setLastPage] = useState(undefined)
+    const [search, setSearch] = useState("")
 
     const fields = {
         "id_inscripcion": "Id",
@@ -19,7 +21,8 @@ const GiftRegistrationsIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllGiftRegistrations(page, limit)
+            setLoading(true)
+            const res = await getAllGiftRegistrations(page, limit, search)
 
             if (!res?.valid) {
                 console.log("Error inscripciones:", res?.error)
@@ -41,12 +44,22 @@ const GiftRegistrationsIndex = () => {
 
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
 
     const onDelete = async (id) => {
         try {
@@ -59,20 +72,29 @@ const GiftRegistrationsIndex = () => {
 
     return (
         <div>
-            <AdminPanel
-                data={data}
-                campos={fields}
-                titulo={"Administración de inscripciones regalo"}
-                texto={"Gestiona las inscripciones de regalo de los usuarios"}
-                linkCrear={"/admin/gift_registrations/create"}
-                linkEditar={"/admin/gift_registrations/edit"}
-                onDelete={onDelete}
-                getData={getData}
-                page={page}
-                lastPage={lastPage}
-                setPage={setPage}
-                idKey="id_inscripcion"
-            />
+            {loading ? (
+                <Loader text='Cargando inscripciones regalo...'></Loader>
+            ) : (
+                <AdminPanel
+                    data={data}
+                    campos={fields}
+                    titulo={"Administración de inscripciones regalo"}
+                    texto={"Gestiona las inscripciones de regalo de los usuarios"}
+                    linkCrear={"/admin/gift_registrations/create"}
+                    linkEditar={"/admin/gift_registrations/edit"}
+                    onDelete={onDelete}
+                    getData={getData}
+                    page={page}
+                    lastPage={lastPage}
+                    setPage={setPage}
+                    idKey="id_inscripcion"
+                    limit={limit}
+                    search={search}
+                    setLimit={setLimit}
+                    setSearch={setSearch}
+                    enableSearch={true}
+                />
+            )}
         </div>
     )
 }

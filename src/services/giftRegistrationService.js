@@ -7,9 +7,9 @@ const getHeaders = () => ({
 })
 
 // Listar todas las inscripciones
-export const getAllGiftRegistrations = async (page = 1, limit = 10) => {
+export const getAllGiftRegistrations = async (page = 1, limit = 10, search = "") => {
     try {
-        const res = await axios.get(`${API_URL}/gift_registrations?page=${page}&limit=${limit}`, {
+        const res = await axios.get(`${API_URL}/gift_registrations?page=${page}&limit=${limit}&search=${search}`, {
             headers: getHeaders()
         })
         console.log("getAllGiftRegistrations raw:", res.data)
