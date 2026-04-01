@@ -51,44 +51,45 @@ const ProductsCarousel = ({tendency = false, discount = false}) => {
         loading ? (
             <Loader text="Cargando productos..."></Loader>
         ) : (
-            <div className="carousel-container">
-            
-                {/* BOTON IZQUIERDA */}
-                {data.length > visibleCards && (
-                    <button className="carousel-btn left" onClick={prev}>◀</button>
-                )}
+            data && (
+                <div className="carousel-container">    
+                    {/* BOTON IZQUIERDA */}
+                    {data.length > visibleCards && (
+                        <button className="carousel-btn left" onClick={prev}>◀</button>
+                    )}
 
-                {/* TRACK */}
-                <div className="carousel-wrapper">
-                    <div 
-                        className="carousel-track products-cards-container"
-                        style={{
-                            transform: `translateX(-${index * (100 / visibleCards)}%)`
-                        }}
-                    >
-                        {data.map((p, i) => (
-                            <div className="carousel-item" key={i}>
-                                <ProductCard
-                                    id={p?.id_producto}
-                                    imagen={p?.imagenes}
-                                    categoria={p?.categoria?.nombre}
-                                    marca={p?.marca?.nombre}
-                                    precio={p?.precio}
-                                    titulo={p?.nombre}
-                                    stock={p?.stock}
-                                    referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
-                                    product={p}
-                                />
-                            </div>
-                        ))}
+                    {/* TRACK */}
+                    <div className="carousel-wrapper">
+                        <div 
+                            className="carousel-track products-cards-container"
+                            style={{
+                                transform: `translateX(-${index * (100 / visibleCards)}%)`
+                            }}
+                        >
+                            {data.map((p, i) => (
+                                <div className="carousel-item" key={i}>
+                                    <ProductCard
+                                        id={p?.id_producto}
+                                        imagen={p?.imagenes}
+                                        categoria={p?.categoria?.nombre}
+                                        marca={p?.marca?.nombre}
+                                        precio={p?.precio}
+                                        titulo={p?.nombre}
+                                        stock={p?.stock}
+                                        referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
+                                        product={p}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* BOTON DERECHA */}
-                {data.length > visibleCards && (
-                    <button className="carousel-btn right" onClick={next}>▶</button>
-                )}
-            </div>
+                    {/* BOTON DERECHA */}
+                    {data.length > visibleCards && (
+                        <button className="carousel-btn right" onClick={next}>▶</button>
+                    )}
+                </div>
+            )
         )
     )
 }

@@ -21,7 +21,7 @@ const HomePage = () => {
             <ProductsCarousel tendency={true}></ProductsCarousel>
 
             {/* productos en descuento */}
-            <h1 className="page-title">Nuestros productos en tendencia</h1>
+            <h1 className="page-title">Nuestros productos en descuento</h1>
             <ProductsCarousel discount={true}></ProductsCarousel>
 
             {/* ultimos productos */}
