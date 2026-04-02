@@ -2,6 +2,8 @@
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import * as XLSX from "xlsx"
+import { saveAs } from "file-saver"
 
 const AdminPanel = ({ 
 		data, titulo, texto, linkCrear, linkEditar,
@@ -11,6 +13,7 @@ const AdminPanel = ({
 	}) => {
 	const [id, setId] = useState(undefined)
 	const idKey = Object.keys(campos)[0]
+	const [loadingDownload, setLoadingDownload] = useState(false)
 	const navigate = useNavigate()
 	const max_length = 50
 
@@ -18,6 +21,44 @@ const AdminPanel = ({
 		if (key === "created_at") return row[key]?.slice(0, 10)
 		if (key.includes(".")) return key.split(".").reduce((obj, k) => obj?.[k], row)
 		return row[key]
+	}
+
+	const exportToExcel = () => {
+		setLoadingDownload(true)
+		if (!data || data.length === 0) return
+
+		const formattedData = data.map((row) => {
+			const newRow = {}
+
+			Object.entries(campos).forEach(([key, label]) => {
+				if (key.includes(".")) {
+					newRow[label] = key.split(".").reduce((obj, k) => obj?.[k], row)
+				} else if (key === "created_at") {
+					newRow[label] = row[key]?.slice(0, 10)
+				} else {
+					newRow[label] = row[key]
+				}
+			})
+
+			return newRow
+		})
+
+		const worksheet = XLSX.utils.json_to_sheet(formattedData)
+		const workbook = XLSX.utils.book_new()
+
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Registros")
+
+		const excelBuffer = XLSX.write(workbook, {
+			bookType: "xlsx",
+			type: "array"
+		})
+
+		const file = new Blob([excelBuffer], {
+			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+		})
+
+		saveAs(file, `${titulo || "reporte"}.xlsx`)
+		setLoadingDownload(false)
 	}
 
 	return (
@@ -140,6 +181,16 @@ const AdminPanel = ({
 							</tbody>
 						</table>
 					</div>
+					
+					{data?.length > 0 && (
+						<button 
+							className="button-download-excel"
+							onClick={() => {exportToExcel()}}
+							disabled={loadingDownload}
+						>
+							{loadingDownload ? "Descargando..." : "Descargar"}
+						</button>
+					)}
 				</>
 			)}
 		</section>

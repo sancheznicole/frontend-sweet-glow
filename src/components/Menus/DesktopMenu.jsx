@@ -1,11 +1,23 @@
 import { Link } from "react-router-dom"
 import CartPage from "../../pages/cart/CartPage"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Searcher from "../Searcher"
 
 const DesktopMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) => {
     const [showCart, setShowCart] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
+
+    useEffect(() => {
+        const handleCartUpdate = () => {
+            setShowCart(true)
+        }
+
+        window.addEventListener("cartUpdated", handleCartUpdate)
+
+        return () => {
+            window.removeEventListener("cartUpdated", handleCartUpdate)
+        }
+    }, [])
 
     return (
         <div className="menu-global-container">

@@ -13,7 +13,7 @@ const PendingPayment = () => {
     }, [navigate])
 
     return (
-        <div className='factura-container'>
+        <div className='factura-container pending-container'>
             <div className='card-factura'>
                 <div className='card-header'>
                     <h1>⏳ Pago en proceso</h1>

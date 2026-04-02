@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import CartPage from "../../pages/cart/CartPage"
 import Searcher from "../Searcher"
 
@@ -7,6 +7,18 @@ const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
     const [visible, setVisible] = useState(false)
     const [showCart, setShowCart] = useState(false)
     const [showSearch, setShowSearch] = useState(false)
+
+    useEffect(() => {
+        const handleCartUpdate = () => {
+            setShowCart(true)
+        }
+
+        window.addEventListener("cartUpdated", handleCartUpdate)
+
+        return () => {
+            window.removeEventListener("cartUpdated", handleCartUpdate)
+        }
+    }, [])
 
     return (
         <div className="menu-global-container mobile-menu">
