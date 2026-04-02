@@ -9,6 +9,7 @@ import { createInvoiceOrders } from "../../services/facturaPedidosService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
 import { userUpdate } from "../../services/authService"
+import { getGiftCard, updateGiftCard } from "../../services/giftCardService"
 
 const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const navigate = useNavigate()
@@ -24,9 +25,13 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     const [descuento, setDescuento] = useState(0)
     const [tarjeta, setTarjeta] = useState(null)
+    const [tarjetaData, setTarjetaData] = useState(undefined)
 
     const [loadingUserUpdate, setLoadingUserUpdate] = useState(false)
     const [userUpdateError, setUSerUpdateError] = useState("")
+    const [card, setCard] = useState("")
+    const [loadingGiftCard, setLoadingGiftCard] = useState(false)
+    const [errorGiftCard, setErrorGiftCard] = useState(false)
 
     useEffect(() => {
         if(isAuthenticated){
@@ -34,6 +39,18 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
             setPhone(user?.telefono)
         } 
     }, [user])
+
+    async function handleUpdateGiftCard(){
+        try {
+            let res = await updateGiftCard(tarjeta, tarjetaData?.monto, tarjetaData?.fecha_expiracion, "usada")
+
+            if(res?.valid){
+                return true
+            }
+        } catch (error) {
+            console.log(error?.message)
+        }
+    }
 
     async function handleProcessCart(){
         try {
@@ -81,7 +98,10 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                 setError("No se pudo procesar la solicitud")
                 return
             }
+            setTarjeta(null)
 
+
+            if(tarjeta) handleUpdateGiftCard()
             handleDeleteCart()
             window.location.href = preferenceRes?.preference?.init_point
             
@@ -140,6 +160,55 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
             setLoadingUserUpdate(false)
         }
     }
+
+    async function searchGiftCard(){
+        try {
+            setLoadingGiftCard(true)
+            setErrorGiftCard(false)
+
+            let res = await getGiftCard(card)
+
+            if(!res?.valid || !res?.tarjeta){
+                setErrorGiftCard(true)
+                return
+            }
+
+            console.log(res?.tarjeta)
+
+            let gifCard = res?.tarjeta
+
+            if(gifCard.estado != "activa"){
+                setErrorGiftCard(true)
+                return
+            }
+
+            setTarjetaData(gifCard)
+            setTarjeta(gifCard?.id_tarjeta)
+            setDescuento(Number(gifCard?.monto))
+        } catch (error) {
+            setErrorGiftCard(true)
+        } finally {
+            setLoadingGiftCard(false)
+        }
+    }
+
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            if (card !== "") {
+                searchGiftCard()
+            }
+        }, 500)
+
+        return () => clearTimeout(delay)
+    }, [card])
+
+    console.log(tarjetaData)
+
+    useEffect(() => {
+        if(descuento > total) setTotal(0)
+    }, [descuento])
+
+    console.log(descuento)
 
     return (
         <div className={`cart-container`}>
@@ -218,7 +287,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                                         onClick={() => {handleProcessCart()}}
                                         disabled={loading}
                                     >
-                                        {loading ? 'Procesando solicitud' : 'Pagar'}
+                                        {loading ? 'Cargando' : 'Pagar'}
                                     </button>
                                     {error != '' && <p>{error}</p>}
                                     <button className="pay-btn"
@@ -285,7 +354,23 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                             <h1>Acciones de carrito</h1>
                             <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
 
-                            <h2>Total: {parsePrice(total)}</h2>
+                            <div>
+                                <p className="giftcard-title">Tarjeta de regalo</p>
+                                {tarjeta ? (
+                                    <p>Tarjeta de regalo aplicada</p>
+                                ) : (
+                                    <div className="giftcard-input-search">
+                                        <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
+                                        <p className="giftcard-search-p">
+                                            {errorGiftCard && 'Tarjeta no encontrada'}
+                                            {loadingGiftCard && 'Buscando tarjeta...'}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+
+                            <h2>Total: {parsePrice((total-descuento))}</h2>
 
                             <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
 

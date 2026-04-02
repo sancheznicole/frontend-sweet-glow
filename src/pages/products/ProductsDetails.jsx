@@ -4,14 +4,16 @@ import { getProduct } from "../../services/productsService"
 import Loader from "../../components/Loader"
 import { getCategory } from "../../services/categoriesService"
 import { getBrand } from "../../services/brands"
-import { searchReviewsByProductId } from "../../services/reviewsService"
+import { createReview, searchReviewsByProductId } from "../../services/reviewsService"
 import ProductsCards from "../../components/ProductsCards"
 import { addToCart } from "../../services/cartService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
 import { addToWishList } from "../../services/wishlist"
+import { useAuth } from "../../contexts/AuthContext"
 
 const ProductsDetails = () => {
+    const { isAuthenticated, user } = useAuth()
     const { id } = useParams()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
@@ -23,9 +25,17 @@ const ProductsDetails = () => {
     const [quantity, setQuantity] = useState(1)
     const [cartError, setCartError] = useState('')
     const [currentImage, setCurrentImage] = useState(0)
+    const [addReview, setAddReview] = useState(false)
+    
+    const [calificacion, setCalificacion] = useState(3)
+    const stars = [1, 2, 3, 4, 5]
+    const [loadingNewReview, setLoadingNewReview] = useState(false)
+    const [reviewError, setReviewError] = useState("")
+    const [reviewAverage, setReviewAverage] = useState(0)
 
     const getData = async () => {
         try {
+            setLoading(true)
             let res = await getProduct(id)
 
             if(!res?.valid){
@@ -86,8 +96,6 @@ const ProductsDetails = () => {
         if(!res?.valid){
             setCartError(res?.error)
         }
-
-        navigate("/cart")
     }
 
     const handleAddToWishList = async () => {
@@ -100,6 +108,15 @@ const ProductsDetails = () => {
         navigate("/wishlist")
     }
 
+    console.log(reviewAverage)
+
+    useEffect(() => {
+        const promedio = reviews.length
+        ? reviews.reduce((acc, item) => acc + item.resena, 0) / reviews.length
+        : 0;
+
+        setReviewAverage(promedio)
+    }, [reviews])
 
     useEffect(() => {
         getData()
@@ -111,7 +128,31 @@ const ProductsDetails = () => {
         }
     }, [product])
 
-    console.log(product)
+    const handleChangeReviewsView = () => {
+        if(!isAuthenticated) return navigate("/login")
+
+        setAddReview(!addReview)
+    }
+
+    const handleSendReview = async () => {
+        try {
+            setLoadingNewReview(true)
+
+            let res = await createReview(calificacion, id, user?.id_usuario)
+
+            if(!res?.valid){
+                setReviewError("No se pudo guardar la reseña")
+                return
+            }
+
+            getData()
+            setAddReview(false)
+        } catch (error) {
+            console.log(error?.message)
+        } finally {
+            setLoadingNewReview(false)
+        }
+    }
 
     return (
         <div>
@@ -153,7 +194,23 @@ const ProductsDetails = () => {
                             )}
                             <p>{brand?.nombre} - {category?.nombre}</p>
 
-                            <p>Reseñas ({reviews.length})</p>
+                            <p>
+                                Reseñas ({reviews.length}) 
+                                <div className="estrellas-display estrellas-display-details">
+                                    {stars.map(s => {
+                                        if (reviewAverage >= s) {
+                                            return <span key={s} className="estrella activa">★</span>
+                                        } else if (reviewAverage >= s - 0.5) {
+                                            return <span key={s} className="estrella media">★</span>
+                                        } else {
+                                            return <span key={s} className="estrella">☆</span>
+                                        }
+                                    })}
+                                </div>
+
+                                <p>({reviewAverage.toFixed(1)} / 5)</p>    
+                            </p>
+
 
                             <div className="add-to-cart">
                                 <div className="quantity-buttons">
@@ -180,16 +237,84 @@ const ProductsDetails = () => {
                     </div>
                     
                     {/* reseñas */}
-                    <div className="details-reviews-container">
-                        {reviews.map((r, index) => {
-                            return (
-                                <div key={index}>
-                                    <h2>{r?.usuario?.nombres} {r?.usuario?.apellidos}</h2>
-                                    <p>{`${'★'.repeat(r.resena)}${'☆'.repeat(5 - r.resena)} (${r.resena}/5)`}</p>
-                                    <h3>{r?.created_at.split("T")[0]}</h3>
+                    <div className="reviews-details-container">
+
+                        {addReview ? (
+                            <div className="section-login">
+                                 <div>
+                                    <h1 className="titulo-por-h1">Reseñas</h1>
+                                </div>
+
+                                <div className="stepper-estrellas">
+                                    <div className="estrellas-display">
+                                        {stars.map(s => (
+                                            <span
+                                                key={s}
+                                                className={`estrella ${s <= calificacion ? 'activa' : ''}`}
+                                                onClick={() => {
+                                                    setCalificacion(s)
+                                                    setStepErrors({})
+                                                }}
+                                            >
+                                                ★
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    <input
+                                        type="range"
+                                        min="1"
+                                        max="5"
+                                        step="1"
+                                        value={calificacion}
+                                        onChange={e => {
+                                            setCalificacion(Number(e.target.value))
+                                            setStepErrors({})
+                                        }}
+                                        className="slider-estrellas"
+                                    />
+
+                                    <p className="calificacion-texto">
+                                        {calificacion === 1 && 'Muy malo'}
+                                        {calificacion === 2 && 'Malo'}
+                                        {calificacion === 3 && 'Regular'}
+                                        {calificacion === 4 && 'Bueno'}
+                                        {calificacion === 5 && 'Excelente'}
+                                    </p>
+                                </div>
+                                <p className="highlight">Dejanos saber tu opinion sobre este producto</p>
+                                <p className="highlight">¿De 1 a 5 que opinas del producto?</p>
+
+                                {reviewError && (<p className="form-input-error">{reviewError}</p>)}
+                            </div>
+                        ) : (
+                            reviews.length > 0 ? (
+                                <div className="details-reviews-container">
+                                    {reviews.map((r, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <h2>{r?.usuario?.nombres} {r?.usuario?.apellidos}</h2>
+                                                <p>{`${'★'.repeat(r.resena)}${'☆'.repeat(5 - r.resena)} (${r.resena}/5)`}</p>
+                                                <h3>{r?.created_at.split("T")[0]}</h3>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="not-reviews-container">
+                                    <h1>Sin reseñas</h1>
+                                    <p>Parece que este producto no cuenta con reseñas, se el primero en agregar una</p>
                                 </div>
                             )
-                        })}
+                        )}
+
+                        <div>
+                            {addReview && (
+                                <button className="secondary-btn" onClick={() => {handleSendReview()}} disabled={loadingNewReview}>{loadingNewReview ? "Guardando..." : "Guardar"}</button>
+                            )}
+                            <button onClick={() => {handleChangeReviewsView()}}>{addReview ? "Cancelar" : "Agregar Reseña"}</button>
+                        </div>
+
                     </div>
 
                     {/* productos  */}

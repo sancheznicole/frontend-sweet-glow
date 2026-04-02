@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getGiftCard, updateGiftCard } from '../../../../services/giftCardService'
 import { useNavigate } from 'react-router-dom'
+import Loader from '../../../../components/Loader'
 
 const estadoOptions = {
     'activa': 'Activa',
@@ -12,7 +13,7 @@ const EditGiftCard = () => {
 
     const { id } = useParams()
     const navigate = useNavigate()
-
+    const [loadingData, setLoadingData] = useState(true)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [fieldErrors, setFieldErrors] = useState({})
@@ -49,6 +50,8 @@ const EditGiftCard = () => {
                 setFechaCreacion(t.created_at ?? '—')
             } catch (e) {
                 setError(e.message)
+            } finally {
+                setLoadingData(false)
             }
         }
         fetchTarjeta()
@@ -99,107 +102,113 @@ const EditGiftCard = () => {
     return (
         <div className="page-container">
 
-            {!mostrarDatos && (
-                <div className="back-link-container">
-                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
-                </div>
-            )}
-
-            <section className="section-editar">
-
-                {!mostrarDatos ? (
-
-                    <>
-                        <h1 className="titulo-por-h1">Detalles de la tarjeta de {usuarioNombre}</h1>
-
-                        <div className="contenedor-campos">
-                            <p><strong>Usuario:</strong> {usuarioNombre}</p>
-                            <p><strong>Monto:</strong> ${Number(monto).toLocaleString()}</p>
-                            <p><strong>Estado:</strong> {estadoOptions[estado] ?? estado}</p>
-                            <p><strong>Vencimiento:</strong> {fechaExpiracion}</p>
-                            <p><strong>Fecha de uso:</strong> {fechaUso}</p>
-                            <p><strong>Creada:</strong> {fechaCreacion}</p>
+            {loadingData ? (
+                <Loader text='Cargando informacion de la tarjeta de regalo...'></Loader>
+            ) : (
+                <>
+                    {!mostrarDatos && (
+                        <div className="back-link-container">
+                            <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                         </div>
-                    </>
+                    )}
 
-                ) : (
+                    <section className="section-editar">
 
-                    <div>
-                        <h1 className="titulo-por-h1">Editar tarjeta</h1>
+                        {!mostrarDatos ? (
 
-                        {/* Usuario — solo lectura */}
-                        <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
-                            <p><strong>Usuario:</strong> {usuarioNombre}</p>
-                        </div>
+                            <>
+                                <h1 className="titulo-por-h1">Detalles de la tarjeta de {usuarioNombre}</h1>
 
-                        <div className="contenedor-campos">
+                                <div className="contenedor-campos">
+                                    <p><strong>Usuario:</strong> {usuarioNombre}</p>
+                                    <p><strong>Monto:</strong> ${Number(monto).toLocaleString()}</p>
+                                    <p><strong>Estado:</strong> {estadoOptions[estado] ?? estado}</p>
+                                    <p><strong>Vencimiento:</strong> {fechaExpiracion}</p>
+                                    <p><strong>Fecha de uso:</strong> {fechaUso}</p>
+                                    <p><strong>Creada:</strong> {fechaCreacion}</p>
+                                </div>
+                            </>
 
-                            {/* Monto */}
-                            <div className="campo-grupo">
-                                <label className="campo-label">Monto</label>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    className="input-busqueda"
-                                    value={monto}
-                                    onChange={e => setMonto(e.target.value)}
-                                />
-                                {fieldErrors.monto && <p className="error-field">{fieldErrors.monto}</p>}
-                            </div>
+                        ) : (
 
-                            {/* Fecha expiración */}
-                            <div className="campo-grupo">
-                                <label className="campo-label">Fecha de vencimiento</label>
-                                <input
-                                    type="date"
-                                    className="input-busqueda"
-                                    value={fechaExpiracion}
-                                    onChange={e => setFechaExpiracion(e.target.value)}
-                                />
-                                {fieldErrors.fechaExpiracion && <p className="error-field">{fieldErrors.fechaExpiracion}</p>}
-                            </div>
+                            <div>
+                            <h1 className="titulo-por-h1">Editar tarjeta</h1>
 
-                            {/* Estado */}
-                            <div className="campo-grupo">
-                                <label className="campo-label">Estado</label>
-                                <select
-                                    className="input-busqueda"
-                                    value={estado}
-                                    onChange={e => setEstado(e.target.value)}
+                                {/* Usuario — solo lectura */}
+                                <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
+                                    <p><strong>Usuario:</strong> {usuarioNombre}</p>
+                                </div>
+
+                                <div className="contenedor-campos">
+
+                                    {/* Monto */}
+                                    <div className="campo-grupo">
+                                        <label className="campo-label">Monto</label>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            className="input-busqueda"
+                                            value={monto}
+                                            onChange={e => setMonto(e.target.value)}
+                                        />
+                                        {fieldErrors.monto && <p className="error-field">{fieldErrors.monto}</p>}
+                                    </div>
+
+                                    {/* Fecha expiración */}
+                                    <div className="campo-grupo">
+                                        <label className="campo-label">Fecha de vencimiento</label>
+                                        <input
+                                            type="date"
+                                            className="input-busqueda"
+                                            value={fechaExpiracion}
+                                            onChange={e => setFechaExpiracion(e.target.value)}
+                                        />
+                                        {fieldErrors.fechaExpiracion && <p className="error-field">{fieldErrors.fechaExpiracion}</p>}
+                                    </div>
+
+                                    {/* Estado */}
+                                    <div className="campo-grupo">
+                                        <label className="campo-label">Estado</label>
+                                        <select
+                                            className="input-busqueda"
+                                            value={estado}
+                                            onChange={e => setEstado(e.target.value)}
+                                        >
+                                            {Object.entries(estadoOptions).map(([val, label]) => (
+                                                <option key={val} value={val}>{label}</option>
+                                            ))}
+                                        </select>
+                                        {fieldErrors.estado && <p className="error-field">{fieldErrors.estado}</p>}
+                                    </div>
+
+                                </div>
+
+                                {error && <p className="error-message">{error}</p>}
+
+                                <button
+                                    className="modificar-profile guardar-cambios"
+                                    onClick={sendData}
+                                    disabled={loading}
+                                    style={{ marginTop: '24px', width: '100%' }}
                                 >
-                                    {Object.entries(estadoOptions).map(([val, label]) => (
-                                        <option key={val} value={val}>{label}</option>
-                                    ))}
-                                </select>
-                                {fieldErrors.estado && <p className="error-field">{fieldErrors.estado}</p>}
+                                    {loading ? 'Guardando...' : 'Guardar cambios'}
+                                </button>
                             </div>
 
+                        )}
+
+                        <div className="contenedor-editar-botones">
+                            <button
+                                className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
+                                onClick={() => setMostrarDatos(!mostrarDatos)}
+                            >
+                                {mostrarDatos ? "Cancelar" : "Modificar"}
+                            </button>
                         </div>
 
-                        {error && <p className="error-message">{error}</p>}
-
-                        <button
-                            className="modificar-profile guardar-cambios"
-                            onClick={sendData}
-                            disabled={loading}
-                            style={{ marginTop: '24px', width: '100%' }}
-                        >
-                            {loading ? 'Guardando...' : 'Guardar cambios'}
-                        </button>
-                    </div>
-
-                )}
-
-                <div className="contenedor-editar-botones">
-                    <button
-                        className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
-                        onClick={() => setMostrarDatos(!mostrarDatos)}
-                    >
-                        {mostrarDatos ? "Cancelar" : "Modificar"}
-                    </button>
-                </div>
-
-            </section>
+                    </section>  
+                </>
+            )}
         </div>
     )
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getGiftRegistration, updateGiftRegistration } from '../../../../services/giftRegistrationService'
 import { useNavigate } from 'react-router-dom'
+import Loader from '../../../../components/Loader'
 
 const estadoOptions = {
     'pendiente':  'Pendiente',
@@ -14,7 +15,7 @@ const EditGiftRegistration = () => {
 
     const { id } = useParams()
     const navigate = useNavigate()
-
+    const [loadingData, setLoadingData] = useState(true)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [fieldErrors, setFieldErrors] = useState({})   // ← nuevo
@@ -42,6 +43,8 @@ const EditGiftRegistration = () => {
                 setFacturaId(i.id_factura_pedido)
             } catch (e) {
                 setError(e.message)
+            } finally {
+                setLoadingData(false)
             }
         }
         fetchInscripcion()
@@ -88,80 +91,87 @@ const EditGiftRegistration = () => {
     return (
         <div className="page-container">
 
-            {!mostrarDatos && (
-                <div className="back-link-container">
-                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
-                </div>
-            )}
-
-            <section className="section-editar">
-
-                {!mostrarDatos ? (
-
-                    <>
-                        <h1 className="titulo-por-h1">Detalles de la inscripción de {usuarioNombre}</h1>
-                        <div className="contenedor-campos">
-                            <p><strong>Usuario:</strong> {usuarioNombre}</p>
-                            <p><strong>Factura:</strong> #{facturaId}</p>
-                            <p><strong>Estado:</strong> {estadoOptions[estado] ?? estado}</p>
+            {loadingData ? (
+                <Loader text='Cargando informacion de la inscripcion regalo...'></Loader>
+            ) : (
+                <>
+                    {!mostrarDatos && (
+                        <div className="back-link-container">
+                            <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                         </div>
-                    </>
+                    )}
 
-                ) : (
+                    <section className="section-editar">
 
-                    <div>
-                        <h1 className="titulo-por-h1">Editar inscripción</h1>
+                        {!mostrarDatos ? (
 
-                        <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
-                            <p><strong>Usuario:</strong> {usuarioNombre}</p>
-                            <p><strong>Factura:</strong> {facturaId}</p>
-                        </div>
+                            <>
+                                <h1 className="titulo-por-h1">Detalles de la inscripción de {usuarioNombre}</h1>
+                                <div className="contenedor-campos">
+                                    <p><strong>Usuario:</strong> {usuarioNombre}</p>
+                                    <p><strong>Factura:</strong> #{facturaId}</p>
+                                    <p><strong>Estado:</strong> {estadoOptions[estado] ?? estado}</p>
+                                </div>
+                            </>
 
-                        <div className="campo-grupo">
-                            <label className="campo-label">Estado</label>
-                            <select
-                                className="input-busqueda"
-                                value={estado}
-                                onChange={e => {
-                                    setEstado(e.target.value)
-                                    setFieldErrors({})   // ← limpiar error al cambiar
+                        ) : (
+
+                            <div>
+                                <h1 className="titulo-por-h1">Editar inscripción</h1>
+
+                                <div className="contenedor-campos" style={{ marginBottom: '20px' }}>
+                                    <p><strong>Usuario:</strong> {usuarioNombre}</p>
+                                    <p><strong>Factura:</strong> {facturaId}</p>
+                                </div>
+
+                                <div className="campo-grupo">
+                                    <label className="campo-label">Estado</label>
+                                    <select
+                                        className="input-busqueda"
+                                        value={estado}
+                                        onChange={e => {
+                                            setEstado(e.target.value)
+                                            setFieldErrors({})   // ← limpiar error al cambiar
+                                        }}
+                                    >
+                                        <option value="">Selecciona un estado</option>   {/* ← opción vacía para forzar selección */}
+                                        {Object.entries(estadoOptions).map(([val, label]) => (
+                                            <option key={val} value={val}>{label}</option>
+                                        ))}
+                                    </select>
+                                    {fieldErrors.estado && <p className="error-field">{fieldErrors.estado}</p>}  {/* ← error del campo */}
+                                </div>
+
+                                {error && <p className="error-message">{error}</p>}
+
+                                <button
+                                    className="modificar-profile guardar-cambios"
+                                    onClick={sendData}
+                                    disabled={loading}
+                                    style={{ marginTop: '24px', width: '100%' }}
+                                >
+                                    {loading ? 'Guardando...' : 'Guardar cambios'}
+                                </button>
+                            </div>
+
+                        )}
+
+                        <div className="contenedor-editar-botones">
+                            <button
+                                className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
+                                onClick={() => {
+                                    setMostrarDatos(!mostrarDatos)
+                                    setFieldErrors({})   // ← limpiar errores al cancelar
                                 }}
                             >
-                                <option value="">Selecciona un estado</option>   {/* ← opción vacía para forzar selección */}
-                                {Object.entries(estadoOptions).map(([val, label]) => (
-                                    <option key={val} value={val}>{label}</option>
-                                ))}
-                            </select>
-                            {fieldErrors.estado && <p className="error-field">{fieldErrors.estado}</p>}  {/* ← error del campo */}
+                                {mostrarDatos ? "Cancelar" : "Modificar"}
+                            </button>
                         </div>
 
-                        {error && <p className="error-message">{error}</p>}
+                    </section>
+                </>
+            )}
 
-                        <button
-                            className="modificar-profile guardar-cambios"
-                            onClick={sendData}
-                            disabled={loading}
-                            style={{ marginTop: '24px', width: '100%' }}
-                        >
-                            {loading ? 'Guardando...' : 'Guardar cambios'}
-                        </button>
-                    </div>
-
-                )}
-
-                <div className="contenedor-editar-botones">
-                    <button
-                        className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
-                        onClick={() => {
-                            setMostrarDatos(!mostrarDatos)
-                            setFieldErrors({})   // ← limpiar errores al cancelar
-                        }}
-                    >
-                        {mostrarDatos ? "Cancelar" : "Modificar"}
-                    </button>
-                </div>
-
-            </section>
         </div>
     )
 }

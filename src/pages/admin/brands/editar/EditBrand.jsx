@@ -4,13 +4,14 @@ import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { updateBrand, getBrand } from "../../../../services/brands"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 
 const EditBrand = () => {
 
 	const { id } = useParams()
 	const navigate = useNavigate()
-
+	const [loadingData, setLoadingData] = useState(true)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState("")
 	const [fieldErrors, setFieldErrors] = useState({})
@@ -92,6 +93,8 @@ const EditBrand = () => {
 
 				setError(error.message)
 
+			} finally {
+				setLoadingData(false)
 			}
 
 		}
@@ -124,62 +127,69 @@ const EditBrand = () => {
 
 		<div className="page-container">
 
-			{!mostrarDatos && (
-				<div className="back-link-container">
-					<button className="link-regresar" onClick={() => navigate(-1)}>
-						Regresar
-					</button>
-				</div>
-			)}
+			{loadingData ? (
+				<Loader text="Cargando informacion de la marca..."></Loader>
+			) : (
 
-			<section className="section-editar">
+				<>
+					{!mostrarDatos && (
+						<div className="back-link-container">
+							<button className="link-regresar" onClick={() => navigate(-1)}>
+								Regresar
+							</button>
+						</div>
+					)}
 
-				{!mostrarDatos ? (
+					<section className="section-editar">
 
-					<>
+						{!mostrarDatos ? (
 
-						<h1 className="titulo-por-h1">
-							Detalles de la marca {nombre}
-						</h1>
+							<>
 
-						<div className="contenedor-campos">
+								<h1 className="titulo-por-h1">
+									Detalles de la marca {nombre}
+								</h1>
 
-							<p><strong>Nombre: </strong>{nombre}</p>
-							<p><strong>País de origen:</strong> {paisOrigen}</p>
+								<div className="contenedor-campos">
+
+									<p><strong>Nombre: </strong>{nombre}</p>
+									<p><strong>País de origen:</strong> {paisOrigen}</p>
+
+								</div>
+
+							</>
+
+						) : (
+
+							<AdminFormEdit
+								titulo="Editar marca"
+								campos={campos}
+								onSendForm={sendData}
+								linkRegresar="/admin/brands"
+								error={error}
+								fieldErrors={fieldErrors}
+								button="Guardar cambios"
+								loading={loading}
+							/>
+
+						)}
+
+						<div className="contenedor-editar-botones">
+
+							<button
+								className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+								onClick={()=>{setMostrarDatos(!mostrarDatos)}}
+							>
+
+								{mostrarDatos ? "Cancelar" : "Modificar"}
+
+							</button>
 
 						</div>
 
-					</>
-
-				) : (
-
-					<AdminFormEdit
-						titulo="Editar marca"
-						campos={campos}
-						onSendForm={sendData}
-						linkRegresar="/admin/brands"
-						error={error}
-						fieldErrors={fieldErrors}
-						button="Guardar cambios"
-						loading={loading}
-					/>
-
-				)}
-
-				<div className="contenedor-editar-botones">
-
-					<button
-						className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
-						onClick={()=>{setMostrarDatos(!mostrarDatos)}}
-					>
-
-						{mostrarDatos ? "Cancelar" : "Modificar"}
-
-					</button>
-
-				</div>
-
-			</section>
+					</section>
+				</>
+			)}
 
 		</div>
 

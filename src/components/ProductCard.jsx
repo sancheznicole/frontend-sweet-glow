@@ -3,11 +3,9 @@ import { createImageURL } from "../services/imagesService"
 import { parsePrice } from "../helpers/json.helpers"
 import { useState, useEffect } from "react"
 import { addToCart } from "../services/cartService"
-import { useNavigate } from "react-router-dom"
 import { removeFromWishList } from "../services/wishlist"
 
 const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categoria, id, product, showDeletion}) => {
-    const navigate = useNavigate()
     const [quantity, setQuantity] = useState(1)
     const [total, setTotal] = useState(quantity*precio)
 
@@ -63,7 +61,7 @@ const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categori
                     </button>
                 </div>
                 <div>
-                    <button onClick={() => {addToCart(product, quantity); navigate("/cart")}}>
+                    <button onClick={() => {addToCart(product, quantity);}}>
                         <span>Agregar al carrito</span> 
                         <span>{parsePrice(total)}</span>
                     </button>

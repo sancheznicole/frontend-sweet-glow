@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { getAllOrSearch, deleteGiftCard } from '../../../services/giftCardService'
 import AdminPanel from "../../../components/admin/AdminPanel"
 import Loader from '../../../components/Loader'
+import { parsePrice } from '../../../helpers/json.helpers'
 
 const GiftCardsIndex = () => {
     const [loading, setLoading] = useState(true)
@@ -37,9 +38,10 @@ const GiftCardsIndex = () => {
                     ? `${t.usuario.nombres} ${t.usuario.apellidos}`
                     : `Usuario #${t.id_usuario}`,
                 estado: t.estado === 'activa' ? 'Activa' : 'Usada',
+                monto: parsePrice(t.monto),
                 // Agrega estas 3 líneas:
                 fecha_expiracion: t.fecha_expiracion ? t.fecha_expiracion.split(" ")[0] : "",
-                fecha_de_uso:     t.fecha_de_uso     ? t.fecha_de_uso.split(" ")[0]     : "",
+                fecha_de_uso:     t.fecha_de_uso != "1000-01-01 00:00:00" ? t.fecha_de_uso.split(" ")[0]  : "No usada",
                 created_at:       t.created_at       ? t.created_at.split(" ")[0]       : "",
             }))
             
