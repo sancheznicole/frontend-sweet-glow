@@ -1,7 +1,7 @@
 
 export const addToWishList = async (product) => {
     try {
-        let saved = localStorage.getItem("cart")
+        let saved = localStorage.getItem("wishlist")
         let list = saved != null ? JSON.parse(saved) : saved
 
        list = {
@@ -21,18 +21,19 @@ export const removeFromWishList = async (id) => {
     try {
         let saved = localStorage.getItem("wishlist");
         let list = saved != null ? JSON.parse(saved) : {};
-
+        
         if (list && list[id]) {
             delete list[id];
         }
-
+        
         if(Object.keys(list).length == 1){
             localStorage.setItem("wishlist", null);
         } else{
             localStorage.setItem("wishlist", JSON.stringify(list));
         }
-
-
+        
+        
+        window.dispatchEvent(new Event("wishlistUpdated"))
         return { valid: true };
     } catch (error) {
         return { valid: false, error: error?.message };

@@ -200,6 +200,11 @@
     .menu-global-container .cart-container{
         width: 60vw;
     }
+
+    /* facturas pagos */
+    .factura-container{
+        width: 80%;
+    }
 }
 
 /* mobile L */
@@ -371,6 +376,36 @@
     .add-to-cart div:last-child button{
         width: 100% !important;
     }
+
+    /* facturas pagos */
+    .factura-container{
+        width: 90%;
+        padding: 20px 5px;
+    }
+    .factura-container h1{
+        font-size: 1.8em;
+    }
+    .factura-container h2{
+        font-size: 17px;
+    }
+    .factura-container .card-factura .cart-product-container{
+        flex-direction: column;
+    }
+    .factura-container .card-factura .cart-product-container .image-container{
+        width: 100%;
+    }
+    .factura-container .card-factura .cart-product-container .info-container{
+        align-items: center;
+        width: 100%;
+    }
+
+    /* searcher */
+    .searcher-container{
+        width: 92vw;
+    }
+    .searcher-container .categories-container, .searcher-container .products-search-results{
+        grid-column: span 2;
+    }
 }
 
 /* mobile m */
@@ -461,6 +496,11 @@
 
     .user-loader h1{
         font-size: 27px;
+    }
+
+    /* facturas y pagos */
+    .factura-container .card-factura .cart-product-container p:nth-child(2){
+        font-size: 11px;
     }
 }
 

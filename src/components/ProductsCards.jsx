@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Loader from './Loader'
 import { Link } from 'react-router-dom'
 
-const ProductsCards = ({ elementsLimit = 6, data = undefined }) => {
+const ProductsCards = ({ elementsLimit = 6, data = undefined, showDeletion = false }) => {
     const [products, setProducts] = useState([])
     const [success, setSuccess] = useState(true)
     const [loading, setLoading] = useState(true)
@@ -43,13 +43,13 @@ const ProductsCards = ({ elementsLimit = 6, data = undefined }) => {
     }
 
     useEffect(() => {
-        if(data){
+        if (data) {
             setProducts(data)
             setLoading(false)
-        }else{
+        } else {
             getContent()
         }
-    }, [])
+    }, [data])
 
     useEffect(() => {
         if(!data) getContent()
@@ -81,7 +81,7 @@ const ProductsCards = ({ elementsLimit = 6, data = undefined }) => {
                                                 precio={p?.precio}
                                                 titulo={p?.nombre}
                                                 stock={p?.stock}
-                                                showDeletion={!data ? false : true}
+                                                showDeletion={showDeletion}
                                                 referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
                                                 product={p}
                                             ></ProductCard>

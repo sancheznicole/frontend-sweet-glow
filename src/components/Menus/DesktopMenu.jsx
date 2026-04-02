@@ -1,14 +1,20 @@
 import { Link } from "react-router-dom"
 import CartPage from "../../pages/cart/CartPage"
 import { useState } from "react"
+import Searcher from "../Searcher"
 
 const DesktopMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) => {
     const [showCart, setShowCart] = useState(false)
+    const [showSearch, setShowSearch] = useState(false)
 
     return (
         <div className="menu-global-container">
             {showCart && (
                 <CartPage setShowCart={setShowCart} showCart={showCart} />
+            )}
+
+            {showSearch && (
+                <Searcher></Searcher>
             )}
 
             <div className={`phrase-section`}>
@@ -48,11 +54,11 @@ const DesktopMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
                                 </Link>
                             )}
 
-                            <Link to={"/search"} title="Buscador">
+                            <button onClick={() => {setShowSearch(!showSearch)}} title="Buscador" className="cart-btn-header">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
-                            </Link>
+                            </button>
 
-                            <button to={""} title="Carrito de compras" className="cart-btn-header"
+                            <button title="Carrito de compras" className="cart-btn-header"
                                 onClick={() => {setShowCart(!showCart)}}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-shopping-bag"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg>

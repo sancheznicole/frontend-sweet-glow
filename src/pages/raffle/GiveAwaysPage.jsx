@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { getAllFacturas, createGiftRegistration } from '../../services/giftRegistrationService'
 import { useAuth } from '../../contexts/AuthContext'
+import { useNavigate } from "react-router-dom"
 
 const GiveAwaysPage = () => {
 
-    const { user } = useAuth()
-
+    const { isAuthenticated, user } = useAuth()
+    const navigate = useNavigate()
     const [modalAbierto, setModalAbierto] = useState(false)
     const [facturas, setFacturas]         = useState([])
     const [facturaId, setFacturaId]       = useState('')
@@ -15,6 +16,8 @@ const GiveAwaysPage = () => {
     const [exito, setExito]               = useState(false)
 
     const abrirModal = async () => {
+        if(!isAuthenticated) return navigate("/login")
+
         setError('')
         setExito(false)
         setFacturaId('')

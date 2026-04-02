@@ -3779,7 +3779,6 @@ button{
     height: 100vh;
     width: 40vw;
     right: 0;
-    gap: 20px;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
@@ -3836,4 +3835,245 @@ button{
 }
 .menu-global-container .cart-container .product-container .info{
     width: 40%;
+}
+
+/* facturas y pagos */
+.factura-container{
+    background-color: white;
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    margin: 0 auto;
+}
+.factura-container .card-factura{
+    width: 80%;
+}
+.factura-container .card-factura .cart-product-container{
+    background-color: #f9f1f4;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.card-factura .products-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.factura-container .card-factura .cart-product-container .image-container{
+    width: 20%;
+}
+.factura-container .card-factura .cart-product-container .info-container{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    width: 70%;
+    padding: 5px;
+}
+.factura-container .card-factura .cart-product-container .image-container img{
+    width: 100%;
+}
+.factura-container .card-header{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.factura-container .card-footer{
+    text-align: right;
+    margin-top: 5px;
+    padding: 10px;
+    color: palevioletred;
+    font-size: 30px;
+    font-weight: bold;
+}
+.factura-container .products-title{
+    margin: 10px 0px;
+}
+.download-bill-factura{
+    margin: 20px;
+    font-size: 15px;
+    padding: 10px;
+    font-weight: bold;
+    border: 1px solid black;
+    display: flex;
+    margin: 0 auto;
+    transition: all 300ms ease-in-out;
+}
+.download-bill-factura:hover{
+    background-color: #fde6ec;
+}
+.card-footer-buttons{
+    display: flex;
+    justify-content: center !important;
+    align-items: center;
+}
+.card-footer-buttons button{
+    background-color: transparent;
+    border: none;
+    transition: all 300ms ease-in-out;
+}
+.card-footer-buttons button:hover{
+    border-bottom: 1px solid black;
+}
+
+.filled-cart .actions-buttons-container button{
+    background: transparent;
+    border: 1px solid #7a5a64;
+    border-radius: 5px;
+}
+.giftcard-input-search input{
+    margin: 3px;
+    padding: 5px;
+    width: 90%;
+}
+.giftcard-title{
+    margin: 5px;
+}
+
+/* reseñas detalles del producto */
+.reviews-details-container{
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+.reviews-details-container button{
+    border: none;
+    background: transparent;
+    margin: 10px;
+    color: white;
+    border: 1px solid #393939;
+    background-color: #393939;   
+    transition: all 300ms ease-in-out;
+    font-size: 15px;
+    font-weight: bolder;
+    padding: 10px;
+    border-radius: 3px;
+}
+.reviews-details-container button:hover{
+    background-color: transparent;
+    color: #393939;
+}
+.reviews-details-container input{
+    border: 1px solid #393939 !important;
+}
+.not-reviews-container{
+    text-align: center;
+}
+.reviews-details-container .secondary-btn{
+    background: transparent;
+    color: #393939;
+}
+.reviews-details-container .secondary-btn:hover{
+    background: #393939;
+    color: white;
+}
+.reviews-details-container .highlight{
+    margin: 10px;
+}
+.details-reviews-container{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+.estrellas-display-details{
+    margin: 10px;
+}
+
+/* inscripciones regalo */
+.giveaways-btn{
+    margin: 0 auto;
+}
+
+/* searcher */
+.searcher-container {
+    padding: 20px;
+    margin: auto;
+    position: fixed;
+    top: 0;
+    padding-top: 22vh;
+    min-height: 80vh;
+    z-index: 10;
+    background: white;
+    width: 97vw;
+    overflow-y: scroll;
+}
+
+/* BARRA */
+.main-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    background: #fff;
+}
+
+.main-bar-container input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+    stroke: #666;
+}
+
+/* CONTENIDO */
+.results-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 20px;
+}
+
+/* FILTROS */
+.categories-container {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    height: fit-content;
+}
+
+.categories-container h3 {
+    margin-bottom: 10px;
+}
+
+.categories-container label {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+/* PRODUCTOS */
+.products-search-results {
+    gap: 20px;
+}
+
+.cards-searcher-container .products-cards-container{
+    grid-template-columns: repeat(3, 1fr);
+}
+.cards-searcher-container{
+    overflow-y: scroll;
+    max-height: 100%;
+}
+.products-search-results .initial-title{
+    text-align: center;
+    font-weight: bolder;
+    font-size: 18px;
+}
+.products-search-results .title{
+    text-align: center;
 }

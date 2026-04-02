@@ -82,6 +82,11 @@ import AwardedIndex from "../pages/admin/premiados/AwardedIndex"
 import CreateAwarded from "../pages/admin/premiados/crear/CreateAwarded"
 import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
 
+// pagos
+import SuccessPayment from "../pages/payments/SuccessPayment"
+import FailedPayment from "../pages/payments/FailedPayment"
+import PendingPayment from "../pages/payments/PendingPayment"
+
 
 export const router = createBrowserRouter([
   {
@@ -435,6 +440,11 @@ export const router = createBrowserRouter([
           <ProfilePage />
         </ProtectedRoute>
       },
+
+      // pagos
+      { path: '/payment/success', element: <SuccessPayment /> },
+      { path: '/payment/pending', element: <PendingPayment /> },
+      { path: '/payment/failed', element: <FailedPayment /> },
 
       { path: 'search', element: <SearchPage /> },
 

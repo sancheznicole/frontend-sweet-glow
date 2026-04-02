@@ -2,12 +2,13 @@ import { useState, useEffect } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getReview, updateReview } from "../../../../services/reviewsService"
+import Loader from "../../../../components/Loader"
 
 const EditReview = () => {
 
     const { id } = useParams()
     const navigate = useNavigate()
-
+    const [loadingData, setLoadingData] = useState(true)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [fieldErrors, setFieldErrors] = useState({})   // ← nuevo
@@ -45,6 +46,8 @@ const EditReview = () => {
                 )
             } catch (err) {
                 setError(err.message)
+            } finally {
+                setLoadingData(false)
             }
         }
         fetchReview()
@@ -84,95 +87,101 @@ const EditReview = () => {
 
     return (
         <div className="page-container">
-
-            {!mostrarDatos && (
-                <div className="back-link-container">
-                    <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
-                </div>
-            )}
-
-            <section className="section-editar">
-
-                {!mostrarDatos ? (
-
-                    <>
-                        <h1 className="titulo-por-h1">Detalles de la reseña</h1>
-
-                        <div className="contenedor-campos">
-                            <strong><p>{productoNombre}</p></strong>
-                            <p>{usuarioNombre}</p>
-                            <p>
-                                {'★'.repeat(calificacion)}{'☆'.repeat(5 - calificacion)}{' '}
-                                ({calificacion}/5) — {etiqueta[calificacion]}
-                            </p>
+            {loadingData ? (
+                <Loader text="Cargando informacion de la reseña..."></Loader>
+            ) : (
+                <>
+                    {!mostrarDatos && (
+                        <div className="back-link-container">
+                            <button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
                         </div>
-                    </>
+                    )}
 
-                ) : (
+                    <section className="section-editar">
 
-                    <div className="stepper-panel">
-                        <h1 className="titulo-por-h1">Editar reseña</h1>
+                        {!mostrarDatos ? (
 
-                        <div className="contenedor-campos" style={{ marginBottom: '24px' }}>
-                            <p><strong>Producto:</strong> {productoNombre}</p>
-                            <p><strong>Usuario:</strong> {usuarioNombre}</p>
-                        </div>
+                            <>
+                                <h1 className="titulo-por-h1">Detalles de la reseña</h1>
 
-                        <div className="stepper-estrellas">
-                            <div className="estrellas-display">
-                                {stars.map(s => (
-                                    <span
-                                        key={s}
-                                        className={`estrella ${s <= calificacion ? 'activa' : ''}`}
-                                        onClick={() => {
-                                            setCalificacion(s)
-                                            setFieldErrors({})   // ← limpiar error al seleccionar
-                                        }}
-                                    >
-                                        ★
-                                    </span>
-                                ))}
+                                <div className="contenedor-campos">
+                                    <strong><p>{productoNombre}</p></strong>
+                                    <p>{usuarioNombre}</p>
+                                    <p>
+                                        {'★'.repeat(calificacion)}{'☆'.repeat(5 - calificacion)}{' '}
+                                        ({calificacion}/5) — {etiqueta[calificacion]}
+                                    </p>
+                                </div>
+                            </>
+
+                        ) : (
+
+                            <div className="stepper-panel">
+                                <h1 className="titulo-por-h1">Editar reseña</h1>
+
+                                <div className="contenedor-campos" style={{ marginBottom: '24px' }}>
+                                    <p><strong>Producto:</strong> {productoNombre}</p>
+                                    <p><strong>Usuario:</strong> {usuarioNombre}</p>
+                                </div>
+
+                                <div className="stepper-estrellas">
+                                    <div className="estrellas-display">
+                                        {stars.map(s => (
+                                            <span
+                                                key={s}
+                                                className={`estrella ${s <= calificacion ? 'activa' : ''}`}
+                                                onClick={() => {
+                                                    setCalificacion(s)
+                                                    setFieldErrors({})   // ← limpiar error al seleccionar
+                                                }}
+                                            >
+                                                ★
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    {/* ← etiqueta de calificación actual */}
+                                    {calificacion > 0 && (
+                                        <p className="calificacion-texto">
+                                            ({calificacion}/5) — {etiqueta[calificacion]}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* ← error del campo */}
+                                {fieldErrors.calificacion && (
+                                    <p className="error-field">{fieldErrors.calificacion}</p>
+                                )}
+
+                                {error && <p className="error-message">{error}</p>}
+
+                                <button
+                                    className="cancelar-profile guardar-cambios"
+                                    onClick={sendData}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Guardando...' : 'Guardar cambios'}
+                                </button>
                             </div>
 
-                            {/* ← etiqueta de calificación actual */}
-                            {calificacion > 0 && (
-                                <p className="calificacion-texto">
-                                    ({calificacion}/5) — {etiqueta[calificacion]}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* ← error del campo */}
-                        {fieldErrors.calificacion && (
-                            <p className="error-field">{fieldErrors.calificacion}</p>
                         )}
 
-                        {error && <p className="error-message">{error}</p>}
+                        <div className="contenedor-editar-botones">
+                            <button
+                                className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
+                                onClick={() => {
+                                    setMostrarDatos(!mostrarDatos)
+                                    setFieldErrors({})   // ← limpiar errores al cancelar
+                                }}
+                            >
+                                {mostrarDatos ? "Cancelar" : "Modificar"}
+                            </button>
+                        </div>
 
-                        <button
-                            className="cancelar-profile guardar-cambios"
-                            onClick={sendData}
-                            disabled={loading}
-                        >
-                            {loading ? 'Guardando...' : 'Guardar cambios'}
-                        </button>
-                    </div>
+                    </section>
+                </>
+            )}
 
-                )}
-
-                <div className="contenedor-editar-botones">
-                    <button
-                        className={mostrarDatos ? "cancelar-profile cancelar-tarjeta" : "modificar-profile"}
-                        onClick={() => {
-                            setMostrarDatos(!mostrarDatos)
-                            setFieldErrors({})   // ← limpiar errores al cancelar
-                        }}
-                    >
-                        {mostrarDatos ? "Cancelar" : "Modificar"}
-                    </button>
-                </div>
-
-            </section>
         </div>
     )
 }

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { getUserData } from "../../services/authService";
 import { getAllGiftCards } from "../../services/giftCardService";
 import axios from 'axios'
+import { useAuth } from "../../contexts/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -29,10 +31,11 @@ const useToast = () => {
 }
 
 const GiftCardPage = () => {
-    const [usuario, setUsuario] = useState(null)
 
+    const [usuario, setUsuario] = useState(null)
     const [montoSeleccionado, setMontoSeleccionado] = useState(null)
     const [montoCustom, setMontoCustom] = useState('')
+    const navigate = useNavigate()
     const [comprando, setComprando] = useState(false)
 
     const [misTarjetas, setMisTarjetas] = useState([])
@@ -82,6 +85,8 @@ const GiftCardPage = () => {
         }
     }
 
+    console.log(usuario)
+
     // ── Comprar tarjeta ───────────────────────────────────────────────────────
     const handleComprar = async () => {
         if (!montoFinal || montoFinal < 1000) {
@@ -89,7 +94,7 @@ const GiftCardPage = () => {
             return
         }
         if (!usuario) {
-            show('Debes iniciar sesión para obtener una tarjeta', 'error')
+            navigate("/login")
             return
         }
         try {
@@ -209,7 +214,11 @@ const GiftCardPage = () => {
                                 placeholder="Ej: 75000"
                                 value={montoCustom}
                                 onChange={(e) => {
-                                    setMontoCustom(e.target.value)
+                                    let value = e.target.value
+
+                                    if (value.startsWith('-')) return
+
+                                    setMontoCustom(value)
                                     setMontoSeleccionado(null)
                                 }}
                             />
