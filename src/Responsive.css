@@ -205,6 +205,13 @@
     .factura-container{
         width: 80%;
     }
+
+    .categories-page .categories-container{
+        grid-column: span 2;
+    }
+    .categories-page .products-search-results{
+        grid-column: span 2;
+    }
 }
 
 /* mobile L */
@@ -406,6 +413,13 @@
     .searcher-container .categories-container, .searcher-container .products-search-results{
         grid-column: span 2;
     }
+
+    .categories-page{
+        padding: 0;
+    }
+    .categories-page .searcher-container{
+        width: 80%;
+    }
 }
 
 /* mobile m */
@@ -549,5 +563,9 @@
     /* product details */
     .add-to-cart div:last-child button{
         font-size: 12px !important;
+    }
+    .outlet-container{
+        padding-left: 0;
+        padding-right: 0;
     }
 }

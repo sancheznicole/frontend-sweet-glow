@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { getProductosByCategoria, getMarcasByCategoria } from '../../services/categoriesService'
 
 const API_URL = import.meta.env.VITE_API_URL
+const SOTAGE_URL = import.meta.env.VITE_STORAGE_URL
 
 const CATEGORY_BANNERS = {
     1:  '/assets/kylie.jpeg',
@@ -17,6 +18,7 @@ const CategoryProducts = ({ categoria, onVolver }) => {
     const [marcaSeleccionada, setMarcaSeleccionada] = useState('')
     const [orden, setOrden] = useState('nombre_asc')
     const [loading, setLoading] = useState(true)
+    console.log(productos)
 
     useEffect(() => {
         getMarcasByCategoria(categoria.id_categoria).then(res => {
@@ -36,7 +38,7 @@ const CategoryProducts = ({ categoria, onVolver }) => {
     const getImagenUrl = (producto) => {
         const filename = producto.imagenes?.[0]?.filename
         if (!filename) return null
-        return `${API_URL}/storage/${filename}`
+        return `${SOTAGE_URL}/${filename}`
     }
 
     const getColor = (producto) => {
