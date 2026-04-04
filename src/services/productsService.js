@@ -168,3 +168,44 @@ export async function searcherForProductsAndFilters(descuento, tendencia, regalo
         return { valid: false, error: error?.message }
     }
 }
+
+export async function sarchByBrandAndCategory(brands, categories, limit) {
+    try {
+        const res = await axios.get(`${API_URL}/products/byBrandsAndCategories`, {
+            params: {
+                brands,
+                categories,
+                limit
+            }
+
+        })
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function handleReduceProductsStock(order_invoice) {
+    try {
+        const res = await axios.post(`${API_URL}/products/handle-reduce-stock`, {
+            order_invoice 
+        })
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }   
+}

@@ -78,7 +78,7 @@ const ProductosIndex = () => {
 			}))
 
 			setData(products)
-			setLastPage(Number(res?.products?.lastPage))
+			setLastPage(Number(res?.products?.last_page))
 
 		} catch (error) {
 			console.log(error?.message)
@@ -127,7 +127,7 @@ const ProductosIndex = () => {
 					limit={limit}
 					setLimit={setLimit}
 					setPage={setPage}
-					page={setPage}
+					page={page}
 					lastPage={lastPage}
 					search={search}
 					setSearch={setSearch}

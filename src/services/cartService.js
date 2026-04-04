@@ -138,7 +138,7 @@ export const addToCart = async (product, quantity) => {
        }
 
        localStorage.setItem("cart", JSON.stringify(cart))
-
+       window.dispatchEvent(new Event("cartUpdated"))
         return { valid: true }
     } catch (error) {
         return { valid: false, error: error?.message }
