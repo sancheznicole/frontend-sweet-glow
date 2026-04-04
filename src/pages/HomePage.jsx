@@ -9,44 +9,49 @@ const HomePage = () => {
         <div className='page-container'>
             {/* imagen */}
             <div className="main-banner">
-                <h1>Cosmic Universe</h1>
-                <p>Limpio, fresco y cremoso - descubre nuestras fragancias cosmicas</p>
-                <p>A demás personaliza el empaquetado de cualquier tamaño de nuestros perfumes</p>
+                <div className="contenedor-desc-home">
+                    <h2>Ya disponible!</h2>
+                    <h1 className="h1-home">Hair & Body Mists</h1>
+                    <p>“Nuestros sprays para cabello y cuerpo inspirados en postres,<p>
+                    </p>los favoritos de nuestros clientes,</p>
+                    <p>ahora llegan para acompañarte a donde vayas.”</p>
+                </div>
             </div>
 
             <div className="view-cleaner-important-div"></div>
 
+            {/* ultimos productos */}
+            <h2 className="titulo-por-h2">Nuestros ultimos productos</h2>
+            <ProductsCards 
+            ></ProductsCards>
+
             {/* productos en tendencia */}
-            <h1 className="page-title">Nuestros productos en tendencia</h1>
+            <h2 className="titulo-por-h2">Nuestros productos en tendencia</h2>
             <ProductsCarousel tendency={true}></ProductsCarousel>
 
             {/* productos en descuento */}
-            <h1 className="page-title">Nuestros productos en descuento</h1>
+            <h2 className="titulo-por-h2">Nuestros productos en descuento</h2>
             <ProductsCarousel discount={true}></ProductsCarousel>
-
-            {/* ultimos productos */}
-            <h1 className="page-title">Nuestros ultimos productos</h1>
-            <ProductsCards 
-            ></ProductsCards>
 
             {/* banner publicitario */}
 
             {/* about  */}
-            <h1 className="page-title">Más sobre Sweet glow</h1>
+            <h2 className="titulo-por-h2">Look icónico </h2>
             <div className="about-sweet-glow">
                 <div>
-                    <img src="assets/esa_qcha.webp" alt="Sweet glow" />
+                    <img src="assets/kylie-look.png" alt="Sweet glow" />
                 </div>
                 <div>
-                    <h1>kylie's oscars look</h1>
-                    <p>
-                        recreate kylie’s oscars glam featuring our best-selling hybrid blush and a new cool-toned precision pout lip liner.
+                    <p className="titulo-por-h2">Kylie y Stassie</p>
+                    <p className="titulo-por-h2">estilo icónico sin esfuerzo</p>
+                    <p className="descripcion-look">
+                        Inspírate en el look natural y luminoso de Kylie y Stassie para lograr un acabado relajado pero memorable. Realza tu piel con nuestro colorete híbrido más vendido y define tus labios con el delineador de precisión en tonos fríos para un resultado suave, fresco y perfectamente equilibrado.    
                     </p>
                 </div>
             </div>
 
             {/* gallery */}
-            <h1 className="page-title">Galería</h1>
+            <h2 className="titulo-por-h2">Galería icónica de nuestras marcas</h2>
             <div className="gallery">
                 <div className="big-photo"><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
                 <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>

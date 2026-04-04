@@ -20,7 +20,7 @@ const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
             )}
 
             <div className={`phrase-section`}>
-                <p> Disfrute de nuestras excelentes tarifas </p>
+                <p> Brilla con dulzura, resplandece con Sweet Glow </p>
             </div>
 
             <header id="header" className={`${bgWhite == true ? 'bg-white' : ''} ${ isTransparent == true ? '' : 'short-header' } ${ fixed == true ? 'fixed' : 'page-container' }`}>

@@ -78,6 +78,13 @@ const Searcher = () => {
                     <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                     <path d="M21 21l-6 -6" />
                 </svg>
+
+                {search && (
+                    <button className="clear-search" onClick={handleClearSearch}>
+                        X
+                    </button>
+                )}
+
             </div>
 
             {/* Resultados */}
@@ -126,7 +133,7 @@ const Searcher = () => {
 
                 {/* Productos */}
                 <div className="products-search-results">
-                    {showInTendencyInitialData && <p className="initial-title">Productos en tendencia</p>}
+                    {showInTendencyInitialData && <p className="titulo-search">Productos en tendencia</p>}
                     {loading && <p className="title">Cargando...</p>}
 
                     {!loading && products.length === 0 && search && (
