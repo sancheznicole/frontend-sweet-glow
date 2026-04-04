@@ -55,12 +55,14 @@ const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categori
                     <span className="reviews-count">({reviewsCount})</span>
                 </div>
 
-                <p>
+                <div className="title-price">
+                    <p>
                     {titulo}
-                </p>
-                
-                <div>
-                    <p>{parsePrice(precio)}</p>
+                    </p>
+                    
+                    <div>
+                        <p>{parsePrice(precio)}</p>
+                    </div>
                 </div>
             </div>
 
