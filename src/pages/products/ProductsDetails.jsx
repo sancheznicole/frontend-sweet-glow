@@ -33,6 +33,11 @@ const ProductsDetails = () => {
     const [reviewError, setReviewError] = useState("")
     const [reviewAverage, setReviewAverage] = useState(0)
 
+    const [tendencia, setTendencia] = useState(0)
+    const [descuento, setDescuento] = useState(0)
+    const [prod_regalo, setProd_regalo] = useState(0)
+    const [premio, setPremio] = useState(0)
+
     const getData = async () => {
         try {
             setLoading(true)
@@ -43,6 +48,10 @@ const ProductsDetails = () => {
             }
 
             setProduct(res?.product)
+            setTendencia(res?.product?.tendencia)
+            setDescuento(res?.product?.descuento)
+            setProd_regalo(res?.product?.prod_regalo)
+            setPremio(res?.product?.premio)
         } catch (error) {
             console.log(error.message)
         }
@@ -108,7 +117,7 @@ const ProductsDetails = () => {
         navigate("/wishlist")
     }
 
-    console.log(reviewAverage)
+    console.log(product)
 
     useEffect(() => {
         const promedio = reviews.length
@@ -210,6 +219,15 @@ const ProductsDetails = () => {
 
                                 <p>({reviewAverage.toFixed(1)} / 5)</p>    
                             </p>
+
+                            {(premio == 1 || descuento == 1 || prod_regalo == 1 || tendencia == 1) && (
+                                <div className="tags-container">
+                                    {descuento == 1 && <span className="badge">En Descuento</span>}
+                                    {tendencia == 1 && <span className="badge">En Tendencia</span>}
+                                    {premio == 1 && <span className="badge">Premio</span>}
+                                    {prod_regalo == 1 && <span className="badge">Regalo</span>}
+                                </div>
+                            )}
 
 
                             <div className="add-to-cart">

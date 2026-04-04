@@ -5,6 +5,7 @@ import { getInvoiceOrders } from '../../services/facturaPedidosService'
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from '../../helpers/json.helpers'
 import Loader from "../../components/Loader"
+import { handleReduceProductsStock } from '../../services/productsService'
 
 const SuccessPayment = () => {
     const [id_factura, setId_Factura] = useState(undefined)
@@ -97,6 +98,15 @@ const SuccessPayment = () => {
         }
     }, [status, navigate]);
 
+    async function handleReduceStock(){
+        await handleReduceProductsStock(factura)
+    }
+
+    useEffect(() => {
+        if(status != "approved") return
+        if(typeof factura == "object") handleReduceStock()
+    }, [factura])
+
     console.log(factura)
 
     return (
@@ -123,9 +133,10 @@ const SuccessPayment = () => {
                                                 <img src={createImageURL(el?.producto?.imagenes[0]?.filename)} alt="" />
                                             </div>
                                             <div className='info-container'>
-                                                <p><strong>{el?.producto?.nombre}</strong></p>
+                                                <h2><strong>{el?.producto?.nombre}</strong></h2>
                                                 <p>color: {el?.producto?.referencia_producto?.color} | tamaño {el?.producto?.referencia_producto?.tamano}</p>
                                                 <p><strong>{el?.producto?.categoria?.nombre}</strong> | {el?.producto?.marca?.nombre}</p>
+                                                <p>{el?.cantidad} Unidad{el?.cantidad > 1 ? "es" : ''}</p>
                                             </div>
                                         </div>
                                     )
