@@ -9,7 +9,6 @@
 @font-face{
     font-family: TT-Chocolate;
     src: url("/fonts/TTChocolatesTrialDemiBold.otf");
-    font-weight: 100;
 }
 *{
     font-family: TT-Chocolate;
@@ -632,11 +631,18 @@ footer {
 /*pagina sobre nosotros*/
 
 .section-sobre-nosotros{
+    .image-container{
+        height: auto;
+        transform: translateX(-2%);
+        position: relative;
+        width: 100vw;
+    }
     img{
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 45vh;
+        height: 100vh;
+        transform: translateY(-20%);
     }
     
     div{
@@ -648,8 +654,8 @@ footer {
         align-items: center;
 
         img{
-            height: 28vh;
-            width: 28vh;
+            height: 100%;
+            width: 100%;
         }
 
         h3{
@@ -2023,6 +2029,16 @@ footer {
     text-align: center;
 }
 
+.empty-cart {
+    h1{
+        font-size: 20px;
+    }
+
+    a{
+        color: #393939;
+    }
+}
+
 .cart-container .empty-cart a,
 .cart-container .empty-cart p {
     margin: 20px;
@@ -2882,7 +2898,7 @@ button {
     display: flex;
     align-items: center;
     font-size: 13px;
-    margin-top: -42px;
+    margin-top: -30px;
 }
 
 .star {
@@ -2908,9 +2924,10 @@ button {
     position: relative;
 }
 
+
 .products-cards-container{
     display: grid;
-    gap: 20px;
+    gap: 42px;
     grid-template-columns: repeat(4, 1fr);
 
     .proyect-card{
@@ -2945,7 +2962,7 @@ button {
             margin-right: 6px;
         }
 
-        .main-content div:last-child p:last-child{
+        .main-content div:last-child p:first-child{
             font-weight: 900; 
             font-size: 18px;
         }
@@ -2965,17 +2982,18 @@ button {
         }
 
         .main-content{
-            height: 70px;
+            height: 85px;
             max-width: 95%;
             z-index: +1;
             background-color: white;
-            transform: translateY(0);
+            transform: translateY(20%);
             bottom: 0px;
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: start;
             justify-content: center;
+            padding-top: 15px;
         }
 
         .main-content .title-price{
@@ -3063,11 +3081,11 @@ button {
     }
     
     .proyect-card:hover .main-content {
-        transform: translateY(-110%);
+        transform: translateY(-68%);
     }
 
     .proyect-card:hover .hidden-content {
-        transform: translateY(-180%);
+        transform: translateY(-226%);
     }
 
     .proyect-card:hover .second-hidden-content {
@@ -3546,40 +3564,48 @@ button{
     margin: 0 auto;
 }
 .payment-card{
+    width: 80%;
     background-color: white;
-    border-radius: 5px;
     padding: 10px 20px;
     text-align: center;
     gap: 10px;
     display: flex;
     flex-direction: column;
     padding-bottom: 30px;
+    border-top: 1px solid #e7dae2;
 }
+
 .payment-card h1{
     width: 100%;
-    border-bottom: 1px solid black;
+    font-size: 20px;
+}
+
+.delete-cart-btn{
+    border: 1px solid #393939;
+    border-radius: 5px;
+    background-color: #393939;
+    color: white;
 }
 .payment-card button{
     padding: 10px;
     font-size: 18px;
-    font-weight: bolder;
-    border: 1px solid black;
-    background-color: transparent;
+    border: 1px solid #393939;
     cursor: pointer;
-    transition: 200ms all ease-in-out;
-}
-
-.payment-card button:hover{
-    background-color: #f7e9ed;
 }
 
 .payment-card .pay-btn{
-    background-color: black;       
-    color: white;
+    border: 1px solid #393939;   
+    background-color: transparent;    
+    color: black;
+    border-radius: 5px;
+    font-size: 15px;
 }
 
-.payment-card.pay-btn:hover{
-    background-color: #333;
+.payment-card .pay-btn:hover{
+    border: 1px solid #393939;  
+    background-color: #393939;     
+    color: white;
+    border-radius: 5px;
 }
 
 .confirmation-card{
@@ -3593,10 +3619,13 @@ button{
 .confirmation-card ul{
     text-align: left;
 }
+
 .confirmation-card .pay-bnt{
     display: block;
     width: 50%;
 }
+
+
 .search-registers-input{
     width: 81%;
     margin: 0 auto;
@@ -3873,6 +3902,24 @@ button{
 /* .section-admin-panel .contenedor-agregar-registro .link-regresar{
     display: none;
 } */
+
+.remove-cart{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 5px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: 7px;
+    margin-top: 5px;
+        button{
+            border: none;
+            background-color: transparent;
+            color: #393939;
+            border-bottom: #393939;
+        }
+}
+
 .contenedor-agregar-registro .link-regresar{
     display: none;
 }
@@ -3904,16 +3951,28 @@ button{
     position: fixed;
     z-index: 100;
     height: 100vh;
-    width: 40vw;
+    width: 30vw;
     right: 0;
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
 }
+
+.filled-cart{
+    h1{
+        color: black;
+        font-size: 18px;
+    }
+
+    p{
+        width: 100px;
+    }
+}
+
 .menu-global-container .cart-container .filled-cart{
     width: 80%;
-    padding: 10px;
 }
+
 .btn-close-cart-container{
     padding: 10px;
     display: flex;
@@ -3927,20 +3986,24 @@ button{
     float: right;
 }
 .menu-global-container .cart-container .product-container{
-    border: 1px solid gray;
+    border: 1px solid #e7dae2;
     border-radius: 5px;
-    margin: 10px 0px;
+    margin: 30px 0px;
     display: flex;
     gap: 10px;
     /* justify-content: space-between; */
 }
 .menu-global-container .cart-container .product-container .image-container{
     aspect-ratio: 1 / 1;
-    width: 30%;
+    margin-top: 3%;
+    margin-left: 15px;
+    width: 25%;
+    height: 50%;
+    overflow: hidden;
+    border-radius: 5px;
 }
 .menu-global-container .cart-container .product-container .image-container img{
-    min-width: 100%;
-    height: 100%;
+    width: 100%;
 }
 .menu-global-container .cart-container .product-container .product-details-cart{
     display: flex;
@@ -3952,11 +4015,35 @@ button{
 .menu-global-container .cart-container .product-container .quantities-container{
     display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: start;
     right: 0;
+    margin-right: 7px;
 }
+
+/*botones de cantidad en carrito*/
+.actions-buttons-container{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-left: auto;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 35%;
+    height: 30px;
+    margin-bottom: 5px;
+
+    button{
+       border: none !important;
+       font-size: 15px !important;
+    }
+
+    p{
+        width: auto;
+        font-size: 13px;
+    }
+}
+
 .menu-global-container .cart-container .product-container .actions-buttons-container{
-    width: 50%;
     display: flex;
     justify-content: space-evenly;
 }
@@ -4053,10 +4140,15 @@ button{
 .giftcard-input-search input{
     margin: 3px;
     padding: 5px;
-    width: 90%;
+    width: 95%;
+    border-radius: 5px;
+    border: 1px solid #393939;
+    height: 30px;
+    outline: none;
 }
 .giftcard-title{
     margin: 5px;
+
 }
 
 /* reseñas detalles del producto */
