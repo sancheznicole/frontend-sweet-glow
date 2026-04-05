@@ -5,6 +5,15 @@
     src: url("/fonts/HeadingNowTrial-65Medium.ttf");
     font-weight: 100;
 }
+
+@font-face{
+    font-family: TT-Chocolate;
+    src: url("/fonts/TTChocolatesTrialDemiBold.otf");
+    font-weight: 100;
+}
+*{
+    font-family: TT-Chocolate;
+}
 body{
     overflow-x: hidden;
 }
@@ -1155,6 +1164,9 @@ footer {
     width: 100%;
     text-align: center;
 }
+.user-loader h1{
+    font-family: TT-Chocolate;
+}
 
 /* STEPPER */
 
@@ -1687,14 +1699,13 @@ footer {
 
 .giveaways-page {
     padding: 60px 40px 80px;
-    background-color: #fdf7f9;
 }
 
 .giveaways-split {
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 560px;
-    max-width: 1100px;
+    width: 100%;
     margin: 0 auto;
     border-radius: 16px;
     overflow: hidden;
@@ -1747,8 +1758,8 @@ footer {
 }
 
 .giveaways-titulo {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(40px, 4vw, 56px);
+    /* font-size: clamp(40px, 4vw, 56px); */
+    font-size: 40px;
     font-weight: 300;
     line-height: 1.08;
     color: #b3848f;
@@ -2195,6 +2206,8 @@ button {
     gap: 0;
     min-height: 520px;
     align-items: stretch;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 @media (max-width: 768px) {
@@ -2341,11 +2354,12 @@ button {
 }
 
 .gc-hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(28px, 3.5vw, 44px);
+    font-family: TT-Chocolate;
+    /* font-size: clamp(28px, 3.5vw, 44px); */
+    font-size: 40px;
     font-weight: 300;
     line-height: 1.15;
-    color: #3a3a3a;
+    color: #b3848f;
     text-transform: uppercase;
     margin: 0 0 14px;
     letter-spacing: 1px;
@@ -2388,19 +2402,18 @@ button {
 .gc-pill {
     padding: 8px 16px;
     border-radius: 100px;
-    border: 1.5px solid #e7dae2;
+    border: 1.5px solid #b3848f; 
     background: white;
     font-family: 'Jost', sans-serif;
     font-size: 13px;
     font-weight: 400;
-    color: #888;
+    color: #393939;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .gc-pill:hover {
     border-color: #b3848f;
-    color: #b3848f;
 }
 
 .gc-pill--active {
@@ -2430,12 +2443,12 @@ button {
     width: 100%;
     box-sizing: border-box;
     padding: 11px 14px 11px 28px;
-    border: 1.5px solid #e7dae2;
+    border: 1.5px solid #b3848f;
     border-radius: 8px;
     background: white;
     font-family: 'Jost', sans-serif;
     font-size: 14px;
-    color: #3a3a3a;
+    color: #393939;
     outline: none;
     transition: border-color 0.2s;
 }
@@ -2450,7 +2463,7 @@ button {
 
 /* ── Caja resumen ─────────────────────────────────────────────── */
 .gc-summary-box {
-    border: 1.5px solid #f0e4e8;
+    border: 1.5px solid #b3848f;
     border-radius: 10px;
     padding: 16px 20px;
     margin: 20px 0 16px;
@@ -2475,7 +2488,7 @@ button {
 }
 
 .gc-summary-row strong {
-    color: #b3848f;
+    color: #393939;
     font-weight: 500;
 }
 
@@ -2484,9 +2497,9 @@ button {
     width: 100%;
     padding: 13px;
     border-radius: 6px;
-    border: 1px solid #b3848f;
-    background: #b3848f;
-    color: white;
+    border: 1px solid #393939;
+    background: transparent;
+    color: #393939;
     font-family: 'Jost', sans-serif;
     font-size: 13px;
     font-weight: 500;
@@ -2497,8 +2510,8 @@ button {
 }
 
 .gc-btn-primary:hover {
-    background: #a0526e;
-    border-color: #a0526e;
+    background: #393939;
+    color: white;
 }
 
 .gc-btn-primary:disabled {
@@ -4304,4 +4317,31 @@ button{
 
 .btn-limpiar-filtros:hover{
     background-color: #e5e5e5;
+}
+.btn-load-more{
+    border: none;
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 18px;
+    border: 1px solid #393939;
+    padding: 10px 20px;
+    border-radius: 3px;
+    color: #393939;
+    transition: all 300ms ease-in-out;
+}
+.btn-load-more:hover{
+    background-color: #393939;
+    color: white;
+}
+.overlay-carrito {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(204, 204, 204, 0.5);
+    z-index: 11;
 }

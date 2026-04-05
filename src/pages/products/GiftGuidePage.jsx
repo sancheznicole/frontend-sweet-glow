@@ -174,10 +174,10 @@ const GiftCardPage = () => {
 
                     {/* Columna derecha — formulario */}
                     <div className="gc-hero-form-col">
-                        <span className="gc-eyebrow">Sweet Glow · Tarjeta Regalo</span>
+                        {/* <span className="gc-eyebrow">Sweet Glow · Tarjeta Regalo</span> */}
                         <h1 className="gc-hero-title">
-                            El regalo perfecto<br />
-                            <em>siempre existe</em>
+                            El regalo perfecto
+                            siempre existe
                         </h1>
                         <p className="gc-hero-sub">
                             Regala libertad para elegir. Nuestra tarjeta regalo se asigna
@@ -217,6 +217,10 @@ const GiftCardPage = () => {
                                     let value = e.target.value
 
                                     if (value.startsWith('-')) return
+
+                                    const numericValue = Number(value)
+
+                                    if (numericValue > 10000000) return
 
                                     setMontoCustom(value)
                                     setMontoSeleccionado(null)
