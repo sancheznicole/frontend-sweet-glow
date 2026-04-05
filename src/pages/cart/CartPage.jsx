@@ -295,6 +295,45 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                                             Cancelar
                                         </button>
                                     </div>
+                                </form>
+
+                                {userUpdateError && (<p>{userUpdateError}</p>)}
+                            </>
+
+                        ) : (
+                            <>
+                                <h1 className="titulo-por-h2">
+                                    Confirmar orden
+                                </h1>
+
+                                <p>
+                                    <strong>
+                                        Antes de continuar confirma tu dirección de envío y telefono de contacto, si no son correctos por favor actualizalos
+                                    </strong>
+                                </p>
+
+                                <ul>
+                                    <li><strong>Telefono de contacto:</strong> {phone}</li>
+                                    <li><strong>Dirección de envío:</strong> {shippingAdress}</li>
+                                </ul>
+                                
+                                <button className="pay-btn" onClick={() => {setModifyData(!modifyData)}}>{modifyData ? 'cerrar' : 'Modificar'}</button>
+
+                                <p>
+                                    Si estos son tus datos correctos confirma la orden haciendo clic en el siguiente botón
+                                </p>
+
+                                <p>
+                                    Al continuar con el pago aceptas nuestros terminos y condiciones de pago
+                                </p>
+
+                                <div className="pay-confirmation-buttons">
+                                    <button className="pay-btn"
+                                        onClick={() => {handleProcessCart()}}
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Cargando...' : 'Pagar'}
+                                    </button>
                                     {error != '' && <p>{error}</p>}
                                 </>
                             )}
@@ -349,6 +388,24 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                                 </div>
                             </div>
 
+                        <div className="payment-card">
+
+                            <div>
+                                {tarjeta ? (
+                                    <p>Tarjeta de regalo aplicada</p>
+                                ) : (
+                                    <div className="giftcard-input-search">
+                                        <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
+                                        <p className="giftcard-search-p">
+                                            {errorGiftCard && 'Tarjeta no encontrada'}
+                                            {loadingGiftCard && 'Buscando tarjeta...'}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+
+                            <h2>Total estimado: {parsePrice((total-descuento))}</h2>
                             <div className="payment-card">
                                 <h1>Acciones de carrito</h1>
                                 <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
@@ -373,6 +430,19 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
                                 <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
 
+                            <button className="pay-btn"
+                                onClick={() => {setConfirm(true)}}
+                            >
+                                Continuar con el pago
+                            </button>
+                            {error != '' && <p>{error}</p>}
+
+                            <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
+                            
+                        </div>
+                    </>
+                )
+            )}
                                 <button className="pay-btn"
                                     onClick={() => {setConfirm(true)}}
                                 >

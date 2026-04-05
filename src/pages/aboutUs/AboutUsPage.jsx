@@ -4,8 +4,8 @@ const AboutUsPage = () => {
   return (
     <div className='page-container'>
       <section className='section-sobre-nosotros'>
-        <div>
-          <img src="/icons/icon.png" alt="" />
+        <div className='image-container'>
+          <img src="assets/sobre_sweetglow.webp" alt="" />
         </div>
 
         <h1 className="titulo-por-h1">sobre nosotros</h1>
