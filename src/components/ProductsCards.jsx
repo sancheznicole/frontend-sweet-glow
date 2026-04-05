@@ -90,8 +90,8 @@ const ProductsCards = ({ elementsLimit = 6, data = undefined, showDeletion = fal
                                 </div>
 
                                 {!data && lastPage > page && attemps < maxAttemps && (
-                                    <button onClick={() => {handleGetMore()}}>
-                                        Cargar mas...
+                                    <button onClick={() => {handleGetMore()}} className='btn-load-more'>
+                                        Cargar mas
                                     </button>
                                 )}
 

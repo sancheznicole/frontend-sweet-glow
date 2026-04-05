@@ -92,8 +92,8 @@ const GiveAwaysPage = () => {
 
                 {/* Lado derecho — título + requisitos + botón */}
                 <div className="giveaways-split-contenido">
-                    <p className="giveaways-eyebrow">✦ sorteo especial</p>
-                    <h1 className="giveaways-titulo">Inscríbete<br />y participa</h1>
+                    {/* <p className="giveaways-eyebrow">✦</p> */}
+                    <h1 className="giveaways-titulo">Inscríbete y participa</h1>
                     <p className="giveaways-tag">¿Cómo participar?</p>
 
                     <ol className="giveaways-requisitos-lista">
