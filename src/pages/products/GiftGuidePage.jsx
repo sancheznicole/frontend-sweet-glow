@@ -132,14 +132,8 @@ const GiftCardPage = () => {
     // TODO (compañera): reemplaza el console.log con tu función del carrito.
     // La tarjeta `t` contiene: id_tarjeta, monto, estado, fecha_expiracion, id_usuario
     const handleAgregarAlCarrito = (tarjeta) => {
-        console.log('🛒 Agregar al carrito — tarjeta:', tarjeta)
-        // agregarAlCarrito({
-        //     tipo: 'gift_card',
-        //     id_tarjeta: tarjeta.id_tarjeta,
-        //     monto: tarjeta.monto,
-        //     id_usuario: usuario?.id_usuario ?? usuario?.id,
-        // })
-        show('Función pendiente de conectar con el carrito 🛒', 'success')
+        localStorage.setItem("gift-card-to-apply", JSON.stringify(tarjeta))
+        show('La tarjeta se agregará al carrito como descuento', 'success')
     }
 
     // ── Determinar si una tarjeta está activa ─────────────────────────────────
@@ -319,7 +313,7 @@ const GiftCardPage = () => {
                                         {activa && (
                                             <div className="gc-card-actions">
                                                 {/*
-                                                    TODO (compañera): reemplaza handleAgregarAlCarrito
+                                                    TO-DO (compañera): reemplaza handleAgregarAlCarrito
                                                     con tu función del servicio de carrito.
                                                     La tarjeta `t` contiene:
                                                       - t.id_tarjeta

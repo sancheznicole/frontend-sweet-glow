@@ -94,26 +94,25 @@ const AdminPanel = ({
 					{lastPage > 1 && (
 						<>
 							<div className="paginations-buttons">
-								{limit && limit > 5 && (
-									<div className="limit-selector">
-										<div>
-											<span>Cantidad de elementos por página</span>
-											<select name="limit" onChange={(e) => {setLimit(e.target.value);}}>
-												{data?.length < 5 && <option value={data?.length}>{data?.length}</option>}
-												<option value="5">5</option>
-												<option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-											</select>
-										</div>
-										<p>Página {page} de {lastPage}</p>
+								
+								<div className="limit-selector">
+									<div>
+										<span>Cantidad de elementos por página</span>
+										<select name="limit" onChange={(e) => {setLimit(Number(e.target.value));}} value={limit}>
+											{data?.length < 5 && <option value={data?.length}>{data?.length}</option>}
+											<option value="5"  >5</option>
+											<option value="10" >10</option>
+											<option value="25" >25</option>
+											<option value="50" >50</option>
+										</select>
 									</div>
-								)}
+									<p>Página {page} de {lastPage}</p>
+								</div>
 								<div>
-									<button onClick={() => { if (page >= 2) setPage(page - 1) }}>
+									<button onClick={() => { if (page >= 2) setPage(page - 1) }} disabled={page <= 1}>
 										Anterior
 									</button>
-									<button onClick={() => { if (page < lastPage) setPage(page + 1) }}>
+									<button onClick={() => { if (page < lastPage) setPage(page + 1) }} disabled={page == lastPage || page >= lastPage}>
 										Siguiente
 									</button>
 								</div>
