@@ -30,6 +30,9 @@ import TermsPage from "../pages/terms/TermsPage"
 import PrivacyPoliciesPage from "../pages/terms/PrivacyPoliciesPage"
 import ReturnsPolicyPage from "../pages/terms/ReturnsPolicyPage"
 import CustomerServicePage from "../pages/terms/CustomerServicePage"
+import AwardsPage from "../pages/raffle/AwardsPage"
+import WinnersPage from "../pages/raffle/WinnersPage"
+
 
 //administradores 
 import AdminIndex from "../pages/admin/AdminIndex"
@@ -82,6 +85,7 @@ import EditAward from "../pages/admin/premios/editar/EditAward"
 import AwardedIndex from "../pages/admin/premiados/AwardedIndex"
 import CreateAwarded from "../pages/admin/premiados/crear/CreateAwarded"
 import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
+
 
 
 export const router = createBrowserRouter([
@@ -414,6 +418,10 @@ export const router = createBrowserRouter([
       { path: 'gift-guide', element: <GiftGuidePage /> },
 
       { path: 'give-aways', element: <GiveAwaysPage /> },
+
+      { path: "awards", element: <AwardsPage /> },
+
+      { path: "winners", element: <WinnersPage /> },
 
       { path: 'about-us', element: <AboutUsPage /> },
 

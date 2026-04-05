@@ -10,7 +10,7 @@ const Colorimetria = () => {
       {/* HERO */}
       <div className="blog-hero">
         <img
-          src={`${STORAGE_URL}/imagenes_productos/blogcolorimetria.jpg`}
+          src={`/assets/blogcolorimetria.jpg`}
           alt="Colorimetria"
           className="blog-hero-img"
         />
@@ -41,7 +41,7 @@ const Colorimetria = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/subtono-calido.jpg`} alt="Subtono cálido" />
+              <img src={`/assets/subtono-calido.jpg`} alt="Subtono cálido" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de maquillaje</Link>
@@ -63,7 +63,7 @@ const Colorimetria = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/subtono-frio.jpg`} alt="Subtono frío" />
+              <img src={`/assets/subtono-frio.jpg`} alt="Subtono frío" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de maquillaje</Link>
@@ -85,7 +85,7 @@ const Colorimetria = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/subtono-neutro.jpg`} alt="Subtono neutro" />
+              <img src={`/assets/subtono-neutro.jpg`} alt="Subtono neutro" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de maquillaje</Link>
@@ -108,58 +108,3 @@ const Colorimetria = () => {
 
 export default Colorimetria
 
-
-
-
-
-
-
-
-
-/*import React from 'react'
-
-
-
-
-      <h3 className='piel'>Subtono frío</h3>
-        <p className='tonos'>
-
-          <h4>Cómo identificarlo:</h4>
-          Las venas de la muñeca se ven azules o moradas.
-          Los accesorios plateados suelen favorecer más que los dorados.
-          La piel puede quemarse con facilidad al exponerse al sol.
-
-          <h4>Tonos de maquillaje recomendados</h4>
-          Base de maquillaje: con subtonos rosados o neutros fríos
-          Rubor: rosado, frambuesa o rosa suave
-          Sombras de ojos: plateado, gris, morado, azul
-          Labiales: rojo cereza, vino, rosa intenso
-          Estos tonos ayudan a equilibrar los matices fríos de la piel y resaltan la luminosidad natural del rostro.</p>
-
-      <h3 className='piel'>Subtono neutro</h3>
-        <p className='tonos'>Las personas con subtono neutro tienen una mezcla equilibrada de matices cálidos y fríos en la piel. 
-          Esto hace que puedan usar una mayor variedad de colores en maquillaje.
-
-          <h4>Cómo identificarlo:</h4>
-          Las venas pueden verse azules y verdes al mismo tiempo.
-          Tanto los accesorios dorados como los plateados suelen verse bien.
-          La piel puede broncearse de forma moderada.
-
-          <h4>Tonos de maquillaje recomendados</h4>
-          Las personas con subtono neutro tienen mayor flexibilidad al elegir colores.
-          Base de maquillaje: subtono neutro
-          Rubor: rosa suave, durazno o coral
-          Sombras de ojos: tonos tierra, rosados, dorados o champagne
-          Labiales: nude, rosa, rojo clásico
-          Esto permite experimentar con diferentes estilos de maquillaje sin perder la armonía con el tono natural de la piel.</p>
-
-
-      <h3 className='piel'>Importancia de conocer la colorimetría</h3>
-        <p className='tonos'> </p>
-       
-    </div>
-  )
-}
-
-export default Colorimetria
-*/

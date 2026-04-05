@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from "react-router-dom"
 import { getAllFacturas, createGiftRegistration } from '../../services/giftRegistrationService'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -184,8 +185,26 @@ const GiveAwaysPage = () => {
                 </div>
             )}
 
+
+            <div style={{ textAlign: "center", padding: "40px 0" }}>
+                <Link 
+                    to="/awards" 
+                    className="giveaways-btn"
+                    style={{
+                        display: "inline-block",
+                        textDecoration: "none",
+                    }}
+                >
+                    Ver premios
+                </Link>
+            </div>
+            
         </div>
+        
+
+    
     )
+    
 }
 
 export default GiveAwaysPage
