@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
 
-const MONTOS_FIJOS = [20000, 50000, 100000, 200000]
+const MONTOS_FIJOS = [80000, 100000, 200000, 300000]
 
 const formatCOP = (n) =>
     new Intl.NumberFormat('en-US', {
@@ -132,14 +132,14 @@ const GiftCardPage = () => {
     // TODO (compañera): reemplaza el console.log con tu función del carrito.
     // La tarjeta `t` contiene: id_tarjeta, monto, estado, fecha_expiracion, id_usuario
     const handleAgregarAlCarrito = (tarjeta) => {
-        console.log('🛒 Agregar al carrito — tarjeta:', tarjeta)
+        console.log('Agregar al carrito — tarjeta:', tarjeta)
         // agregarAlCarrito({
         //     tipo: 'gift_card',
         //     id_tarjeta: tarjeta.id_tarjeta,
         //     monto: tarjeta.monto,
         //     id_usuario: usuario?.id_usuario ?? usuario?.id,
         // })
-        show('Función pendiente de conectar con el carrito 🛒', 'success')
+        show('Función pendiente de conectar con el carrito', 'success')
     }
 
     // ── Determinar si una tarjeta está activa ─────────────────────────────────
@@ -210,7 +210,7 @@ const GiftCardPage = () => {
                             <input
                                 className="gc-input"
                                 type="number"
-                                min="1000"
+                                min="80000"
                                 placeholder="Ej: 75000"
                                 value={montoCustom}
                                 onChange={(e) => {
@@ -328,7 +328,7 @@ const GiftCardPage = () => {
                                                     className="gc-btn-cart"
                                                     onClick={() => handleAgregarAlCarrito(t)}
                                                 >
-                                                    🛒 Agregar al carrito
+                                                    Agregar al carrito
                                                 </button>
                                             </div>
                                         )}

@@ -56,22 +56,27 @@ const ProductCard = ({titulo, imagen, precio, stock, referencia, marca, categori
                 </div>
 
                 <div className="title-price">
-                    <p>
-                    {titulo}
-                    </p>
+                    <div>
+                        
+                        <p>{referencia}</p>
+
+                        <p>
+                            {titulo}
+                        </p>
+
+                    </div>
                     
                     <div>
                         <p>{parsePrice(precio)}</p>
                     </div>
+
                 </div>
             </div>
 
             <div className="hidden-content">
-                <p>{referencia}</p>
-
                 <div>
-                    <p>{marca}</p>
-                    <p>{categoria}</p>
+                    <strong><p>{categoria}</p></strong>
+                    <strong><p>{marca}</p></strong>
                 </div>
             </div>
 
