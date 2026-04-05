@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import ProductsCards from "../components/ProductsCards"
 import { searcherForProductsAndFilters, latestInTendency } from "../services/productsService"
 
-const Searcher = () => {
+const Searcher = ({ setShowSearch, showSearch }) => {
     const [showInTendencyInitialData, setShhowInTendencyInitialData] = useState(true)
     const [search, setSearch] = useState("")
     const [products, setProducts] = useState([])
@@ -67,24 +67,24 @@ const Searcher = () => {
             
             {/* Barra principal */}
             <div className="main-bar-container">
-                <input 
-                    type="text" 
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Buscar productos..."
-                />
+                <div className="input-searcher-container">
+                    <input 
+                        type="text" 
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Buscar productos..."
+                    />
 
-                <svg xmlns="http://www.w3.org/2000/svg" className="search-icon" viewBox="0 0 24 24">
-                    <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                    <path d="M21 21l-6 -6" />
-                </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-search">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                        <path d="M21 21l-6 -6" />
+                    </svg>
+                </div>
 
-                {search && (
-                    <button className="clear-search" onClick={handleClearSearch}>
-                        X
-                    </button>
-                )}
-
+                <button className="close-search-btn" onClick={() => {setShowSearch(!showSearch)}} title="Salir">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" className="icon icon-tabler icons-tabler-filled icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
+                </button>
             </div>
 
             {/* Resultados */}
