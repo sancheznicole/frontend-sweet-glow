@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
 
-const MONTOS_FIJOS = [20000, 50000, 100000, 200000]
+const MONTOS_FIJOS = [80000, 100000, 200000, 300000]
 
 const formatCOP = (n) =>
     new Intl.NumberFormat('en-US', {
@@ -204,7 +204,7 @@ const GiftCardPage = () => {
                             <input
                                 className="gc-input"
                                 type="number"
-                                min="1000"
+                                min="80000"
                                 placeholder="Ej: 75000"
                                 value={montoCustom}
                                 onChange={(e) => {
@@ -326,7 +326,7 @@ const GiftCardPage = () => {
                                                     className="gc-btn-cart"
                                                     onClick={() => handleAgregarAlCarrito(t)}
                                                 >
-                                                    🛒 Agregar al carrito
+                                                    Agregar al carrito
                                                 </button>
                                             </div>
                                         )}
