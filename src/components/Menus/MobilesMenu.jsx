@@ -28,7 +28,7 @@ const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
             )}
             
             {showSearch && (
-                <Searcher></Searcher>
+                <Searcher setShowSearch={setShowSearch} showSearch={showSearch}></Searcher>
             )}
 
             <div className={`phrase-section`}>
