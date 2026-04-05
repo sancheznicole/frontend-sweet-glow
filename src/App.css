@@ -3553,6 +3553,7 @@ button{
     gap: 10px;
     display: flex;
     flex-direction: column;
+    padding-bottom: 30px;
 }
 .payment-card h1{
     width: 100%;
@@ -3881,8 +3882,9 @@ button{
 .pay-confirmation-buttons{
     gap: 10px;
     display: flex;
-    width: 50%;
+    width: 100%;
     justify-content: space-around;
+    padding-bottom: 20px;
 }
 .pay-confirmation-buttons button{
     width: 100%;
@@ -4344,4 +4346,21 @@ button{
     height: 100vh;
     background: rgba(204, 204, 204, 0.5);
     z-index: 11;
+}
+.user-cart-form-modified-data{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+.user-cart-form-modified-data div{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.user-cart-form-modified-data input, .user-cart-form-modified-data select{
+    padding: 5px;
+    border: 1px solid #393939;
+    border-radius: 5px;
+    outline: none;
 }
