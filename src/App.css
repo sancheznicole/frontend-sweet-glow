@@ -4456,3 +4456,6 @@ button{
     border-radius: 5px;
     outline: none;
 }
+.totals-cart-container{
+    text-align: end;
+}

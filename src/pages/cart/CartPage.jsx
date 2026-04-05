@@ -17,7 +17,6 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const { isAuthenticated, user } = useAuth()
     const [shippingAdress, setShippingAdress] = useState("")
     const [phone, setPhone] = useState("")
-    const [modifyData, setModifyData] = useState(false)
     const [cart, setCart] = useState(null)
     const [total, setTotal] = useState(0)
     const [error, setError] = useState('')
@@ -38,6 +37,8 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const [departamento, setDepartamento] = useState("")
     const [municipio, setMunicipio] = useState("")
     const [municipios, setMunicipios] = useState([])
+    const [savedCard, setSavedCard] = useState(null)
+    const totalFinal = Math.max(0, total - descuento)
 
     useEffect(() => {
         if(isAuthenticated){
@@ -89,7 +90,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
 
             // crear factura no pagada
-            let invoiceRes = await createInvoiceOrders(user?.id_usuario, new_cart_id, tarjeta, total, descuento, "pending")
+            let invoiceRes = await createInvoiceOrders(user?.id_usuario, new_cart_id, tarjeta, totalFinal, descuento, "pending")
 
             if(!invoiceRes?.valid){
                 setError("No se pudo procesar la solicitud")
@@ -100,18 +101,25 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
             // iniciar pago en pasarela 
             let preferenceRes = await createPreference(invoiceRes?.order_invoice?.data?.id_factura_pedido)
 
-            if(!preferenceRes?.valid || !preferenceRes?.preference?.init_point){
+            if(!preferenceRes?.valid || (!preferenceRes?.preference?.init_point && !preferenceRes?.preference?.successZeroPay)){
                 setError("No se pudo procesar la solicitud")
                 return
             }
             setTarjeta(null)
 
+            if(preferenceRes?.preference?.successZeroPay){
+                handleDeleteCart()
+                navigate(`/payment/success?external_reference=${preferenceRes?.preference?.factura}&payment_type=zero`)
+                setShowCart(false)
+                return
+            }
 
             if(tarjeta) handleUpdateGiftCard()
             handleDeleteCart()
             window.location.href = preferenceRes?.preference?.init_point
             
         } catch (error) {
+            console.log(error?.message)
             setError("Error al iniciar pago ")
         } finally {
             setLoading(false)
@@ -123,11 +131,14 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
         let saved = localStorage.getItem("cart")
 
         setCart(saved != null ? JSON.parse(saved) : saved)
+
+        let savedGiftCard = localStorage.getItem("gift-card-to-apply")
+        setSavedCard(savedGiftCard != null ? JSON.parse(savedGiftCard) : null)
     }
 
     // obtener carrito de compras 
     useEffect(() => {
-        getCart()
+        getCart();
     }, [])
 
     // calcular precio total del carrito
@@ -145,6 +156,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     const handleDeleteCart = () => {
         localStorage.setItem("cart", null);
+        localStorage.setItem("gift-card-to-apply", null);
         getCart()
     }
 
@@ -219,8 +231,8 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
     }, [card])
 
     useEffect(() => {
-        if(descuento > total) setTotal(0)
-    }, [descuento])
+        if(savedCard?.estado != "usada") setCard(savedCard?.id_tarjeta)
+    }, [savedCard])
 
     console.log(descuento)
 
@@ -326,7 +338,6 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                                         {loadingUserUpdate ? "Guardando..." : "Actualizar"}
                                     </button>
                                 )}
-                                {error != '' && <p>{error}</p>}
                                 <button className="pay-btn"
                                     onClick={() => {setConfirm(false)}}
                                 >
@@ -380,24 +391,33 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                             </div>
                         </div>
 
-                        <div className="payment-card">
+                            <div className="payment-card">
+                                <h1>Acciones de carrito</h1>
+                                <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
 
-                            <div>
-                                {tarjeta ? (
-                                    <p>Tarjeta de regalo aplicada</p>
-                                ) : (
-                                    <div className="giftcard-input-search">
-                                        <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
-                                        <p className="giftcard-search-p">
-                                            {errorGiftCard && 'Tarjeta no encontrada'}
-                                            {loadingGiftCard && 'Buscando tarjeta...'}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
+                                <div>
+                                    <p className="giftcard-title">Tarjeta de regalo</p>
+                                    {tarjeta || savedCard != null ? (
+                                        <p>Tarjeta de regalo aplicada | #{card ? card : ""}</p>
+                                    ) : (
+                                        savedCard == null && (
+                                            <div className="giftcard-input-search">
+                                                <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
+                                                <p className="giftcard-search-p">
+                                                    {errorGiftCard && 'Tarjeta no encontrada'}
+                                                    {loadingGiftCard && 'Buscando tarjeta...'}
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
+                                </div>
 
 
-                            <h2>Total estimado: {parsePrice((total-descuento))}</h2>
+                                <div className="totals-cart-container">
+                                    <p>Subtotal: {parsePrice(total)}</p>
+                                    {descuento > 0 && (<p>Descuento: -{parsePrice(descuento)}</p>)}
+                                    <h2>Total: {parsePrice(totalFinal)}</h2>
+                                </div>
 
                             <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
 
