@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getProductosByCategoria, getMarcasByCategoria } from '../../services/categoriesService'
+import ProductsCards from '../../components/ProductsCards'
+import Loader from '../../components/Loader'
 
 const API_URL = import.meta.env.VITE_API_URL
 const SOTAGE_URL = import.meta.env.VITE_STORAGE_URL
@@ -18,7 +20,6 @@ const CategoryProducts = ({ categoria, onVolver }) => {
     const [marcaSeleccionada, setMarcaSeleccionada] = useState('')
     const [orden, setOrden] = useState('nombre_asc')
     const [loading, setLoading] = useState(true)
-    console.log(productos)
 
     useEffect(() => {
         getMarcasByCategoria(categoria.id_categoria).then(res => {
@@ -98,48 +99,11 @@ const CategoryProducts = ({ categoria, onVolver }) => {
 
             {/* Productos */}
             {loading ? (
-                <p className="stepper-cargando">Cargando productos...</p>
+                <Loader text="Cargando productos..."></Loader>
             ) : productos.length === 0 ? (
                 <p className="stepper-vacio">No hay productos disponibles en esta categoría aún.</p>
             ) : (
-                <div className="productos-grid">
-                    {productos.map(p => {
-                        const imagen = getImagenUrl(p)
-                        const color  = getColor(p)
-                        return (
-                            <div key={p.id_producto} className="producto-card">
-                                {imagen ? (
-                                    <img
-                                        src={imagen}
-                                        alt={p.nombre}
-                                        className="producto-card-imagen"
-                                        onError={e => e.target.style.display = 'none'}
-                                    />
-                                ) : (
-                                    <div className="producto-card-sin-imagen">Sin imagen</div>
-                                )}
-                                <div className="producto-card-info">
-                                    <p className="producto-nombre">{p.nombre}</p>
-                                    <p className="producto-marca">{p.marca?.nombre ?? '—'}</p>
-                                    <p className="producto-precio">
-                                        ${Number(p.precio).toLocaleString('es-CO')}
-                                    </p>
-                                    {color && (
-                                        <div className="producto-color-row">
-                                            <span
-                                                className="producto-color-dot"
-                                                style={{ backgroundColor: color }}
-                                                title={color}
-                                            />
-                                            <span className="producto-color-label">{color}</span>
-                                        </div>
-                                    )}
-                                    <p className="producto-stock">Stock: {p.stock}</p>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
+                <ProductsCards data={productos}></ProductsCards>
             )}
         </div>
     )
