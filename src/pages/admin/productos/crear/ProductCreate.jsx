@@ -289,10 +289,10 @@ const ProductCreate = () => {
         }
 
         // Guía regalo obligatoria
-        if (!id_guia) {
-            errors.id_guia =
-                "Debe seleccionar una guía de regalo"
-        }
+        // if (!id_guia) {
+        //     errors.id_guia =
+        //         "Debe seleccionar una guía de regalo"
+        // }
 
         setFieldErrors(errors)
 

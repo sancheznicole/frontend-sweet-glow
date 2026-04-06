@@ -6,6 +6,7 @@ import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from '../../helpers/json.helpers'
 import Loader from "../../components/Loader"
 import { handleReduceProductsStock } from '../../services/productsService'
+import { sendEBill } from "../../services/emailsService"
 
 const SuccessPayment = () => {
     const [id_factura, setId_Factura] = useState(undefined)
@@ -19,21 +20,26 @@ const SuccessPayment = () => {
     async function processPayment() {
         const params = new URLSearchParams(window.location.search);
         const payment_id = params.get("payment_id");
+        const payment_type = params.get("payment_type")
         const factura = params.get("external_reference")
 
-        if (!payment_id) {
+        if (!payment_id && !payment_type) {
             setStatus("error");
             return;
         }
 
-        const res = await verifyPayment(payment_id, factura)
-
-        if (!res?.valid) {
-            console.log(res?.error)
-            return
+        if(payment_type != "zero"){
+            const res = await verifyPayment(payment_id, factura)
+    
+            if (!res?.valid) {
+                console.log(res?.error)
+                return
+            }
+    
+            setStatus(res?.data?.status);
         }
 
-        setStatus(res?.data?.status);
+        setStatus("already_paid");
         setId_Factura(factura)
     }
 
@@ -52,19 +58,26 @@ const SuccessPayment = () => {
 
     const handleDownload = async () => {
         try {
-            setLoadingDownload(true)
+            setLoadingDownload(true);
             const res = await fetch(`${API_URL}/factura/${id_factura}/pdf`);
-            const blob = await res.blob();
 
+            const contentType = res.headers.get('content-type');
+            if (!res.ok || contentType?.includes('application/json')) {
+                const errorData = await res.json();
+                console.error('Error del servidor:', errorData);
+                return;
+            }
+
+            const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
             a.download = `factura_${id_factura}.pdf`;
             a.click();
         } catch (error) {
-            console.log(error?.message)
+            console.log(error?.message);
         } finally {
-            setLoadingDownload(false)
+            setLoadingDownload(false);
         }
     };
 
@@ -72,8 +85,14 @@ const SuccessPayment = () => {
         processPayment();
     }, []);
 
+    async function handleSendEmail(){
+        await sendEBill(id_factura)
+    }
+
     useEffect(() => {
+        if(!id_factura) return
         getOrderInoiceData()
+        handleSendEmail()
     }, [id_factura])
 
     useEffect(() => {
@@ -86,11 +105,11 @@ const SuccessPayment = () => {
                 break;
 
             case "rejected":
-                navigate("/payment/failure");
+                navigate("/payment/failed");
                 break;
 
             case "error":
-                navigate("/payment/failure");
+                navigate("/payment/failed");
                 break;
 
             default:
@@ -142,7 +161,11 @@ const SuccessPayment = () => {
                                 })}
                             </div>
                             <div className='card-footer'>
-                                <p>Total: {parsePrice(factura?.neto-factura?.descuento)}</p>
+                                <p>Total: {parsePrice(Math.max(0, factura?.neto - factura?.descuento))}</p>
+
+                                <button onClick={() => navigate("/")}>
+                                    Volver al inicio
+                                </button>
                             </div>
                         </div>
 

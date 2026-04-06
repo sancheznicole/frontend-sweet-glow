@@ -12,55 +12,55 @@ const BlogPage = () => {
 
       <div className="blog-container">
 
-        <div className="Blog">
+        <Link to="/blog/Skincare" className="Blog">
           <img className="img"
-            src={`${STORAGE_URL}/imagenes_productos/skinn.jpg`}
+            src={`/assets/skinn.jpg`}
             alt="Cuidado de la Piel"
           />
           <div className="blog-overlay">
-            <Link to="/blog/Skincare">Cuidado de la piel</Link>
+            <span>Cuidado de la piel</span>
           </div>
-        </div>
+        </Link>
 
-        <div className="Blog">
+        <Link to="/blog/Colorimetria" className="Blog">
           <img className="img"
-            src={`${STORAGE_URL}/imagenes_productos/tonosideales.jpg`}
+            src={`/assets/tonosideales.jpg`}
             alt="Tonos ideales"
           />
           <div className="blog-overlay">
-            <Link to="/blog/Colorimetria">Colorimetria y tonos ideales</Link>
+            <span>Colorimetria y tonos ideales</span>
           </div>
-        </div>
+        </Link>
 
-        <div className="Blog">
+        <Link to="/blog/Fragrance" className="Blog">
           <img className="img"
-            src={`${STORAGE_URL}/imagenes_productos/fragancia.jpg`}
+            src={`/assets/fragancia.jpg`}
             alt="Fragancia"
           />
           <div className="blog-overlay">
-            <Link to="/blog/Fragrance">Fragancias</Link>
+            <span>Fragancias</span>
           </div>
-        </div>
+        </Link>
 
-        <div className="Blog">
+        <Link to="/blog/Recommended" className="Blog">
           <img className="img"
-            src={`${STORAGE_URL}/imagenes_productos/productos.jpg`}
+            src={`/assets/productos.jpg`}
             alt="Productos"
           />
           <div className="blog-overlay">
-            <Link to="/blog/Recommended">Productos recomendados</Link>
+            <span>Productos recomendados</span>
           </div>
-        </div>
+        </Link>
 
-        <div className="Blog">
+        <Link to="/blog/Advice" className="Blog">
           <img className="img"
-            src={`${STORAGE_URL}/imagenes_productos/bellezaa.jpg`}
+            src={`/assets/bellezaa.jpg`}
             alt="Consejos"
           />
           <div className="blog-overlay">
-            <Link to="/blog/Advice">Consejos de belleza</Link>
+            <span>Consejos de belleza</span>
           </div>
-        </div>
+        </Link>
 
       </div>
     </div>

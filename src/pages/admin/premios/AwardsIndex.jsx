@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react"
 import { getAllAwards, deleteAward } from "../../../services/awardsService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const AwardsIndex = () => {
-
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
+    const [search, setSearch] = useState("")
     const [lastPage, setLastPage] = useState(undefined)
+    const [limit, setLimit] = useState(5)
 
     // Campos para mostrar en la tabla
     const fields = {
@@ -17,7 +20,7 @@ const AwardsIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllAwards(page)
+            const res = await getAllAwards(page, limit, search)
             if (!res?.valid) {
                 console.log(res?.error)
                 return
@@ -33,12 +36,22 @@ const AwardsIndex = () => {
             setLastPage(res.awards.last_page)
         } catch (error) {
             console.log(error?.message)
+        } finally{
+            setLoading(false)
         }
     }
 
     useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
+
+    useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
 
     const onDelete = async (id) => {
         try {
@@ -50,6 +63,8 @@ const AwardsIndex = () => {
             return error.message
         }
     }
+
+    if(loading) return <Loader text="Cargando premios..."></Loader>
 
     return (
         <div>
@@ -65,6 +80,11 @@ const AwardsIndex = () => {
                 linkEditar={"/admin/premios/editar"}
                 onDelete={onDelete}
                 getData={getData}
+                limit={limit}
+                search={search}
+                setLimit={setLimit}
+                setSearch={setSearch}
+                enableSearch={true}
             />
         </div>
     )

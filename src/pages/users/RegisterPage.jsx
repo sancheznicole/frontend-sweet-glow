@@ -117,7 +117,7 @@ const RegisterPage = () => {
               <option value="TI">Tarjeta de identidad</option>
               <option value="PP">Pasaporte</option>
             </select>
-            <label>Seleccione tipo documento</label>
+            <label>Tipo documento</label>
             {fieldErrors?.tipoDocumento && <p className="form-input-error-register">{fieldErrors?.tipoDocumento}</p>}
           </div>
 

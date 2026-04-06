@@ -11,12 +11,14 @@ function Menu({isTransparent, bgWhite, fixed}) {
 	const [isMobile, setIsMobile] = useState(undefined)
 
 	useEffect(() => {
-		if(window.innerWidth <= 800){
+		if(window.innerWidth <= 850){
 			setIsMobile(true)
 		}else{
 			setIsMobile(false)
 		}
 	})
+
+	console.log(window.innerWidth)
 
 	return (
 		isMobile ? (
