@@ -10,7 +10,7 @@ const Fragrance = () => {
       {/* HERO */}
       <div className="blog-hero">
         <img
-          src={`${STORAGE_URL}/imagenes_productos/blogfragancias.jpg`}
+          src={`/assets/blogfragancias.jpg`}
           alt="fragancias"
           className="blog-hero-img"
         />
@@ -45,7 +45,7 @@ const Fragrance = () => {
           
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/fragancias-dulces.jpg`} alt="Fragancias dulces" />
+              <img src={`/assets/fragancias-dulces.jpg`} alt="Fragancias dulces" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver Fragancias</Link>
@@ -70,7 +70,7 @@ const Fragrance = () => {
 
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/fragancias-florales.jpg`} alt="Fragancias florales" />
+              <img src={`/assets/fragancias-florales.jpg`} alt="Fragancias florales" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver Fragancias</Link>
@@ -95,7 +95,7 @@ const Fragrance = () => {
 
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/fragancias-cítricas.jpg`} alt="Fragancias cítricas" />
+              <img src={`/assets/fragancias-cítricas.jpg`} alt="Fragancias cítricas" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver Fragancias</Link>
@@ -120,7 +120,7 @@ const Fragrance = () => {
 
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/fragancias-intensas.jpg`} alt="Fragancias intensas" />
+              <img src={`/assets/fragancias-intensas.jpg`} alt="Fragancias intensas" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver Fragancias</Link>

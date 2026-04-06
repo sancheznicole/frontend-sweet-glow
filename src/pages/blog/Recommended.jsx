@@ -10,7 +10,7 @@ const Recommended = () => {
       {/* HERO */}
       <div className="blog-hero">
         <img
-          src={`${STORAGE_URL}/imagenes_productos/recomendaciones.jpg`}
+          src={`/assets/recomendaciones.jpg`}
           alt="recomendaciones"
           className="blog-hero-img"
         />
@@ -41,10 +41,10 @@ const Recommended = () => {
           
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/limpiador.jpg`} alt="Fragancias dulces" />
+              <img src={`/assets/limpiador.jpg`} alt="Fragancias dulces" />
             </div>
             <div className="skin-boton-container">
-              <Link to="/categories" className="skin-boton">Ver Fragancias</Link>
+              <Link to="/categories" className="skin-boton">Ver productos de skincare</Link>
             </div>
           </div>
         </div>
@@ -61,10 +61,10 @@ const Recommended = () => {
 
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/piel-seca.jpg`} alt="Fragancias florales" />
+              <img src={`/assets/piel-seca.jpg`} alt="Fragancias florales" />
             </div>
             <div className="skin-boton-container">
-              <Link to="/categories" className="skin-boton">Ver Fragancias</Link>
+              <Link to="/categories" className="skin-boton">Ver productos de skincare</Link>
             </div>
           </div>
         </div>
@@ -83,10 +83,10 @@ const Recommended = () => {
 
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/subtono-frio.jpg`} alt="Fragancias cítricas" />
+              <img src={`/assets/subtono-frio.jpg`} alt="Fragancias cítricas" />
             </div>
             <div className="skin-boton-container">
-              <Link to="/categories" className="skin-boton">Ver Fragancias</Link>
+              <Link to="/categories" className="skin-boton">Ver productos de maquillaje</Link>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ const Recommended = () => {
 
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/fragancias-florales.jpg`} alt="Fragancias intensas" />
+              <img src={`/assets/fragancias-florales.jpg`} alt="Fragancias intensas" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver Fragancias</Link>

@@ -29,6 +29,9 @@ import TermsPage from "../pages/terms/TermsPage"
 import PrivacyPoliciesPage from "../pages/terms/PrivacyPoliciesPage"
 import ReturnsPolicyPage from "../pages/terms/ReturnsPolicyPage"
 import CustomerServicePage from "../pages/terms/CustomerServicePage"
+import AwardsPage from "../pages/raffle/AwardsPage"
+import WinnersPage from "../pages/raffle/WinnersPage"
+
 
 //administradores 
 import AdminIndex from "../pages/admin/AdminIndex"
@@ -86,6 +89,7 @@ import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
 import SuccessPayment from "../pages/payments/SuccessPayment"
 import FailedPayment from "../pages/payments/FailedPayment"
 import PendingPayment from "../pages/payments/PendingPayment"
+
 
 
 export const router = createBrowserRouter([
@@ -418,6 +422,10 @@ export const router = createBrowserRouter([
       { path: 'gift-guide', element: <GiftGuidePage /> },
 
       { path: 'give-aways', element: <GiveAwaysPage /> },
+
+      { path: "awards", element: <AwardsPage /> },
+
+      { path: "winners", element: <WinnersPage /> },
 
       { path: 'about-us', element: <AboutUsPage /> },
 
