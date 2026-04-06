@@ -6,6 +6,7 @@ import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from '../../helpers/json.helpers'
 import Loader from "../../components/Loader"
 import { handleReduceProductsStock } from '../../services/productsService'
+import { sendEBill } from "../../services/emailsService"
 
 const SuccessPayment = () => {
     const [id_factura, setId_Factura] = useState(undefined)
@@ -77,9 +78,14 @@ const SuccessPayment = () => {
         processPayment();
     }, []);
 
+    async function handleSendEmail(){
+        await sendEBill(id_factura)
+    }
+
     useEffect(() => {
         if(!id_factura) return
         getOrderInoiceData()
+        handleSendEmail()
     }, [id_factura])
 
     useEffect(() => {
