@@ -4787,3 +4787,7 @@ button{
 .totals-cart-container{
     text-align: end;
 }
+.factura-gf-container{
+    width: fit-content;
+    margin: 0 auto;
+}

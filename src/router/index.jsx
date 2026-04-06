@@ -89,6 +89,9 @@ import EditAwarded from "../pages/admin/premiados/editar/EditAwarded"
 import SuccessPayment from "../pages/payments/SuccessPayment"
 import FailedPayment from "../pages/payments/FailedPayment"
 import PendingPayment from "../pages/payments/PendingPayment"
+import SuccessGiftCardPayment from "../pages/payments/GiftCards/SuccessGiftCardPayment"
+import PendingGiftCardPayment from "../pages/payments/GiftCards/PendingGiftCardPayment"
+import FailedGiftCardPayment from "../pages/payments/GiftCards/FailedGiftCardPayment"
 
 
 
@@ -453,6 +456,12 @@ export const router = createBrowserRouter([
       { path: '/payment/success', element: <SuccessPayment /> },
       { path: '/payment/pending', element: <PendingPayment /> },
       { path: '/payment/failed', element: <FailedPayment /> },
+
+      // giftcards
+      {path: "/giftcards/payment/success", element: < SuccessGiftCardPayment/>},
+      {path: "/giftcards/payment/pending", element: < PendingGiftCardPayment/>},
+      {path: "/giftcards/payment/failed", element: < FailedGiftCardPayment/>},
+
 
       { path: 'search', element: <SearchPage /> },
 

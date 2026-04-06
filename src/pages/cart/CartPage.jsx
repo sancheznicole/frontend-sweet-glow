@@ -205,7 +205,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
             let gifCard = res?.tarjeta
 
-            if(gifCard.estado != "activa"){
+            if(gifCard.estado != "activa" || gifCard?.status == "unpaid"){
                 setErrorGiftCard(true)
                 return
             }
@@ -222,7 +222,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     useEffect(() => {
         const delay = setTimeout(() => {
-            if (card !== "") {
+            if (card.trim() !== "") {
                 searchGiftCard()
             }
         }, 500)
@@ -231,7 +231,12 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
     }, [card])
 
     useEffect(() => {
-        if(savedCard?.estado != "usada") setCard(savedCard?.id_tarjeta)
+        if(savedCard?.estado != "usada" && savedCard?.status != "unpaid") setCard(savedCard?.id_tarjeta)
+
+        if(savedCard?.status == "unpaid"){
+            setCard(null)
+            setSavedCard(null)
+        }
     }, [savedCard])
 
     console.log(descuento)
