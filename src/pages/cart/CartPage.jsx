@@ -346,7 +346,6 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                             </div>
                             {error != '' && <p>{error}</p>}
                         </div>
-                    </div>
                 ) : (
                     <>
                         <div className="filled-cart">
