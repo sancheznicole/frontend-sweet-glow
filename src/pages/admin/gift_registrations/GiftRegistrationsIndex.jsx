@@ -12,7 +12,7 @@ const GiftRegistrationsIndex = () => {
     const [search, setSearch] = useState("")
 
     const fields = {
-        "id_inscripcion": "Id",
+        "id_inscripcion": "ID",
         "usuario_nombre": "Usuario",
         "factura_id":     "Factura",
         "estado":         "Estado",

@@ -12,7 +12,7 @@ const CarritoIndex = () => {
 	const [search, setSearch] = useState("")
 
 	const fields = {
-		id_carrito: "Id carrito",
+		id_carrito: "ID",
 		usuario: "Usuario",
 		elementos: "Elementos",
 		status: "Estado",

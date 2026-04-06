@@ -12,7 +12,7 @@ const UsuariosIndex = () => {
     const [search, setSearch] = useState('')
 
     const fields = {
-        "id_usuario": "Id usuario",
+        "id_usuario": "ID",
         "tipo_documento": "Tipo Doc",
         "num_documento": "Num Doc",
         "nombres": "Nombres",

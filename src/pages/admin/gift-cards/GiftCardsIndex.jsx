@@ -13,7 +13,7 @@ const GiftCardsIndex = () => {
     const [search, setSearch] = useState("")
 
     const fields = {
-        "id_tarjeta":       "Id Tarjeta",
+        "id_tarjeta":       "ID",
         "usuario_nombre":   "Usuario",
         "monto":            "Monto",
         "estado":           "Estado",

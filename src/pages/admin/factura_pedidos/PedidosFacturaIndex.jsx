@@ -12,7 +12,7 @@ const PedidosFacturaIndex = () => {
 	const [search, setSearch] = useState('')
 
 	const fields = {
-		id_factura_pedido: "Id factura",
+		id_factura_pedido: "ID",
 		usuario: "Usuario",
 		id_carrito: "Carrito",
 		tarjeta: "Tarjeta regalo",

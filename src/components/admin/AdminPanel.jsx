@@ -148,7 +148,7 @@ const AdminPanel = ({
 													) : key === "elementos" ? (
 														row[key]?.length > 0 ? (
 															row[key].map((el) => (
-																<Link 
+																<Link className="link_elementos"
 																	key={el.id_elemento_carrito}
 																	to={`${elementsLink}/${el.id_elemento_carrito}`}
 																	style={{ display: "block" }}

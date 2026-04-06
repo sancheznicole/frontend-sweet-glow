@@ -8,7 +8,7 @@ const RolesIndex = () => {
 	const [loading, setLoading] = useState(true)
 	// los campos que se reciben del back y el nombre de la tabla del front 
 	const fields = {
-		id_rol: "Id rol",
+		id_rol: "ID",
 		nombre: "Rol",
 		created_at: "Fecha creación",
 	}

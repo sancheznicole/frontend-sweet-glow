@@ -12,7 +12,7 @@ const ReviewsIndex = () => {
     const [search, setSearch] = useState("")
 
     const fields = {
-        "id_resena":        "Id Reseña",
+        "id_resena":        "ID",
         "categoria_nombre": "Categoría",
         "marca_nombre":     "Marca",
         "producto_nombre":  "Producto",
