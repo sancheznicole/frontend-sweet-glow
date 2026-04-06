@@ -462,7 +462,6 @@ export const router = createBrowserRouter([
       {path: "/giftcards/payment/failed", element: < FailedGiftCardPayment/>},
 
 
-      { path: 'search', element: <SearchPage /> },
 
       { path: 'terms', element: <TermsPage/> },
 
