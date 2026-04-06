@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getUserData } from "../../services/authService";
-import { createGiftCard, getAllGiftCards } from "../../services/giftCardService";
+import { createGiftCard, getAllGiftCards, deleteGiftCard } from "../../services/giftCardService";
 import { useNavigate } from "react-router-dom"
 import { createGFPreference } from '../../services/paymentService';
 
@@ -180,8 +180,26 @@ const GiftCardPage = () => {
         return s === 'activa'
     }
 
-    const handleDeleteCard = async () => {
+    const handleDeleteCard = async (eliminar_tarjeta_id) => {
+        try {
+            console.log("🗑 Eliminando tarjeta:", eliminar_tarjeta_id)
 
+            let res = await deleteGiftCard(eliminar_tarjeta_id);
+
+            console.log("📩 Respuesta delete:", res)
+
+            if (!res?.valid) {
+                show("No se pudo eliminar la tarjeta", "error")
+                return
+            }
+
+            show("Tarjeta eliminada correctamente", "success")
+            cargarTarjetas()
+
+        } catch (error) {
+            console.error("❌ Error eliminando:", error)
+            show("Error al eliminar la tarjeta", "error")
+        }
     }
 
     return (
@@ -321,6 +339,8 @@ const GiftCardPage = () => {
                                     ? t.fecha_de_uso.split('T')[0]
                                     : null
 
+                                console.log("estado tarjeta:", t.estado)
+
                                 return (
                                     <div
                                         key={t.id_tarjeta}
@@ -352,9 +372,9 @@ const GiftCardPage = () => {
                                                     <button
                                                         className="gc-btn-cart"
                                                         disabled={t?.status != "paid" || t?.estado == "usada"}
-                                                        onClick={() => handleDeleteCard(t)}
+                                                        onClick={() => handleDeleteCard(t?.id_tarjeta)}
                                                     >
-                                                        Eliminar
+                                                        Tarjeta no usable
                                                     </button>
                                                 ) : (
                                                     <button

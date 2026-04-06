@@ -88,7 +88,7 @@ const SuccessGiftCardPayment = () => {
         <div className='factura-container'>
             <div className='card-factura'>   
                 <div className='card-header'>
-                    <h1>✅ Pago aprobado</h1>
+                    <h1>Pago aprobado</h1>
                     <h2>Tu compra fue exitosa | Tarjeta #{id_tarjeta}</h2>
                     <p>Fecha de compra: {tarjeta?.created_at.slice(0, 10)}</p>
                 </div>
