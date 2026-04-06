@@ -105,11 +105,11 @@ const SuccessPayment = () => {
                 break;
 
             case "rejected":
-                navigate("/payment/failure");
+                navigate("/payment/failed");
                 break;
 
             case "error":
-                navigate("/payment/failure");
+                navigate("/payment/failed");
                 break;
 
             default:

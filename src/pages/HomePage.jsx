@@ -53,18 +53,18 @@ const HomePage = () => {
             {/* gallery */}
             <h2 className="titulo-por-h2">Galería icónica de nuestras marcas</h2>
             <div className="gallery">
-                <div className="big-photo"><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div className="big-photo"><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
-                <div><img src="/assets/sorteos.jpeg" alt="sweet-glow gallery photo" /></div>
+                <div className="big-photo"><img src="assets/galleryHome/kingKylie.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/olaplexG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/cosmicG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/lipsG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/centellaG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/diorG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div className="big-photo"><img src="assets/galleryHome/rhodeG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/missdiorG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/gisouG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/colorwowG.png" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/makeupG.jpg" alt="sweet-glow gallery photo" /></div>
+                <div><img src="assets/galleryHome/lipsKylie.jpg" alt="sweet-glow gallery photo" /></div>
             </div>
         </div>
     )
