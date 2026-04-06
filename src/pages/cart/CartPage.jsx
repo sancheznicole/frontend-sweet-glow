@@ -10,18 +10,19 @@ import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
 import { userUpdate } from "../../services/authService"
 import { getGiftCard, updateGiftCard } from "../../services/giftCardService"
+import { colombia } from "../../services/citiesService"
 
 const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const navigate = useNavigate()
     const { isAuthenticated, user } = useAuth()
     const [shippingAdress, setShippingAdress] = useState("")
     const [phone, setPhone] = useState("")
-    const [modifyData, setModifyData] = useState(false)
     const [cart, setCart] = useState(null)
     const [total, setTotal] = useState(0)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const [confirm, setConfirm] = useState(false)
+    const [modifiedData, setModifiedData] = useState(false)
 
     const [descuento, setDescuento] = useState(0)
     const [tarjeta, setTarjeta] = useState(null)
@@ -32,6 +33,12 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const [card, setCard] = useState("")
     const [loadingGiftCard, setLoadingGiftCard] = useState(false)
     const [errorGiftCard, setErrorGiftCard] = useState(false)
+
+    const [departamento, setDepartamento] = useState("")
+    const [municipio, setMunicipio] = useState("")
+    const [municipios, setMunicipios] = useState([])
+    const [savedCard, setSavedCard] = useState(null)
+    const totalFinal = Math.max(0, total - descuento)
 
     useEffect(() => {
         if(isAuthenticated){
@@ -83,7 +90,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
 
             // crear factura no pagada
-            let invoiceRes = await createInvoiceOrders(user?.id_usuario, new_cart_id, tarjeta, total, descuento, "pending")
+            let invoiceRes = await createInvoiceOrders(user?.id_usuario, new_cart_id, tarjeta, totalFinal, descuento, "pending")
 
             if(!invoiceRes?.valid){
                 setError("No se pudo procesar la solicitud")
@@ -94,18 +101,25 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
             // iniciar pago en pasarela 
             let preferenceRes = await createPreference(invoiceRes?.order_invoice?.data?.id_factura_pedido)
 
-            if(!preferenceRes?.valid || !preferenceRes?.preference?.init_point){
+            if(!preferenceRes?.valid || (!preferenceRes?.preference?.init_point && !preferenceRes?.preference?.successZeroPay)){
                 setError("No se pudo procesar la solicitud")
                 return
             }
             setTarjeta(null)
 
+            if(preferenceRes?.preference?.successZeroPay){
+                handleDeleteCart()
+                navigate(`/payment/success?external_reference=${preferenceRes?.preference?.factura}&payment_type=zero`)
+                setShowCart(false)
+                return
+            }
 
             if(tarjeta) handleUpdateGiftCard()
             handleDeleteCart()
             window.location.href = preferenceRes?.preference?.init_point
             
         } catch (error) {
+            console.log(error?.message)
             setError("Error al iniciar pago ")
         } finally {
             setLoading(false)
@@ -117,11 +131,14 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
         let saved = localStorage.getItem("cart")
 
         setCart(saved != null ? JSON.parse(saved) : saved)
+
+        let savedGiftCard = localStorage.getItem("gift-card-to-apply")
+        setSavedCard(savedGiftCard != null ? JSON.parse(savedGiftCard) : null)
     }
 
     // obtener carrito de compras 
     useEffect(() => {
-        getCart()
+        getCart();
     }, [])
 
     // calcular precio total del carrito
@@ -139,21 +156,32 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     const handleDeleteCart = () => {
         localStorage.setItem("cart", null);
+        localStorage.setItem("gift-card-to-apply", null);
         getCart()
+    }
+
+    const handleDepartamentoChange = (dep) => {
+        setDepartamento(dep)
+
+        const found = colombia.find(d => d.departamento === dep)
+        setMunicipios(found ? found.ciudades : [])
+
+        setMunicipio("")
     }
 
     const handleUserDataUpdate = async () => {
         try {
             setLoadingUserUpdate(true)
+            const fullAddress = `${departamento} / ${municipio} / ${shippingAdress}`
 
-            let res = await userUpdate(null, null, null, phone, shippingAdress, user?.id_usuario, user?.id_rol)
+            let res = await userUpdate(null, null, null, phone, fullAddress, user?.id_usuario, user?.id_rol)
 
             if(!res?.valid){
                 setUSerUpdateError(res?.error)
                 return
             }
 
-            setModifyData(false)
+            setModifiedData(true)
         } catch (error) {
             setUSerUpdateError(error?.message)
         } finally {
@@ -177,7 +205,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
             let gifCard = res?.tarjeta
 
-            if(gifCard.estado != "activa"){
+            if(gifCard.estado != "activa" || gifCard?.status == "unpaid"){
                 setErrorGiftCard(true)
                 return
             }
@@ -194,7 +222,7 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     useEffect(() => {
         const delay = setTimeout(() => {
-            if (card !== "") {
+            if (card.trim() !== "") {
                 searchGiftCard()
             }
         }, 500)
@@ -202,112 +230,127 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
         return () => clearTimeout(delay)
     }, [card])
 
-    console.log(tarjetaData)
-
     useEffect(() => {
-        if(descuento > total) setTotal(0)
-    }, [descuento])
+        if(savedCard?.estado != "usada" && savedCard?.status != "unpaid") setCard(savedCard?.id_tarjeta)
+
+        if(savedCard?.status == "unpaid"){
+            setCard(null)
+            setSavedCard(null)
+        }
+    }, [savedCard])
 
     console.log(descuento)
 
     return (
-        <div className={`cart-container`}>
-            {showCart && (
-                <div className="btn-close-cart-container">
-                    <button onClick={() => {setShowCart(false)}} className="close-cart-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
-                    </button>
-                </div>
-            )}
-            {cart == null ? (
-                <div className="empty-cart">
-                    <h1>
-                        Carrito de compras vacío
-                    </h1>
+        <div className="overlay-carrito">
+            <div className={`cart-container`}>
+                {showCart && (
+                    <div className="btn-close-cart-container">
+                        <button onClick={() => {setShowCart(false)}} className="close-cart-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
+                        </button>
+                    </div>
+                )}
+                {cart == null ? (
+                    <div className="empty-cart">
+                        <h1>
+                            Carrito de compras vacío
+                        </h1>
 
-                    <p>
-                        Para antojarte, puedes ver nuestros productos haciendo clic en el siguiente enlace
-                    </p>
+                        <p>
+                            Para antojarte, puedes ver nuestros productos haciendo clic en el siguiente enlace
+                        </p>
 
-                    <Link to={"/"}>Clic aquí</Link>
-                </div>
-            ) : (
-                confirm ? (
-                    <div className="confirmation-card payment-card">
+                        <Link to={"/"}>Clic aquí</Link>
+                    </div>
+                ) : (
+                    confirm ? (
+                        <div className="confirmation-card payment-card">
 
-                        {modifyData ? (
-                            <>
-                                <h1>
-                                    Actualizar datos de envío
-                                </h1>
+                            <h1>
+                                Confirmar orden
+                            </h1>
 
-                                <form action="" onSubmit={(e) => {e.preventDefault(); handleUserDataUpdate()}}>
-                                    <div>
-                                        <label htmlFor="">Telefono</label>
-                                        <input type="text" name="telefono" defaultValue={phone} onChange={(e) => {setPhone(e.target.value)}}/>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="">Dirección</label>
-                                        <input type="text" name="direccion" defaultValue={shippingAdress} onChange={(e) => {setShippingAdress(e.target.value)}}/>
-                                    </div>
-                                </form>
+                            {modifiedData ? (
+                                <>
+                                    <p>
+                                        Al continuar con el pago aceptas nuestros terminos y condiciones de pago
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <p>
+                                        <strong>
+                                            Antes de continuar confirma tu dirección de envío y telefono de contacto, si no son correctos por favor actualizalos
+                                        </strong>
+                                    </p>
 
-                                {userUpdateError && (<p>{userUpdateError}</p>)}
-                            </>
+                                    <h2>
+                                        Datos de envío
+                                    </h2>
+                                    <span>Confirma los datos de envío antes de realizar la orden</span>
 
-                        ) : (
-                            <>
-                                <h1 className="titulo-por-h2">
-                                    Confirmar orden
-                                </h1>
+                                    <form action="" onSubmit={(e) => {e.preventDefault(); handleUserDataUpdate()}} className="user-cart-form-modified-data">
+                                        <div>
+                                            <label htmlFor="">Telefono:</label>
+                                            <input type="text" name="telefono" defaultValue={phone} onChange={(e) => {setPhone(e.target.value)}}/>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="">Envío a:</label>
+                                            <input type="text" name="direccion" defaultValue={shippingAdress} onChange={(e) => {setShippingAdress(e.target.value)}}/>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="">Departamento</label>
+                                            <select onChange={(e) => handleDepartamentoChange(e.target.value)}>
+                                                <option value="">Departamento</option>
+                                                {colombia.map((d) => (
+                                                    <option key={d.id} value={d.departamento}>
+                                                        {d.departamento}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="">Municipio</label>
+                                            <select 
+                                                onChange={(e) => setMunicipio(e.target.value)}
+                                                disabled={!departamento}
+                                            >
+                                                <option value="">Municipio</option>
+                                                {municipios.map((m, i) => (
+                                                    <option key={i} value={m}>
+                                                        {m}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </form>
 
-                                <p>
-                                    <strong>
-                                        Antes de continuar confirma tu dirección de envío y telefono de contacto, si no son correctos por favor actualizalos
-                                    </strong>
-                                </p>
+                                    {userUpdateError && (<p>{userUpdateError}</p>)}
+                                </>
+                            )}
 
-                                <ul>
-                                    <li><strong>Telefono de contacto:</strong> {phone}</li>
-                                    <li><strong>Dirección de envío:</strong> {shippingAdress}</li>
-                                </ul>
-                                
-                                <button className="pay-btn" onClick={() => {setModifyData(!modifyData)}}>{modifyData ? 'cerrar' : 'Modificar'}</button>
-
-                                <p>
-                                    Si estos son tus datos correctos confirma la orden haciendo clic en el siguiente botón
-                                </p>
-
-                                <p>
-                                    Al continuar con el pago aceptas nuestros terminos y condiciones de pago
-                                </p>
-
-                                <div className="pay-confirmation-buttons">
+                            <div className="pay-confirmation-buttons">
+                                {modifiedData ? (
                                     <button className="pay-btn"
                                         onClick={() => {handleProcessCart()}}
-                                        disabled={loading}
+                                        disabled={loading || !modifiedData}
                                     >
-                                        {loading ? 'Cargando...' : 'Pagar'}
+                                        {loading ? 'Cargando' : 'Pagar'}
                                     </button>
-                                    {error != '' && <p>{error}</p>}
-                                    <button className="pay-btn"
-                                        onClick={() => {setConfirm(false)}}
-                                    >
-                                        Cancelar
+                                ) : (
+                                    <button className="pay-btn" onClick={(e) => {e.preventDefault(); handleUserDataUpdate()}} disabled={loadingUserUpdate}>
+                                        {loadingUserUpdate ? "Guardando..." : "Actualizar"}
                                     </button>
-                                </div>
-                                {error != '' && <p>{error}</p>}
-                            </>
-                        )}
-
-                        <div className="pay-confirmation-buttons">
-                            {modifyData && (
-                                <button className="pay-btn" onClick={(e) => {e.preventDefault(); handleUserDataUpdate()}} disabled={loadingUserUpdate}>
-                                    {loadingUserUpdate ? "Guardando..." : "Actualizar"}
+                                )}
+                                <button className="pay-btn"
+                                    onClick={() => {setConfirm(false)}}
+                                >
+                                    Cancelar
                                 </button>
-                            )}
+                            </div>
+                            {error != '' && <p>{error}</p>}
                         </div>
-                    </div>
                 ) : (
                     <>
                         <div className="filled-cart">
@@ -352,40 +395,48 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
                             </div>
                         </div>
 
-                        <div className="payment-card">
+                            <div className="payment-card">
+                                <h1>Acciones de carrito</h1>
+                                <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
 
-                            <div>
-                                {tarjeta ? (
-                                    <p>Tarjeta de regalo aplicada</p>
-                                ) : (
-                                    <div className="giftcard-input-search">
-                                        <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
-                                        <p className="giftcard-search-p">
-                                            {errorGiftCard && 'Tarjeta no encontrada'}
-                                            {loadingGiftCard && 'Buscando tarjeta...'}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
+                                <div>
+                                    <p className="giftcard-title">Tarjeta de regalo</p>
+                                    {tarjeta || savedCard != null ? (
+                                        <p>Tarjeta de regalo aplicada | #{card ? card : ""}</p>
+                                    ) : (
+                                        savedCard == null && (
+                                            <div className="giftcard-input-search">
+                                                <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
+                                                <p className="giftcard-search-p">
+                                                    {errorGiftCard && 'Tarjeta no encontrada'}
+                                                    {loadingGiftCard && 'Buscando tarjeta...'}
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
+                                </div>
 
 
-                            <h2>Total estimado: {parsePrice((total-descuento))}</h2>
+                                <div className="totals-cart-container">
+                                    <p>Subtotal: {parsePrice(total)}</p>
+                                    {descuento > 0 && (<p>Descuento: -{parsePrice(descuento)}</p>)}
+                                    <h2>Total: {parsePrice(totalFinal)}</h2>
+                                </div>
 
                             <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
 
-                            <button className="pay-btn"
-                                onClick={() => {setConfirm(true)}}
-                            >
-                                Continuar con el pago
-                            </button>
-                            {error != '' && <p>{error}</p>}
-
-                            <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
-                            
-                        </div>
-                    </>
-                )
-            )}
+                                <button className="pay-btn"
+                                    onClick={() => {if(isAuthenticated) {setConfirm(true)}else {setShowCart(false); navigate("/login")}}}
+                                >
+                                    Continuar con el pago
+                                </button>
+                                {error != '' && <p>{error}</p>}
+                                
+                            </div>
+                        </>
+                    )
+                )}
+            </div>
         </div>
     )
 }

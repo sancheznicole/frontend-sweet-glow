@@ -19,21 +19,26 @@ const SuccessPayment = () => {
     async function processPayment() {
         const params = new URLSearchParams(window.location.search);
         const payment_id = params.get("payment_id");
+        const payment_type = params.get("payment_type")
         const factura = params.get("external_reference")
 
-        if (!payment_id) {
+        if (!payment_id && !payment_type) {
             setStatus("error");
             return;
         }
 
-        const res = await verifyPayment(payment_id, factura)
-
-        if (!res?.valid) {
-            console.log(res?.error)
-            return
+        if(payment_type != "zero"){
+            const res = await verifyPayment(payment_id, factura)
+    
+            if (!res?.valid) {
+                console.log(res?.error)
+                return
+            }
+    
+            setStatus(res?.data?.status);
         }
 
-        setStatus(res?.data?.status);
+        setStatus("already_paid");
         setId_Factura(factura)
     }
 
@@ -143,7 +148,11 @@ const SuccessPayment = () => {
                                 })}
                             </div>
                             <div className='card-footer'>
-                                <p>Total: {parsePrice(factura?.neto-factura?.descuento)}</p>
+                                <p>Total: {parsePrice(Math.max(0, factura?.neto - factura?.descuento))}</p>
+
+                                <button onClick={() => navigate("/")}>
+                                    Volver al inicio
+                                </button>
                             </div>
                         </div>
                     

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Loader from './Loader'
 import { Link } from 'react-router-dom'
 
-const ProductsCards = ({ elementsLimit = 6, data = undefined, showDeletion = false }) => {
+const ProductsCards = ({ elementsLimit = 4, data = undefined, showDeletion = false }) => {
     const [products, setProducts] = useState([])
     const [success, setSuccess] = useState(true)
     const [loading, setLoading] = useState(true)

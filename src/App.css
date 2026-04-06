@@ -3158,6 +3158,7 @@ button{
     cursor: pointer;
 }
 
+
 /*blog*/
 .blog-header {
     text-align: center;
@@ -3168,7 +3169,6 @@ button{
     font-family: Heading;
     font-size: 28px;
     color: #b3848f;
-    letter-spacing: 4px;
     text-transform: uppercase;
 }
 
@@ -3212,9 +3212,10 @@ button{
     background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
 }
 
-.blog-overlay a {
+
+.blog-overlay span {
     color: white;
-    font-size: 14px;
+    font-size: 15px;
     font-family: Heading;
     text-decoration: none;
     text-transform: uppercase;
@@ -3225,19 +3226,13 @@ button{
     bottom: 20px;
 }
 
-.blog-overlay a:hover {
+.blog-overlay span:hover {
     color: #efd7e5;
 }
 
 
+
 /* BLOG: SKINCARE - COLORIMETRIA - FRAGANCIAS - PRODUCTOS RECOMENDADOS - CONSEJOS DE BELLEZA*/
-
-/* Contenedor principal - sin max-width para que el hero ocupe todo */
-.skin, .colorimetria, .fragancias, .recomendaciones, .consejos {
-    font-family: 'Heading', sans-serif;
-    color: #444;
-}
-
 
 /* El párrafo intro */
 .parrafo-titulo {
@@ -3263,7 +3258,6 @@ button{
 /* Los párrafos */
 .piel-p, .tonos, .p, .prod, .pb {
     padding: 10px 0;
-    color: #4a4a4a;
     line-height: 1.8;
     margin-bottom: 40px;
     text-align: justify;
@@ -3278,7 +3272,6 @@ button{
     color: #b3848f;
     font-size: 14px;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .skin .blog-hero,
@@ -3316,12 +3309,11 @@ button{
     font-size: 32px;
     font-family: Heading;
     font-weight: lighter;
-    letter-spacing: 4px;
     text-transform: uppercase;
     text-align: left;
 }
 
-/* Contenido del blog con max-width */
+/* Contenido del blog */
 .skin-contenido {
     max-width: 900px;
     margin: 0 auto;
@@ -3384,9 +3376,7 @@ button{
     border: 1px solid #b3848f;
     padding: 15px 40px;
     border-radius: 4px;
-    font-family: Heading;
     font-size: 16px;
-    letter-spacing: 2px;
     text-transform: uppercase;
     transition: all 300ms;
 }
@@ -3529,6 +3519,344 @@ button{
     }
 }
 
+
+/* AWARDS PAGE */
+
+.awards-hero {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 450px;
+    overflow: hidden;
+}
+
+.awards-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.awards-hero-overlay {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+}
+
+
+.awards-titulo {
+    color: white;
+    font-size: 40px;
+    font-weight: lighter;
+    text-transform: uppercase;
+    font-family: Heading;
+}
+
+.awards-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.awards-subtitulo {
+    font-size: 28px;
+    color: #b3848f;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    
+}
+
+.awards-descripcion {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 40px;
+    
+}
+
+.awards-cargando, .awards-vacio {
+    color: #999;
+    font-size: 16px;
+    text-align: center;
+    padding: 40px 0;
+}
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.awards-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: white;
+
+    transition: transform 0.3s ease;
+}
+
+.awards-card:hover {
+    transform: scale(1.03);
+}
+
+.awards-card-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+.awards-card-no-img {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    background-color: #efd7e5;
+}
+
+.awards-card-info {
+    padding: 15px;
+}
+
+.awards-card-nombre {
+    color: #393939;
+    font-size: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* CONTENEDOR DEL BANNER */
+.awards-banner-container {
+    display: flex;
+    justify-content: center;
+    margin: 60px 20px;
+}
+
+/* BANNER */
+.awards-banner {
+    width: 100%;
+    max-width: 900px;
+    background-color: #ffffff;
+    padding: 60px 40px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* TEXTO */
+.awards-banner-eyebrow {
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.awards-banner-titulo {
+    color: #b3848f;;
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.awards-banner-texto {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* BOTÓN  */
+.awards-banner-btn {
+    text-decoration: none;
+    background: #3a3a3a;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.awards-banner-btn:hover {
+    background-color: #b3848f;
+    transform: translateY(-2px);
+    
+}
+
+
+/* WINNERS PAGE */
+
+.winners-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.winners-titulo {
+    font-size: 50px;
+    color: #b3848f;
+    font-weight: lighter;
+    text-transform: uppercase;
+    margin: 10px 0;
+    font-family: Heading;
+}
+
+.winners-desc {
+    color: #666;
+    font-size: 16px;
+}
+
+.winners-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.winners-card {
+    display: flex;
+    max-width: 900px;
+    margin: 0 auto;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 25px;
+    border: 1px solid #efd7e5;
+    border-radius: 12px;
+    background-color: white;
+    transition: all 300ms;
+}
+
+
+
+.winners-numero {
+    font-size: 24px;
+    color: #b3848f;
+    font-weight: lighter;
+    letter-spacing: 2px;
+    min-width: 50px;
+}
+
+.winners-info {
+    flex: 1;
+}
+
+.winners-nombre {
+    font-size: 18px;
+    color: #393939;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.winners-premio {
+    font-size: 14px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.winners-tu {
+    color: #b3848f;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.winners-vacio {
+    text-align: center;
+    padding: 60px 0;
+    color: #999;
+}
+
+.winners-no-auth {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.winners-no-auth h1 {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.winners-no-auth p {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+
+/* GIFT GUIDE SECTION */
+
+.gg-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.gg-titulo {
+    font-size: 36px;
+    color: #393939;
+    font-weight: lighter;
+    text-transform: uppercase;
+    margin: 10px 0;
+    font-family: 'Heading';
+}
+
+.gg-desc {
+    color: #666;
+    font-size: 16px;
+}
+
+.gg-cargando, .gg-vacio {
+    text-align: center;
+    color: #999;
+    padding: 40px 0;
+}
+
+.gg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.gg-card {
+    position: relative;
+    height: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #efd7e5, #f9f1f4);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+}
+
+.gg-card:hover {
+    transform: scale(1.03);
+}
+
+.gg-card-overlay {
+    padding: 25px;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+    width: 100%;
+}
+
+.gg-card-nombre {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+}
+
+.gg-card-desc {
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+    line-height: 1.5;
+}
 .product-details .images-container{
     margin-top: 50px;
     width: 35%;
@@ -3579,6 +3907,7 @@ button{
     gap: 10px;
     display: flex;
     flex-direction: column;
+    padding-bottom: 30px;
     border-top: 1px solid #e7dae2;
 }
 
@@ -3936,8 +4265,9 @@ button{
 .pay-confirmation-buttons{
     gap: 10px;
     display: flex;
-    width: 50%;
+    width: 100%;
     justify-content: space-around;
+    padding-bottom: 20px;
 }
 .pay-confirmation-buttons button{
     width: 100%;

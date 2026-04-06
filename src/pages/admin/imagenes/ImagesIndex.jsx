@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react"
 import { getAllImages, deleteImage } from "../../../services/imagesService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const ImagesIndex = () => {
-
+    const [loading, setLoading] = useState(true)
+    const [search, setSearch] = useState("")
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
     const [lastPage, setLastPage] = useState(undefined)
+    const [limit, setLimit] = useState(5)
 
     // Cambié fields para usar la nueva clave 'producto_nombre'
     const fields = {
@@ -17,7 +20,7 @@ const ImagesIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllImages(page)
+            const res = await getAllImages(page, limit, search)
             if (!res?.valid) {
                 console.log(res?.error)
                 return
@@ -26,12 +29,22 @@ const ImagesIndex = () => {
             setLastPage(res?.images?.last_page)
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
+
+    useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
 
     const onDelete = async (id) => {
         try {
@@ -48,6 +61,8 @@ const ImagesIndex = () => {
         producto_nombre: item.producto?.nombre || ""
     }))
 
+    if(loading) return <Loader text="Cargando imagenes..."></Loader>
+
     return (
         <div>
             <AdminPanel
@@ -62,6 +77,11 @@ const ImagesIndex = () => {
                 linkEditar={"/admin/imagenes/editar"}
                 onDelete={onDelete}
                 getData={getData}
+                limit={limit}
+                search={search}
+                setLimit={setLimit}
+                setSearch={setSearch}
+                enableSearch={true}
             />
         </div>
     )

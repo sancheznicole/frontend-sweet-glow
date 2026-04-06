@@ -2,9 +2,9 @@ import axios from "axios"
 
 const API_URL = import.meta.env.VITE_API_URL
 
-export async function getAllWinners(page = 1) {
+export async function getAllWinners(page = 1, limit = 5, search = "") {
     try {
-        const res = await axios.get(`${API_URL}/premiados?page=${page}`)
+        const res = await axios.get(`${API_URL}/premiados?page=${page}&limit=${limit}&search=${search}`)
         if (res?.status !== 200) return { valid: false, error: res.data?.errors }
         return { valid: true, winners: res?.data }
     } catch (error) {

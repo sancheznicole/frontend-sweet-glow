@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react"
 import { getAllWinners, deleteWinner } from "../../../services/winnersService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const AwardedIndex = () => {
-
+    const [loading, setLoading] = useState(true)
+    const [limit, setLimit] = useState(5)
+    const [search, setSearch] = useState("")
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
     const [lastPage, setLastPage] = useState(undefined)
@@ -17,7 +20,7 @@ const AwardedIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllWinners(page)
+            const res = await getAllWinners(page, limit, search)
             if (!res?.valid) {
                 console.log(res?.error)
                 return
@@ -35,12 +38,22 @@ const AwardedIndex = () => {
 
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
+
+    useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
 
     const onDelete = async (id) => {
         try {
@@ -51,6 +64,8 @@ const AwardedIndex = () => {
             return error.message
         }
     }
+
+    if(loading) return <Loader text="Cargando premiados..."></Loader>
 
     return (
         <div>
@@ -66,6 +81,11 @@ const AwardedIndex = () => {
                 linkEditar={"/admin/premiados/editar"}
                 onDelete={onDelete}
                 getData={getData}
+                limit={limit}
+                search={search}
+                setLimit={setLimit}
+                setSearch={setSearch}
+                enableSearch={true}
             />
         </div>
     )
