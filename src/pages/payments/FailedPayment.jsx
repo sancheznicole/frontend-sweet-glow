@@ -7,7 +7,7 @@ const FailedPayment = () => {
         <div className='factura-container'>
             <div className='card-factura'>
                 <div className='card-header'>
-                    <h1>❌ Pago rechazado</h1>
+                    <h1>Pago rechazado</h1>
                     <h2>No se pudo procesar tu pago</h2>
                     <p>Verifica tus datos o intenta con otro método de pago.</p>
                 </div>
