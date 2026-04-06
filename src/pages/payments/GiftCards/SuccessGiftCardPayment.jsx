@@ -68,11 +68,11 @@ const SuccessGiftCardPayment = () => {
                 break;
 
             case "rejected":
-                navigate("/giftcards/payment/failure");
+                navigate("/giftcards/payment/failed");
                 break;
 
             case "error":
-                navigate("/giftcards/payment/failure");
+                navigate("/giftcards/payment/failed");
                 break;
 
             default:
