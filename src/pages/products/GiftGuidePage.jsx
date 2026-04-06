@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { createGFPreference } from '../../services/paymentService';
 
 const API_URL = import.meta.env.VITE_API_URL
+const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
 
 const MONTOS_FIJOS = [80000, 100000, 200000, 300000]
 
@@ -29,6 +30,53 @@ const useToast = () => {
     return { toast, show }
 }
 
+// ── Sección Guía de Regalos ───────────────────────────────────────────────────
+const GiftGuideSection = () => {
+    const [guides, setGuides] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        async function fetchGuides() {
+            try {
+                const res = await getAllGiftGuides()
+                if (res?.valid) setGuides(res?.giftGuides?.data ?? [])
+            } catch (error) {
+                console.log(error?.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchGuides()
+    }, [])
+
+    return (
+        <div className="gg-section">
+            <div className="gg-header">
+                <p className="gc-eyebrow">Sweet Glow · Inspiración</p>
+                <h2 className="gg-titulo">GUÍA DE REGALOS</h2>
+                <p className="gg-desc">Encuentra la inspiración perfecta para regalar en cada ocasión.</p>
+            </div>
+
+            {loading ? (
+                <p className="gg-cargando">Cargando guías...</p>
+            ) : guides.length === 0 ? (
+                <p className="gg-vacio">No hay guías disponibles por el momento.</p>
+            ) : (
+                <div className="gg-grid">
+                    {guides.map((guide) => (
+                        <div key={guide.id_guia} className="gg-card">
+                            <div className="gg-card-overlay">
+                                <h3 className="gg-card-nombre">{guide.nombre}</h3>
+                                <p className="gg-card-desc">{guide.descripcion}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}
+
 const GiftCardPage = () => {
 
     const [usuario, setUsuario] = useState(null)
@@ -36,15 +84,11 @@ const GiftCardPage = () => {
     const [montoCustom, setMontoCustom] = useState('')
     const navigate = useNavigate()
     const [comprando, setComprando] = useState(false)
-
     const [misTarjetas, setMisTarjetas] = useState([])
     const [cargando, setCargando] = useState(true)
-
     const { toast, show } = useToast()
-
     const montoFinal = montoSeleccionado ?? (montoCustom ? Number(montoCustom) : null)
 
-    // ── Cargar usuario ────────────────────────────────────────────────────────
     useEffect(() => {
         const token = getToken()
         if (!token) return
@@ -56,7 +100,6 @@ const GiftCardPage = () => {
         })
     }, [])
 
-    // ── Cargar tarjetas del usuario ───────────────────────────────────────────
     useEffect(() => {
         if (!usuario) return
         cargarTarjetas()
@@ -69,11 +112,8 @@ const GiftCardPage = () => {
             if (res?.valid) {
                 const todasLasTarjetas = res.tarjetas ?? []
                 console.log('Todas las tarjetas:', todasLasTarjetas)
-
                 const idUsuario = usuario?.id_usuario ?? usuario?.id ?? null
-
                 const mias = todasLasTarjetas
-
                 console.log('Mis tarjetas filtradas:', mias)
                 setMisTarjetas(mias)
             }
@@ -97,11 +137,9 @@ const GiftCardPage = () => {
         try {
             setComprando(true)
             const token = getToken()
-
             const fechaExp = new Date()
             fechaExp.setFullYear(fechaExp.getFullYear() + 1)
             const fechaExpStr = fechaExp.toISOString().split('T')[0]
-
             const idUsuario = usuario?.id_usuario ?? usuario?.id ?? usuario?.user_id
 
             let res = await createGiftCard(montoFinal, fechaExpStr, idUsuario)
@@ -130,20 +168,17 @@ const GiftCardPage = () => {
         }
     }
 
-    // ── Agregar tarjeta al carrito ────────────────────────────────────────────
-    // TODO (compañera): reemplaza el console.log con tu función del carrito.
-    // La tarjeta `t` contiene: id_tarjeta, monto, estado, fecha_expiracion, id_usuario
     const handleAgregarAlCarrito = (tarjeta) => {
+        console.log('🛒 Agregar al carrito — tarjeta:', tarjeta)
+        show('Función pendiente de conectar con el carrito 🛒', 'success')
         localStorage.setItem("gift-card-to-apply", JSON.stringify(tarjeta))
         show('La tarjeta se agregará al carrito como descuento', 'success')
     }
 
-    // ── Determinar si una tarjeta está activa ─────────────────────────────────
-    // Cubre los valores más comunes que puede devolver el backend
-        const tarjetaEsActiva = (t) => {
-            const s = String(t.estado ?? '').toLowerCase().trim()
-            return s === 'activa'
-        }
+    const tarjetaEsActiva = (t) => {
+        const s = String(t.estado ?? '').toLowerCase().trim()
+        return s === 'activa'
+    }
 
     const handleDeleteCard = async () => {
 
@@ -153,10 +188,7 @@ const GiftCardPage = () => {
         <>
             <div className="gc-page page-container">
 
-                {/* ── Hero: dos columnas ────────────────────────────────── */}
                 <div className="gc-hero">
-
-                    {/* Columna izquierda — tarjeta visual */}
                     <div className="gc-hero-visual-col">
                         <div className="gc-card-visual">
                             <div className="gc-card-visual-brand">
@@ -172,7 +204,6 @@ const GiftCardPage = () => {
                         </div>
                     </div>
 
-                    {/* Columna derecha — formulario */}
                     <div className="gc-hero-form-col">
                         {/* <span className="gc-eyebrow">Sweet Glow · Tarjeta Regalo</span> */}
                         <h1 className="gc-hero-title">
@@ -184,7 +215,6 @@ const GiftCardPage = () => {
                             al instante y se puede usar en toda la tienda.
                         </p>
 
-                        {/* Montos sugeridos */}
                         <label className="gc-field-label">Montos sugeridos</label>
                         <div className="gc-pills">
                             {MONTOS_FIJOS.map((m) => (
@@ -201,7 +231,6 @@ const GiftCardPage = () => {
                             ))}
                         </div>
 
-                        {/* Monto custom */}
                         <label className="gc-field-label" style={{ marginTop: '16px' }}>
                             O ingresa otro valor
                         </label>
@@ -228,7 +257,6 @@ const GiftCardPage = () => {
                             />
                         </div>
 
-                        {/* Resumen */}
                         <div className="gc-summary-box">
                             <div className="gc-summary-row">
                                 <span>Valor de la tarjeta</span>
@@ -260,7 +288,6 @@ const GiftCardPage = () => {
                     </div>
                 </div>
 
-                {/* ── Mis tarjetas ──────────────────────────────────────── */}
                 <div className="gc-body">
                     <div className="gc-sep">
                         <div className="gc-sep-line" />
@@ -347,9 +374,12 @@ const GiftCardPage = () => {
                         </div>
                     )}
                 </div>
+
+                {/* ── Guía de Regalos ──────────────────────────────────── */}
+                <GiftGuideSection />
+
             </div>
 
-            {/* ── Toast ────────────────────────────────────────────────── */}
             <div className={`gc-toast${toast.show ? ' gc-toast--show' : ''}${toast.type === 'error' ? ' gc-toast--error' : ''}`}>
                 {toast.msg}
             </div>

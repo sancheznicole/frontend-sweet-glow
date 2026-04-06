@@ -10,7 +10,7 @@ const Skincare = () => {
       {/* HERO */}
       <div className="blog-hero">
         <img
-          src={`${STORAGE_URL}/imagenes_productos/blogskin.jpg`}
+          src={`/assets/blogskin.jpg`}
           alt="Cuidado de la piel"
           className="blog-hero-img"
         />
@@ -40,7 +40,7 @@ const Skincare = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/piel-seca.jpg`} alt="Piel seca" />
+              <img src={`/assets/piel-seca.jpg`} alt="Piel seca" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de skincare</Link>
@@ -65,7 +65,7 @@ const Skincare = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/tonico.jpg`} alt="Piel mixta" />
+              <img src={`/assets/tonico.jpg`} alt="Piel mixta" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de skincare</Link>
@@ -89,7 +89,7 @@ const Skincare = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/limpiador.jpg`} alt="Piel grasa" />
+              <img src={`/assets/limpiador.jpg`} alt="Piel grasa" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de skincare</Link>
@@ -114,7 +114,7 @@ const Skincare = () => {
           </div>
           <div className="skin-imagen-con-boton">
             <div className="skin-imagen-tipo">
-              <img src={`${STORAGE_URL}/imagenes_productos/serum.jpg`} alt="Piel sensible" />
+              <img src={`/assets/serum.jpg`} alt="Piel sensible" />
             </div>
             <div className="skin-boton-container">
               <Link to="/categories" className="skin-boton">Ver productos de skincare</Link>
