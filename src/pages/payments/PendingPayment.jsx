@@ -16,7 +16,7 @@ const PendingPayment = () => {
         <div className='factura-container pending-container'>
             <div className='card-factura'>
                 <div className='card-header'>
-                    <h1>⏳ Pago en proceso</h1>
+                    <h1>Pago en proceso</h1>
                     <h2>Estamos confirmando tu pago</h2>
                     <p>Esto puede tardar unos minutos dependiendo del medio de pago.</p>
                 </div>

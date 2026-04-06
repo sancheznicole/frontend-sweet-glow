@@ -116,11 +116,10 @@ const SuccessPayment = () => {
             <div className='factura-container'>
                 {status == "approved" || status == "already_paid" && factura != undefined && (
                     <>
-                        <button className='download-bill-factura' onClick={() => handleDownload()} disabled={loadingDownload}>{loadingDownload ? 'Descargando...' : 'Descargar factura'}</button>
 
                         <div className='card-factura'>   
                             <div className='card-header'>
-                                <h1>✅ Pago aprobado</h1>
+                                <h1>Pago aprobado</h1>
                                 <h2>Tu compra fue exitosa | Factura #{id_factura}</h2>
                                 <p>Fecha de compra: {factura?.created_at.slice(0, 10)}</p>
                             </div>
@@ -146,10 +145,12 @@ const SuccessPayment = () => {
                                 <p>Total: {parsePrice(factura?.neto-factura?.descuento)}</p>
                             </div>
                         </div>
+
                     
                     </>
 
                 )}
+                <button className='download-bill-factura' onClick={() => handleDownload()} disabled={loadingDownload}>{loadingDownload ? 'Descargando...' : 'Descargar factura'}</button>
             </div>
         )
     )

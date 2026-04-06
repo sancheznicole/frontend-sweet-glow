@@ -4072,10 +4072,13 @@ button{
     width: 80%;
 }
 .factura-container .card-factura .cart-product-container{
-    background-color: #f9f1f4;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
+    border: 1px solid #e7dae2;
+    border-radius: 5px;
+    width: 70%;
+    margin: 0 auto;
 }
 .card-factura .products-container{
     display: flex;
@@ -4104,9 +4107,11 @@ button{
     text-align: right;
     margin-top: 5px;
     padding: 10px;
-    color: palevioletred;
     font-size: 30px;
     font-weight: bold;
+}
+.card-footer p{
+    color: #393939;
 }
 .factura-container .products-title{
     margin: 10px 0px;
@@ -4116,7 +4121,10 @@ button{
     font-size: 15px;
     padding: 10px;
     font-weight: bold;
-    border: 1px solid black;
+    border: 1px solid #393939;
+    background-color: #393939;
+    color: white;
+    border-radius: 5px;
     display: flex;
     margin: 0 auto;
     transition: all 300ms ease-in-out;
@@ -4464,4 +4472,7 @@ button{
     display: flex;
     align-items: center;
     gap: 10px;
+}
+.home-separator{
+    margin-top: 20px;
 }

@@ -21,17 +21,25 @@ const HomePage = () => {
             <div className="view-cleaner-important-div"></div>
 
             {/* ultimos productos */}
-            <h2 className="titulo-por-h2">Nuestros ultimos productos</h2>
-            <ProductsCards 
-            ></ProductsCards>
+            <div className="home-separator">
+                <h2 className="titulo-por-h2">Nuestros ultimos productos</h2>
+                <ProductsCards 
+                ></ProductsCards>
+
+            </div>
 
             {/* productos en tendencia */}
-            <h2 className="titulo-por-h2">Nuestros productos en tendencia</h2>
-            <ProductsCarousel tendency={true}></ProductsCarousel>
+            <div className="home-separator">
+                <h2 className="titulo-por-h2">Nuestros productos en tendencia</h2>
+                <ProductsCarousel tendency={true}></ProductsCarousel>
+            </div>
 
             {/* productos en descuento */}
-            <h2 className="titulo-por-h2">Nuestros productos en descuento</h2>
-            <ProductsCarousel discount={true}></ProductsCarousel>
+            <div className="home-separator">
+                <h2 className="titulo-por-h2 titulo-margen-up-home">Nuestros productos en descuento</h2>
+                <ProductsCarousel discount={true}></ProductsCarousel>
+
+            </div>
 
             {/* banner publicitario */}
 
