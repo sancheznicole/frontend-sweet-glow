@@ -78,6 +78,7 @@ const SuccessPayment = () => {
     }, []);
 
     useEffect(() => {
+        if(!id_factura) return
         getOrderInoiceData()
     }, [id_factura])
 
