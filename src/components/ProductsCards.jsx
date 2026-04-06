@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Loader from './Loader'
 import { Link } from 'react-router-dom'
 
-const ProductsCards = ({ elementsLimit = 6 }) => {
+const ProductsCards = ({ elementsLimit = 6, data = undefined, showDeletion = false }) => {
     const [products, setProducts] = useState([])
     const [success, setSuccess] = useState(true)
     const [loading, setLoading] = useState(true)
@@ -43,11 +43,16 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
     }
 
     useEffect(() => {
-        getContent()
-    }, [])
+        if (data) {
+            setProducts(data)
+            setLoading(false)
+        } else {
+            getContent()
+        }
+    }, [data])
 
     useEffect(() => {
-        getContent()
+        if(!data) getContent()
     }, [page])
 
     const handleGetMore = () => {
@@ -58,47 +63,52 @@ const ProductsCards = ({ elementsLimit = 6 }) => {
     return (
         <>
             {loading ? (
-                <Loader key={"Estamos cargando los productos"}></Loader>
+                <Loader text={"Estamos cargando los productos"}></Loader>
             ) : (
                 <>
                     {success ? (
-                        <div>
-                            <div className='products-cards-container'>
-                                {products?.map((p, index) => {
-                                    return (
-                                        <ProductCard 
-                                            key={index}
-                                            id={p?.id_producto}
-                                            imagen={p?.imagenes}
-                                            categoria={p?.categoria?.nombre}
-                                            marca={p?.marca?.nombre}
-                                            precio={p?.precio}
-                                            titulo={p?.nombre}
-                                            stock={p?.stock}
-                                            referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
-                                            product={p}
-                                        ></ProductCard>
-                                    )
-                                })}
-                            </div>
-
-                            {lastPage > page && attemps < maxAttemps && (
-                                <button onClick={() => {handleGetMore()}}>
-                                    Cargar mas...
-                                </button>
-                            )}
-
-                            {attemps >= maxAttemps && (
-                                <div>
-                                    <p>Te invitamos a ver nuestra lista completa de productos</p>
-
-                                    <Link to={"/"}>
-                                        Ver mas productos
-                                    </Link>
+                        products && products.length > 0 ? (
+                            <div>
+                                <div className='products-cards-container'>
+                                    {products?.map((p, index) => {
+                                        return (
+                                            <ProductCard 
+                                                key={index}
+                                                id={p?.id_producto}
+                                                imagen={p?.imagenes}
+                                                categoria={p?.categoria?.nombre}
+                                                marca={p?.marca?.nombre}
+                                                precio={p?.precio}
+                                                titulo={p?.nombre}
+                                                stock={p?.stock}
+                                                showDeletion={showDeletion}
+                                                referencia={`${p?.referencia_producto?.color} | ${p?.referencia_producto?.tamano}`}
+                                                product={p}
+                                            ></ProductCard>
+                                        )
+                                    })}
                                 </div>
 
-                            )}
-                        </div>
+                                {!data && lastPage > page && attemps < maxAttemps && (
+                                    <button onClick={() => {handleGetMore()}} className='btn-load-more'>
+                                        Cargar mas
+                                    </button>
+                                )}
+
+                                {!data && attemps >= maxAttemps && (
+                                    <div>
+                                        <p>Te invitamos a ver nuestra lista completa de productos</p>
+
+                                        <Link to={"/"}>
+                                            Ver mas productos
+                                        </Link>
+                                    </div>
+
+                                )}
+                            </div>
+                        ) : (
+                            <p>Sin productos para mostrar</p>
+                        )
                     ) : (
                         <p>Ocurrió un error al cargar los productos</p>
                     )} 

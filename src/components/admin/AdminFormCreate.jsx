@@ -11,7 +11,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 	const navigate = useNavigate()
 
 	return (
-		<div>
+		<div className="create-form-admin-panel">
 			<div className="back-link-container">
         		<button className="link-regresar" onClick={() => navigate(-1)}>Regresar</button>
       		</div>
@@ -109,7 +109,7 @@ const AdminFormCreate = ({titulo, campos, onSendForm, linkRegresar, error, field
 									/>
 
 									{searchResults[value.name]?.length > 0 && (
-										<div>
+										<div className="input-search-results">
 											{searchResults[value.name].map((r, index) => {
 												let keys = value?.text_keys.split(",")
 												return (

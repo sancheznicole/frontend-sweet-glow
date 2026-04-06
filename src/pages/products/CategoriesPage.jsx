@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { getAllCategories } from '../../services/categoriesService'
 import CategoryProducts from './CategoryProducts'
+import Loader from '../../components/Loader'
 
 const CATEGORY_ASSETS = {
     1:  { imagen: '/assets/maquillaje.jpeg',    video: '/assets/maquillaje.mp4' },
-    6:  { imagen: '/assets/haircare.jpeg',   video: '/assets/haircare.mp4' },
-    7: { imagen: '/assets/skincare.jpeg', video: '/assets/skincare.mp4' },
-    8: { imagen: '/assets/perfume.jpeg',   video: '/assets/perfume.mp4' },
+    2:  { imagen: '/assets/haircare.jpeg',   video: '/assets/haircare.mp4' },
+    3: { imagen: '/assets/skincare.jpeg', video: '/assets/skincare.mp4' },
+    4: { imagen: '/assets/perfume.jpeg',   video: '/assets/perfume.mp4' },
 }
 
 const CategoryCard = ({ categoria, onSelect }) => {
@@ -66,7 +67,7 @@ const CategoriesPage = () => {
         <div className="categories-page">
             <h1 className="categories-titulo">Compra por Categorías</h1>
             {loading ? (
-                <p className="stepper-cargando">Cargando categorías...</p>
+                <Loader text=''></Loader>
             ) : (
                 <div className="categories-grid">
                     {categories.map(cat => (

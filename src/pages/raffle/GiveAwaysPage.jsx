@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { Link } from "react-router-dom"
 import { getAllFacturas, createGiftRegistration } from '../../services/giftRegistrationService'
 import { useAuth } from '../../contexts/AuthContext'
+import { useNavigate } from "react-router-dom"
 
 const GiveAwaysPage = () => {
 
-    const { user } = useAuth()
-
+    const { isAuthenticated, user } = useAuth()
+    const navigate = useNavigate()
     const [modalAbierto, setModalAbierto] = useState(false)
     const [facturas, setFacturas]         = useState([])
     const [facturaId, setFacturaId]       = useState('')
@@ -16,6 +17,8 @@ const GiveAwaysPage = () => {
     const [exito, setExito]               = useState(false)
 
     const abrirModal = async () => {
+        if(!isAuthenticated) return navigate("/login")
+
         setError('')
         setExito(false)
         setFacturaId('')
@@ -90,8 +93,8 @@ const GiveAwaysPage = () => {
 
                 {/* Lado derecho — título + requisitos + botón */}
                 <div className="giveaways-split-contenido">
-                    <p className="giveaways-eyebrow">✦ sorteo especial</p>
-                    <h1 className="giveaways-titulo">Inscríbete<br />y participa</h1>
+                    {/* <p className="giveaways-eyebrow">✦</p> */}
+                    <h1 className="giveaways-titulo">Inscríbete y participa</h1>
                     <p className="giveaways-tag">¿Cómo participar?</p>
 
                     <ol className="giveaways-requisitos-lista">

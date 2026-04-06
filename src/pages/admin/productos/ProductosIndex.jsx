@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react"
 import { getAllProducts, deleteProduct } from "../../../services/productsService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const ProductosIndex = () => {
 	const [data, setData] = useState([])
+	const [loading, setLoading] = useState(true)
+	const [page, setPage] = useState(1)
+	const [limit, setLimit] = useState(5)
+	const [lastPage, setLastPage] = useState(undefined)
+	const [search, setSearch] = useState("")
 
 	const fields = {
 		id_producto: "Id producto",
@@ -22,9 +28,15 @@ const ProductosIndex = () => {
 		created_at: "Fecha creación",
 	}
 
+	useEffect(() => {
+        getData()
+    }, [page, limit])
+
 	async function getData() {
 		try {
-			let res = await getAllProducts()
+			setLoading(true)
+
+			let res = await getAllProducts(page, limit, search)
 
 			if (!res?.valid) {
 				console.log(res?.error)
@@ -66,15 +78,26 @@ const ProductosIndex = () => {
 			}))
 
 			setData(products)
+			setLastPage(Number(res?.products?.last_page))
 
 		} catch (error) {
 			console.log(error?.message)
+		} finally {
+			setLoading(false)
 		}
 	}
 
 	useEffect(() => {
 		getData()
 	}, [])
+
+	useEffect(() => {
+		const delayDebounce = setTimeout(() => {
+			getData()
+		}, 500)
+
+		return () => clearTimeout(delayDebounce)
+	}, [search])
 
 	const onDelete = async (id) => {
 		try {
@@ -89,16 +112,28 @@ const ProductosIndex = () => {
 
 	return (
 		<div>
-			<AdminPanel
-				data={data}
-				campos={fields}
-				titulo={"Administración de productos"}
-				texto={"Administra el catálogo de productos disponibles y actualiza su información dentro del sistema"}
-				linkCrear={"/admin/products/create"}
-				linkEditar={"/admin/products/edit"}
-				onDelete={onDelete}
-				getData={getData}
-			/>
+			{loading ? (
+				<Loader text="Cargando productos..." />
+			) : (
+				<AdminPanel
+					data={data}
+					campos={fields}
+					titulo={"Administración de productos"}
+					texto={"Administra el catálogo de productos disponibles y actualiza su información dentro del sistema"}
+					linkCrear={"/admin/products/create"}
+					linkEditar={"/admin/products/edit"}
+					onDelete={onDelete}
+					getData={getData}
+					limit={limit}
+					setLimit={setLimit}
+					setPage={setPage}
+					page={page}
+					lastPage={lastPage}
+					search={search}
+					setSearch={setSearch}
+					enableSearch={true}
+				/>
+			)}
 		</div>
 	)
 }

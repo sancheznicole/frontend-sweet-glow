@@ -138,7 +138,7 @@ export const addToCart = async (product, quantity) => {
        }
 
        localStorage.setItem("cart", JSON.stringify(cart))
-
+       window.dispatchEvent(new Event("cartUpdated"))
         return { valid: true }
     } catch (error) {
         return { valid: false, error: error?.message }
@@ -183,14 +183,22 @@ export const addOne = (id) => {
 
 export const deleteOne = (id) => {
     let saved = localStorage.getItem("cart")
-    let cart = saved != null ? JSON.parse(saved) : saved
+    let cart = saved != null ? JSON.parse(saved) : {}
 
-    if (cart[id]) {
-        cart[id].quantity -= 1;
-    } else {
+    if (!cart[id]) {
         console.warn("Producto no existe en el carrito");
         return;
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+    if (cart[id].quantity > 1) {
+        cart[id].quantity -= 1;
+    } else {
+        delete cart[id];
+    }
+
+    if (Object.keys(cart).length === 0) {
+        localStorage.removeItem("cart");
+    } else {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
 }

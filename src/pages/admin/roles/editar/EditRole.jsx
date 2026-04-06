@@ -4,13 +4,15 @@ import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { updateRole, getRole } from "../../../../services/rolesService"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 const EditRole = () => {
 
   // obtener id desde la url
   const { id } = useParams()
   const navigate = useNavigate()
-
+  
+  const [loadingData, setLoadingData] = useState(true)
   // estados generales
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -85,6 +87,8 @@ const EditRole = () => {
         
       } catch (error) {
         setError(error.message)
+      } finally {
+        setLoadingData(false)
       }
     }
     getData()
@@ -102,6 +106,9 @@ const EditRole = () => {
   }
 
   return (
+    loadingData ? (
+      <Loader text="Cargando informacion del rol..."></Loader>
+    ) : (
 
     <div className="page-container">
         {!mostrarDatos && (
@@ -145,7 +152,7 @@ const EditRole = () => {
       </section>
 
     </div>
-
+    )
   )
 }
 

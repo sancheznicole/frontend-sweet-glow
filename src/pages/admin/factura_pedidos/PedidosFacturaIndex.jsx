@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react"
 import { getAllInvoiceOrders, deleteInvoiceOrders } from "../../../services/facturaPedidosService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const PedidosFacturaIndex = () => {
+	const [loading, setLoading] = useState(true)
 	const [data, setData] = useState([])
-	const [page, setPage] = useState(0)
-	const [lastPage, setLastPage] = useState(0)
+	const [page, setPage] = useState(1)
+	const [limit, setLimit] = useState(5)
+	const [lastPage, setLastPage] = useState(undefined)
+	const [search, setSearch] = useState('')
 
 	const fields = {
 		id_factura_pedido: "Id factura",
@@ -18,9 +22,19 @@ const PedidosFacturaIndex = () => {
 		created_at: "Fecha de creacion"
 	}
 
+	useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
+
 	async function getData() {
 		try {
-			let res = await getAllInvoiceOrders(page)
+			setLoading(true)
+
+			let res = await getAllInvoiceOrders(page, limit, search)
 
 			if (!res?.valid) {
 				console.log(res?.error)
@@ -45,6 +59,8 @@ const PedidosFacturaIndex = () => {
 
 		} catch (error) {
 			console.log(error?.message)
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -54,9 +70,9 @@ const PedidosFacturaIndex = () => {
 
 	useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
 
-  	console.log(data)
+  	console.log(search)
 
 	const onDelete = async (id) => {
 		try {
@@ -73,19 +89,28 @@ const PedidosFacturaIndex = () => {
 
 	return (
 		<div>
-			<AdminPanel
-				data={data}
-				campos={fields}
-				titulo={"Administración de facturas"}
-				texto={"Administra las facturas registradas dentro del sistema"}
-				linkCrear={"/admin/invoice-orders/create"}
-				linkEditar={"/admin/invoice-orders/edit"}
-				onDelete={onDelete}
-				getData={getData}
-				setPage={setPage}
-				page={page}
-				lastPage={lastPage}
-			/>
+			{loading ? (
+				<Loader text="Cargando facturas..."></Loader>
+			) : (
+				<AdminPanel
+					data={data}
+					campos={fields}
+					titulo={"Administración de facturas"}
+					texto={"Administra las facturas registradas dentro del sistema"}
+					linkCrear={"/admin/invoice-orders/create"}
+					linkEditar={"/admin/invoice-orders/edit"}
+					onDelete={onDelete}
+					getData={getData}
+					setPage={setPage}
+					page={page}
+					lastPage={lastPage}
+					limit={limit}
+					setLimit={setLimit}
+					setSearch={setSearch}
+					enableSearch={true}
+					search={search}
+				/>
+			)}
 		</div>
 	)
 }

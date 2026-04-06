@@ -2,9 +2,9 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function getAllProducts(page, limit) {
+export async function getAllProducts(page = 1, limit = 5, search = "") {
     try {
-        const res = await axios.get(`${API_URL}/products?page=${page}&limit=${limit}`)
+        const res = await axios.get(`${API_URL}/products?page=${page}&limit=${limit}&search=${search}`)
 
         if(res?.status != 200){
             return { valid: false, error: res.data?.errors }
@@ -117,4 +117,95 @@ export async function searchProduct(search) {
     catch (error) {
         return { valid: false, error: error?.message }
     }
+}
+
+export async function latestInTendency() {
+    try {
+        const res = await axios.get(`${API_URL}/products/tendency-latest`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function getDiscountProducts() {
+    try {
+        const res = await axios.get(`${API_URL}/products/discount`)
+
+        if(res?.status != 200){
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function searcherForProductsAndFilters(descuento, tendencia, regalo, premio, search, limit) {
+    try {
+        const res = await axios.get(`${API_URL}/products/searcher`, {
+            params: { descuento, tendencia, regalo, premio, search, limit }
+        })
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function sarchByBrandAndCategory(brands, categories, limit) {
+    try {
+        const res = await axios.get(`${API_URL}/products/byBrandsAndCategories`, {
+            params: {
+                brands,
+                categories,
+                limit
+            }
+
+        })
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
+export async function handleReduceProductsStock(order_invoice) {
+    try {
+        const res = await axios.post(`${API_URL}/products/handle-reduce-stock`, {
+            order_invoice 
+        })
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+        
+        return { valid: true, products: res?.data }
+    } 
+    
+    catch (error) {
+        return { valid: false, error: error?.message }
+    }   
 }

@@ -4,13 +4,16 @@ import { getProduct } from "../../services/productsService"
 import Loader from "../../components/Loader"
 import { getCategory } from "../../services/categoriesService"
 import { getBrand } from "../../services/brands"
-import { searchReviewsByProductId } from "../../services/reviewsService"
+import { createReview, searchReviewsByProductId } from "../../services/reviewsService"
 import ProductsCards from "../../components/ProductsCards"
 import { addToCart } from "../../services/cartService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
+import { addToWishList } from "../../services/wishlist"
+import { useAuth } from "../../contexts/AuthContext"
 
 const ProductsDetails = () => {
+    const { isAuthenticated, user } = useAuth()
     const { id } = useParams()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
@@ -22,9 +25,22 @@ const ProductsDetails = () => {
     const [quantity, setQuantity] = useState(1)
     const [cartError, setCartError] = useState('')
     const [currentImage, setCurrentImage] = useState(0)
+    const [addReview, setAddReview] = useState(false)
+    
+    const [calificacion, setCalificacion] = useState(3)
+    const stars = [1, 2, 3, 4, 5]
+    const [loadingNewReview, setLoadingNewReview] = useState(false)
+    const [reviewError, setReviewError] = useState("")
+    const [reviewAverage, setReviewAverage] = useState(0)
+
+    const [tendencia, setTendencia] = useState(0)
+    const [descuento, setDescuento] = useState(0)
+    const [prod_regalo, setProd_regalo] = useState(0)
+    const [premio, setPremio] = useState(0)
 
     const getData = async () => {
         try {
+            setLoading(true)
             let res = await getProduct(id)
 
             if(!res?.valid){
@@ -32,22 +48,26 @@ const ProductsDetails = () => {
             }
 
             setProduct(res?.product)
+            setTendencia(res?.product?.tendencia)
+            setDescuento(res?.product?.descuento)
+            setProd_regalo(res?.product?.prod_regalo)
+            setPremio(res?.product?.premio)
         } catch (error) {
             console.log(error.message)
         }
     }
 
-    useEffect(() => {
-        if (!product?.imagenes?.length) return
+    const nextImage = () => {
+        setCurrentImage(prev =>
+            (prev + 1) % product.imagenes.length
+        )
+    }
 
-        const interval = setInterval(() => {
-            setCurrentImage(prev =>
-                (prev + 1) % product.imagenes.length 
-            )
-        }, 3000) // 3 segundos
-
-        return () => clearInterval(interval)
-    }, [product?.imagenes])
+    const prevImage = () => {
+        setCurrentImage(prev =>
+            prev === 0 ? product.imagenes.length - 1 : prev - 1
+        )
+    }
 
     const getBrandAndCategory = async () => {
         try {
@@ -85,9 +105,27 @@ const ProductsDetails = () => {
         if(!res?.valid){
             setCartError(res?.error)
         }
-
-        navigate("/cart")
     }
+
+    const handleAddToWishList = async () => {
+        const res = await addToWishList(product)
+
+        if(!res?.valid){
+            setCartError(res?.error)
+        }
+
+        navigate("/wishlist")
+    }
+
+    console.log(product)
+
+    useEffect(() => {
+        const promedio = reviews.length
+        ? reviews.reduce((acc, item) => acc + item.resena, 0) / reviews.length
+        : 0;
+
+        setReviewAverage(promedio)
+    }, [reviews])
 
     useEffect(() => {
         getData()
@@ -99,7 +137,31 @@ const ProductsDetails = () => {
         }
     }, [product])
 
-    console.log(product)
+    const handleChangeReviewsView = () => {
+        if(!isAuthenticated) return navigate("/login")
+
+        setAddReview(!addReview)
+    }
+
+    const handleSendReview = async () => {
+        try {
+            setLoadingNewReview(true)
+
+            let res = await createReview(calificacion, id, user?.id_usuario)
+
+            if(!res?.valid){
+                setReviewError("No se pudo guardar la reseña")
+                return
+            }
+
+            getData()
+            setAddReview(false)
+        } catch (error) {
+            console.log(error?.message)
+        } finally {
+            setLoadingNewReview(false)
+        }
+    }
 
     return (
         <div>
@@ -111,16 +173,29 @@ const ProductsDetails = () => {
                     <div className="product-details">
                         <div className="images-container">
                             {product?.imagenes?.map((i, index) => (
-                                <img
-                                    key={index}
-                                    src={createImageURL(i?.filename)}
-                                    alt={`${product?.nombre} #${index}`}
-                                    className={index === currentImage ? 'active' : 'inactive'}
-                                />
+                                <>
+                                    <img
+                                        src={createImageURL(product.imagenes[currentImage]?.filename)}
+                                        alt={product?.nombre}
+                                        className="main-image"
+                                    />
+
+                                    {product.imagenes.length > 1 && (
+                                        <>
+                                            <button className="prev" onClick={prevImage}>‹</button>
+                                            <button className="next" onClick={nextImage}>›</button>
+                                        </>
+                                    )}
+                                </>
                             ))}
                         </div>
                         <div className="details">
-                            <h1>{product?.nombre}</h1>
+                            <div className="details-menu-header">
+                                <h1>{product?.nombre}</h1>
+                                <button title="Agregar a la lista de deseos" onClick={() => {handleAddToWishList()}} className="button-add-to-wishlist">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-heart"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                </button>
+                            </div>
                             {product?.stock == 0 ? (
                                 <p>Agotado</p>
                             ) : (
@@ -128,43 +203,136 @@ const ProductsDetails = () => {
                             )}
                             <p>{brand?.nombre} - {category?.nombre}</p>
 
-                            <p>Reseñas ({reviews.length})</p>
+                            <p>
+                                Reseñas ({reviews.length}) 
+                                <div className="estrellas-display estrellas-display-details">
+                                    {stars.map(s => {
+                                        if (reviewAverage >= s) {
+                                            return <span key={s} className="estrella activa">★</span>
+                                        } else if (reviewAverage >= s - 0.5) {
+                                            return <span key={s} className="estrella media">★</span>
+                                        } else {
+                                            return <span key={s} className="estrella">☆</span>
+                                        }
+                                    })}
+                                </div>
+
+                                <p>({reviewAverage.toFixed(1)} / 5)</p>    
+                            </p>
+
+                            {(premio == 1 || descuento == 1 || prod_regalo == 1 || tendencia == 1) && (
+                                <div className="tags-container">
+                                    {descuento == 1 && <span className="badge">En Descuento</span>}
+                                    {tendencia == 1 && <span className="badge">En Tendencia</span>}
+                                    {premio == 1 && <span className="badge">Premio</span>}
+                                    {prod_regalo == 1 && <span className="badge">Regalo</span>}
+                                </div>
+                            )}
+
 
                             <div className="add-to-cart">
                                 <div className="quantity-buttons">
                                     <button onClick={() => {if(quantity > 1) setQuantity(quantity-1)}}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
+                                       <p>-</p> 
                                     </button>
                                     <p>
                                         {quantity}
                                     </p>
                                     <button onClick={() => {setQuantity(quantity+1)}}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
+                                        <p>+</p>
                                     </button>
                                 </div>
                                 <div>
                                     <button onClick={() => {handleAddToCart()}}>
-                                        Añadir al carrito {parsePrice(quantity*product?.precio)} COP
+                                        añadir al carrito {parsePrice(quantity*product?.precio)} COP
                                     </button>
                                 </div>
                             </div>
 
-                            <h2>Descripcion</h2>
+                            <h2>Detalles</h2>
                             <p>{product?.descripcion}</p>
                         </div>
                     </div>
                     
                     {/* reseñas */}
-                    <div className="details-reviews-container">
-                        {reviews.map((r, index) => {
-                            return (
-                                <div key={index}>
-                                    <h2>{r?.usuario?.nombres} {r?.usuario?.apellidos}</h2>
-                                    <p>{`${'★'.repeat(r.resena)}${'☆'.repeat(5 - r.resena)} (${r.resena}/5)`}</p>
-                                    <h3>{r?.created_at.split("T")[0]}</h3>
+                    <div className="reviews-details-container">
+
+                        {addReview ? (
+                            <div className="section-login">
+                                 <div>
+                                    <h1 className="titulo-por-h1">Reseñas</h1>
+                                </div>
+
+                                <div className="stepper-estrellas">
+                                    <div className="estrellas-display">
+                                        {stars.map(s => (
+                                            <span
+                                                key={s}
+                                                className={`estrella ${s <= calificacion ? 'activa' : ''}`}
+                                                onClick={() => {
+                                                    setCalificacion(s)
+                                                    setStepErrors({})
+                                                }}
+                                            >
+                                                ★
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    <input
+                                        type="range"
+                                        min="1"
+                                        max="5"
+                                        step="1"
+                                        value={calificacion}
+                                        onChange={e => {
+                                            setCalificacion(Number(e.target.value))
+                                            setStepErrors({})
+                                        }}
+                                        className="slider-estrellas"
+                                    />
+
+                                    <p className="calificacion-texto">
+                                        {calificacion === 1 && 'Muy malo'}
+                                        {calificacion === 2 && 'Malo'}
+                                        {calificacion === 3 && 'Regular'}
+                                        {calificacion === 4 && 'Bueno'}
+                                        {calificacion === 5 && 'Excelente'}
+                                    </p>
+                                </div>
+                                <p className="highlight">Dejanos saber tu opinion sobre este producto</p>
+                                <p className="highlight">¿De 1 a 5 que opinas del producto?</p>
+
+                                {reviewError && (<p className="form-input-error">{reviewError}</p>)}
+                            </div>
+                        ) : (
+                            reviews.length > 0 ? (
+                                <div className="details-reviews-container">
+                                    {reviews.map((r, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <h2>{r?.usuario?.nombres} {r?.usuario?.apellidos}</h2>
+                                                <p>{`${'★'.repeat(r.resena)}${'☆'.repeat(5 - r.resena)} (${r.resena}/5)`}</p>
+                                                <h3>{r?.created_at.split("T")[0]}</h3>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="not-reviews-container">
+                                    <h1>Sin reseñas</h1>
+                                    <p>Parece que este producto no cuenta con reseñas, se el primero en agregar una</p>
                                 </div>
                             )
-                        })}
+                        )}
+
+                        <div>
+                            {addReview && (
+                                <button className="secondary-btn" onClick={() => {handleSendReview()}} disabled={loadingNewReview}>{loadingNewReview ? "Guardando..." : "Guardar"}</button>
+                            )}
+                            <button onClick={() => {handleChangeReviewsView()}}>{addReview ? "Cancelar" : "Agregar Reseña"}</button>
+                        </div>
+
                     </div>
 
                     {/* productos  */}

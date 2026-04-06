@@ -8,17 +8,56 @@ import { createPreference } from "../../services/paymentService"
 import { createInvoiceOrders } from "../../services/facturaPedidosService"
 import { createImageURL } from "../../services/imagesService"
 import { parsePrice } from "../../helpers/json.helpers"
+import { userUpdate } from "../../services/authService"
+import { getGiftCard, updateGiftCard } from "../../services/giftCardService"
+import { colombia } from "../../services/citiesService"
 
-const cartPage = () => {
+const CartPage = ({setShowCart = undefined, showCart = false}) => {
     const navigate = useNavigate()
     const { isAuthenticated, user } = useAuth()
+    const [shippingAdress, setShippingAdress] = useState("")
+    const [phone, setPhone] = useState("")
     const [cart, setCart] = useState(null)
     const [total, setTotal] = useState(0)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [confirm, setConfirm] = useState(false)
+    const [modifiedData, setModifiedData] = useState(false)
 
     const [descuento, setDescuento] = useState(0)
     const [tarjeta, setTarjeta] = useState(null)
+    const [tarjetaData, setTarjetaData] = useState(undefined)
+
+    const [loadingUserUpdate, setLoadingUserUpdate] = useState(false)
+    const [userUpdateError, setUSerUpdateError] = useState("")
+    const [card, setCard] = useState("")
+    const [loadingGiftCard, setLoadingGiftCard] = useState(false)
+    const [errorGiftCard, setErrorGiftCard] = useState(false)
+
+    const [departamento, setDepartamento] = useState("")
+    const [municipio, setMunicipio] = useState("")
+    const [municipios, setMunicipios] = useState([])
+    const [savedCard, setSavedCard] = useState(null)
+    const totalFinal = Math.max(0, total - descuento)
+
+    useEffect(() => {
+        if(isAuthenticated){
+            setShippingAdress(user?.direccion)
+            setPhone(user?.telefono)
+        } 
+    }, [user])
+
+    async function handleUpdateGiftCard(){
+        try {
+            let res = await updateGiftCard(tarjeta, tarjetaData?.monto, tarjetaData?.fecha_expiracion, "usada")
+
+            if(res?.valid){
+                return true
+            }
+        } catch (error) {
+            console.log(error?.message)
+        }
+    }
 
     async function handleProcessCart(){
         try {
@@ -51,7 +90,7 @@ const cartPage = () => {
 
 
             // crear factura no pagada
-            let invoiceRes = await createInvoiceOrders(user?.id_usuario, new_cart_id, tarjeta, total, descuento, "pending")
+            let invoiceRes = await createInvoiceOrders(user?.id_usuario, new_cart_id, tarjeta, totalFinal, descuento, "pending")
 
             if(!invoiceRes?.valid){
                 setError("No se pudo procesar la solicitud")
@@ -62,15 +101,25 @@ const cartPage = () => {
             // iniciar pago en pasarela 
             let preferenceRes = await createPreference(invoiceRes?.order_invoice?.data?.id_factura_pedido)
 
-            if(!preferenceRes?.valid || !preferenceRes?.preference?.init_point){
+            if(!preferenceRes?.valid || (!preferenceRes?.preference?.init_point && !preferenceRes?.preference?.successZeroPay)){
                 setError("No se pudo procesar la solicitud")
                 return
             }
+            setTarjeta(null)
 
+            if(preferenceRes?.preference?.successZeroPay){
+                handleDeleteCart()
+                navigate(`/payment/success?external_reference=${preferenceRes?.preference?.factura}&payment_type=zero`)
+                setShowCart(false)
+                return
+            }
+
+            if(tarjeta) handleUpdateGiftCard()
             handleDeleteCart()
             window.location.href = preferenceRes?.preference?.init_point
             
         } catch (error) {
+            console.log(error?.message)
             setError("Error al iniciar pago ")
         } finally {
             setLoading(false)
@@ -82,11 +131,14 @@ const cartPage = () => {
         let saved = localStorage.getItem("cart")
 
         setCart(saved != null ? JSON.parse(saved) : saved)
+
+        let savedGiftCard = localStorage.getItem("gift-card-to-apply")
+        setSavedCard(savedGiftCard != null ? JSON.parse(savedGiftCard) : null)
     }
 
     // obtener carrito de compras 
     useEffect(() => {
-        getCart()
+        getCart();
     }, [])
 
     // calcular precio total del carrito
@@ -104,84 +156,284 @@ const cartPage = () => {
 
     const handleDeleteCart = () => {
         localStorage.setItem("cart", null);
+        localStorage.setItem("gift-card-to-apply", null);
         getCart()
     }
 
+    const handleDepartamentoChange = (dep) => {
+        setDepartamento(dep)
+
+        const found = colombia.find(d => d.departamento === dep)
+        setMunicipios(found ? found.ciudades : [])
+
+        setMunicipio("")
+    }
+
+    const handleUserDataUpdate = async () => {
+        try {
+            setLoadingUserUpdate(true)
+            const fullAddress = `${departamento} / ${municipio} / ${shippingAdress}`
+
+            let res = await userUpdate(null, null, null, phone, fullAddress, user?.id_usuario, user?.id_rol)
+
+            if(!res?.valid){
+                setUSerUpdateError(res?.error)
+                return
+            }
+
+            setModifiedData(true)
+        } catch (error) {
+            setUSerUpdateError(error?.message)
+        } finally {
+            setLoadingUserUpdate(false)
+        }
+    }
+
+    async function searchGiftCard(){
+        try {
+            setLoadingGiftCard(true)
+            setErrorGiftCard(false)
+
+            let res = await getGiftCard(card)
+
+            if(!res?.valid || !res?.tarjeta){
+                setErrorGiftCard(true)
+                return
+            }
+
+            console.log(res?.tarjeta)
+
+            let gifCard = res?.tarjeta
+
+            if(gifCard.estado != "activa"){
+                setErrorGiftCard(true)
+                return
+            }
+
+            setTarjetaData(gifCard)
+            setTarjeta(gifCard?.id_tarjeta)
+            setDescuento(Number(gifCard?.monto))
+        } catch (error) {
+            setErrorGiftCard(true)
+        } finally {
+            setLoadingGiftCard(false)
+        }
+    }
+
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            if (card !== "") {
+                searchGiftCard()
+            }
+        }, 500)
+
+        return () => clearTimeout(delay)
+    }, [card])
+
+    useEffect(() => {
+        if(savedCard?.estado != "usada") setCard(savedCard?.id_tarjeta)
+    }, [savedCard])
+
+    console.log(descuento)
+
     return (
-        <div className={`cart-container ${cart == null ? 'cart-center' : 'cart-between'}`}>
-            {cart == null ? (
-                <div className="empty-cart">
-                    <h1>
-                        Carrito de compras vacío
-                    </h1>
+        <div className="overlay-carrito">
+            <div className={`cart-container`}>
+                {showCart && (
+                    <div className="btn-close-cart-container">
+                        <button onClick={() => {setShowCart(false)}} className="close-cart-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6.707 5.293l5.293 5.292l5.293 -5.292a1 1 0 0 1 1.414 1.414l-5.292 5.293l5.292 5.293a1 1 0 0 1 -1.414 1.414l-5.293 -5.292l-5.293 5.292a1 1 0 1 1 -1.414 -1.414l5.292 -5.293l-5.292 -5.293a1 1 0 0 1 1.414 -1.414" /></svg>
+                        </button>
+                    </div>
+                )}
+                {cart == null ? (
+                    <div className="empty-cart">
+                        <h1>
+                            Carrito de compras vacío
+                        </h1>
 
-                    <p>
-                        Para antojarte, puedes ver nuestros productos haciendo clic en el siguiente enlace
-                    </p>
+                        <p>
+                            Para antojarte, puedes ver nuestros productos haciendo clic en el siguiente enlace
+                        </p>
 
-                    <Link to={"/"}>Clic aquí</Link>
-                </div>
-            ) : (
-                <>
-                    <div className="filled-cart">
-                        <h1>Productos en tú carrito de compras</h1>
+                        <Link to={"/"}>Clic aquí</Link>
+                    </div>
+                ) : (
+                    confirm ? (
+                        <div className="confirmation-card payment-card">
 
-                        <div className="products-container">
-                            {Object.values(cart).map((r, index) => {
+                            <h1>
+                                Confirmar orden
+                            </h1>
 
-                                return (
-                                    <div key={index} className="product-container">
-                                        <div className="image-container">
-                                            <img src={createImageURL(r?.imagenes[0]?.filename)} alt={`Portada ${r?.nombre}`} />
+                            {modifiedData ? (
+                                <>
+                                    <p>
+                                        Al continuar con el pago aceptas nuestros terminos y condiciones de pago
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <p>
+                                        <strong>
+                                            Antes de continuar confirma tu dirección de envío y telefono de contacto, si no son correctos por favor actualizalos
+                                        </strong>
+                                    </p>
+
+                                    <h2>
+                                        Datos de envío
+                                    </h2>
+                                    <span>Confirma los datos de envío antes de realizar la orden</span>
+
+                                    <form action="" onSubmit={(e) => {e.preventDefault(); handleUserDataUpdate()}} className="user-cart-form-modified-data">
+                                        <div>
+                                            <label htmlFor="">Telefono:</label>
+                                            <input type="text" name="telefono" defaultValue={phone} onChange={(e) => {setPhone(e.target.value)}}/>
                                         </div>
                                         <div>
-                                            <p>{r?.nombre}</p>
-                                            <p>{r?.referencia_producto?.color} | {r?.referencia_producto?.tamano}</p>
+                                            <label htmlFor="">Envío a:</label>
+                                            <input type="text" name="direccion" defaultValue={shippingAdress} onChange={(e) => {setShippingAdress(e.target.value)}}/>
                                         </div>
-                                        <div className="quantities-container">
-                                            <div className="info">
-                                                <p>{r?.quantity} unidad{r?.quantity > 1 && 'es'}</p>
-                                                <p>Valor: {parsePrice(r?.quantity*Number(r?.precio))}</p>
-                                            </div>
-                                            <div>
-                                                <button title="Aumentar cantidad" onClick={() => {addOne(r?.id_producto); getCart()}}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 0 1 0 2h-6v6a1 1 0 0 1 -2 0v-6h-6a1 1 0 0 1 0 -2h6v-6a1 1 0 0 1 1 -1" /></svg>
-                                                </button>
-                                                <button title="Disminuir cantidad" onClick={() => {deleteOne(r?.id_producto); getCart()}}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-crop-16-9"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 7a3 3 0 0 1 3 3v4a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-4a3 3 0 0 1 3 -3z" /></svg>
-                                                </button>
-                                                <button title="Eliminar producto del carrito" onClick={() => {removeFromCart(r?.id_producto); getCart()}}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#996c74" className="icon icon-tabler icons-tabler-filled icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007zm-10 4a1 1 0 0 0 -1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0 -1 -1m4 0a1 1 0 0 0 -1 1v6a1 1 0 0 0 2 0v-6a1 1 0 0 0 -1 -1" /><path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005z" /></svg>
-                                                </button>
-                                            </div>
+                                        <div>
+                                            <label htmlFor="">Departamento</label>
+                                            <select onChange={(e) => handleDepartamentoChange(e.target.value)}>
+                                                <option value="">Departamento</option>
+                                                {colombia.map((d) => (
+                                                    <option key={d.id} value={d.departamento}>
+                                                        {d.departamento}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
-                                    </div>
-                                )
-                            })}
+                                        <div>
+                                            <label htmlFor="">Municipio</label>
+                                            <select 
+                                                onChange={(e) => setMunicipio(e.target.value)}
+                                                disabled={!departamento}
+                                            >
+                                                <option value="">Municipio</option>
+                                                {municipios.map((m, i) => (
+                                                    <option key={i} value={m}>
+                                                        {m}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </form>
+
+                                    {userUpdateError && (<p>{userUpdateError}</p>)}
+                                </>
+                            )}
+
+                            <div className="pay-confirmation-buttons">
+                                {modifiedData ? (
+                                    <button className="pay-btn"
+                                        onClick={() => {handleProcessCart()}}
+                                        disabled={loading || !modifiedData}
+                                    >
+                                        {loading ? 'Cargando' : 'Pagar'}
+                                    </button>
+                                ) : (
+                                    <button className="pay-btn" onClick={(e) => {e.preventDefault(); handleUserDataUpdate()}} disabled={loadingUserUpdate}>
+                                        {loadingUserUpdate ? "Guardando..." : "Actualizar"}
+                                    </button>
+                                )}
+                                <button className="pay-btn"
+                                    onClick={() => {setConfirm(false)}}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                            {error != '' && <p>{error}</p>}
                         </div>
-                    </div>
+                ) : (
+                    <>
+                        <div className="filled-cart">
+                            <h1>Carrito de compras</h1>
 
-                    <div>
-                        <h1>Acciones de carrito</h1>
-                        <button onClick={() => {handleDeleteCart()}}>Eliminar carrito</button>
+                            <div className="products-container">
+                                {Object.values(cart).map((r, index) => {
 
-                        <h2>Total: {parsePrice(total)}</h2>
+                                    return (
+                                        <div key={index} className="product-container">
+                                            <div className="image-container">
+                                                <img src={createImageURL(r?.imagenes[0]?.filename)} alt={`Portada ${r?.nombre}`} />
+                                            </div>
+                                            <div className="product-details-cart">
+                                                <div>
+                                                    <div className="remove-cart">
+                                                    <button onClick={() => {removeFromCart(r?.id_producto); getCart()}}>
+                                                            remover
+                                                        </button>
+                                                </div>
+                                                    <p>{r?.nombre}</p>
+                                                    <p>{r?.referencia_producto?.color} | {r?.referencia_producto?.tamano}</p>
+                                                </div>
+                                                <div className="quantities-container">
+                                                    <div className="info">
+                                                        <p>{parsePrice(r?.quantity*Number(r?.precio))}</p>
+                                                    </div>
+                                                    <div className="actions-buttons-container">
+                                                        <button title="Disminuir cantidad" onClick={() => {deleteOne(r?.id_producto); getCart()}}>
+                                                            -
+                                                        </button>
+                                                         <p>{r?.quantity} {r?.quantity > 1}</p>
+                                                        <button title="Aumentar cantidad" onClick={() => {addOne(r?.id_producto); getCart()}}>
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
 
-                        <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
+                            <div className="payment-card">
+                                <h1>Acciones de carrito</h1>
+                                <button onClick={() => {handleDeleteCart()}} className="delete-cart-btn">Eliminar carrito</button>
 
-                        <button
-                            onClick={() => {handleProcessCart()}}
-                            disabled={loading}
-                        >
-                            {loading ? 'Procesando solicitud' : 'Pagar'}
-                        </button>
-                        {error != '' && <p>{error}</p>}
-                        
-                    </div>
-                </>
-            )}
+                                <div>
+                                    <p className="giftcard-title">Tarjeta de regalo</p>
+                                    {tarjeta || savedCard != null ? (
+                                        <p>Tarjeta de regalo aplicada | #{card ? card : ""}</p>
+                                    ) : (
+                                        savedCard == null && (
+                                            <div className="giftcard-input-search">
+                                                <input type="text" placeholder="Código de tarjeta de regalo" onChange={(e) => {setCard(e.target.value)}}/>
+                                                <p className="giftcard-search-p">
+                                                    {errorGiftCard && 'Tarjeta no encontrada'}
+                                                    {loadingGiftCard && 'Buscando tarjeta...'}
+                                                </p>
+                                            </div>
+                                        )
+                                    )}
+                                </div>
+
+
+                                <div className="totals-cart-container">
+                                    <p>Subtotal: {parsePrice(total)}</p>
+                                    {descuento > 0 && (<p>Descuento: -{parsePrice(descuento)}</p>)}
+                                    <h2>Total: {parsePrice(totalFinal)}</h2>
+                                </div>
+
+                            <p>Al pagar los productos aceptas nuestros terminos y condiciones</p>
+
+                                <button className="pay-btn"
+                                    onClick={() => {if(isAuthenticated) {setConfirm(true)}else {setShowCart(false); navigate("/login")}}}
+                                >
+                                    Continuar con el pago
+                                </button>
+                                {error != '' && <p>{error}</p>}
+                                
+                            </div>
+                        </>
+                    )
+                )}
+            </div>
         </div>
     )
 }
 
-export default cartPage
+export default CartPage

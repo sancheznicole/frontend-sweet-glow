@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import { getAllCategories, deleteCategory } from "../../../services/categoriesService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const CategoriesIndex = () => {
-
+    const [search, setSearch] = useState("")
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
-    const [limit] = useState(10)
+    const [limit, setLimit] = useState(5)
     const [lastPage, setLastPage] = useState(undefined)
 
     const fields = {
@@ -17,8 +19,8 @@ const CategoriesIndex = () => {
 
     async function getData() {
         try {
-
-            const res = await getAllCategories(page, limit)
+            setLoading(true)
+            const res = await getAllCategories(page, limit, search)
 
             if (!res?.valid) {
                 console.log(res?.error)
@@ -35,12 +37,22 @@ const CategoriesIndex = () => {
 
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
+
+    useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
 
     const onDelete = async (id) => {
         try {
@@ -53,20 +65,29 @@ const CategoriesIndex = () => {
 
     return (
         <div>
-            <AdminPanel
-                data={data}
-                campos={fields}
-                titulo={"Administración de categorías"}
-                texto={"Administra las categorías de los productos"}
-                linkCrear={"/admin/categories/create"}
-                linkEditar={"/admin/categories/edit"}
-                onDelete={onDelete}
-                getData={getData}
-                page={page}
-                lastPage={lastPage}
-                setPage={setPage}
-                idKey="id_categoria"
-            />
+            {loading ? (
+                <Loader text="Cargando categorías..."></Loader>
+            ) : (
+                <AdminPanel
+                    data={data}
+                    campos={fields}
+                    titulo={"Administración de categorías"}
+                    texto={"Administra las categorías de los productos"}
+                    linkCrear={"/admin/categories/create"}
+                    linkEditar={"/admin/categories/edit"}
+                    onDelete={onDelete}
+                    getData={getData}
+                    page={page}
+                    lastPage={lastPage}
+                    setPage={setPage}
+                    idKey="id_categoria"
+                    limit={limit}
+                    search={search}
+                    setLimit={setLimit}
+                    setSearch={setSearch}
+                    enableSearch={true}
+                />
+            )}
         </div>
     )
 }

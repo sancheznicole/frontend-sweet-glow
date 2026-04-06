@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { updateCategory, getCategory } from "../../../../services/categoriesService"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 const EditCategory = () => {
 
 	const { id } = useParams()
 	const navigate = useNavigate()
-
+	const [loadingData, setLoadingData] = useState(true)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState("")
 	const [fieldErrors, setFieldErrors] = useState({})
@@ -88,6 +89,8 @@ const EditCategory = () => {
 
 				setError(error.message)
 
+			} finally {
+				setLoadingData(false)
 			}
 
 		}
@@ -112,59 +115,65 @@ const EditCategory = () => {
 
 		<div className="page-container">
 
-			{!mostrarDatos && (
-				<div className="back-link-container">
-					<button className="link-regresar" onClick={() => navigate(-1)}>
-						Regresar
-					</button>
-				</div>
-			)}
+			{loadingData ? (
+				<Loader text="Cargando informacion de la categoría..."></Loader>
+			) : (
+				<>
+					{!mostrarDatos && (
+						<div className="back-link-container">
+							<button className="link-regresar" onClick={() => navigate(-1)}>
+								Regresar
+							</button>
+						</div>
+					)}
 
-			<section className="section-editar">
+					<section className="section-editar">
 
-				{!mostrarDatos ? (
+						{!mostrarDatos ? (
 
-					<>
+							<>
 
-						<h1 className="titulo-por-h1">
-							Detalles de la categoría {nombre}
-						</h1>
+								<h1 className="titulo-por-h1">
+									Detalles de la categoría {nombre}
+								</h1>
 
-						<div className="contenedor-campos">
-							<p><strong>Nombre:</strong> {nombre}</p>
+								<div className="contenedor-campos">
+									<p><strong>Nombre:</strong> {nombre}</p>
+								</div>
+
+							</>
+
+						) : (
+
+							<AdminFormEdit
+								titulo="Editar categoría"
+								campos={campos}
+								onSendForm={sendData}
+								linkRegresar="/admin/categories"
+								error={error}
+								fieldErrors={fieldErrors}
+								button="Guardar cambios"
+								loading={loading}
+							/>
+
+						)}
+
+						<div className="contenedor-editar-botones">
+
+							<button
+								className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
+								onClick={()=>{setMostrarDatos(!mostrarDatos)}}
+							>
+
+								{mostrarDatos ? "Cancelar" : "Modificar"}
+
+							</button>
+
 						</div>
 
-					</>
-
-				) : (
-
-					<AdminFormEdit
-						titulo="Editar categoría"
-						campos={campos}
-						onSendForm={sendData}
-						linkRegresar="/admin/categories"
-						error={error}
-						fieldErrors={fieldErrors}
-						button="Guardar cambios"
-						loading={loading}
-					/>
-
-				)}
-
-				<div className="contenedor-editar-botones">
-
-					<button
-						className={mostrarDatos ? "cancelar-profile" : "modificar-profile"}
-						onClick={()=>{setMostrarDatos(!mostrarDatos)}}
-					>
-
-						{mostrarDatos ? "Cancelar" : "Modificar"}
-
-					</button>
-
-				</div>
-
-			</section>
+					</section>
+				</>
+			)}
 
 		</div>
 

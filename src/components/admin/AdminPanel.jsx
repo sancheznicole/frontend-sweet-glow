@@ -1,11 +1,19 @@
 /*TABLA DE REGISTROS*/
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import * as XLSX from "xlsx"
+import { saveAs } from "file-saver"
 
-const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDelete, getData, page = 1, lastPage = undefined, setPage, elementsLink = "" }) => {
+const AdminPanel = ({ 
+		data, titulo, texto, linkCrear, linkEditar,
+		campos, onDelete, getData, page = 1, 
+		lastPage = undefined, setPage, elementsLink = "",
+		limit, setLimit, enableSearch = false, setSearch, search
+	}) => {
 	const [id, setId] = useState(undefined)
 	const idKey = Object.keys(campos)[0]
+	const [loadingDownload, setLoadingDownload] = useState(false)
 	const navigate = useNavigate()
 	const max_length = 50
 
@@ -13,6 +21,44 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 		if (key === "created_at") return row[key]?.slice(0, 10)
 		if (key.includes(".")) return key.split(".").reduce((obj, k) => obj?.[k], row)
 		return row[key]
+	}
+
+	const exportToExcel = () => {
+		setLoadingDownload(true)
+		if (!data || data.length === 0) return
+
+		const formattedData = data.map((row) => {
+			const newRow = {}
+
+			Object.entries(campos).forEach(([key, label]) => {
+				if (key.includes(".")) {
+					newRow[label] = key.split(".").reduce((obj, k) => obj?.[k], row)
+				} else if (key === "created_at") {
+					newRow[label] = row[key]?.slice(0, 10)
+				} else {
+					newRow[label] = row[key]
+				}
+			})
+
+			return newRow
+		})
+
+		const worksheet = XLSX.utils.json_to_sheet(formattedData)
+		const workbook = XLSX.utils.book_new()
+
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Registros")
+
+		const excelBuffer = XLSX.write(workbook, {
+			bookType: "xlsx",
+			type: "array"
+		})
+
+		const file = new Blob([excelBuffer], {
+			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+		})
+
+		saveAs(file, `${titulo || "reporte"}.xlsx`)
+		setLoadingDownload(false)
 	}
 
 	return (
@@ -36,23 +82,48 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 					</div>
 
 					<h1 className="titulo-por-h1">{titulo}</h1>
-					<p>{texto}</p>
+					<p className="information-text">{texto}</p>
 
 					<div className="contenedor-agregar-registro">
 						<Link className="link-agregar-registro" to={linkCrear}>Agregar registro</Link>
+						<button className='link-regresar link-agregar-registro' onClick={() => navigate(-1)}>Regresar</button>
 					</div>
 
+					<p>Total de registros ({data?.length ?? 0})</p>
+
 					{lastPage > 1 && (
-						<div className="paginations-buttons">
-							<p>Página {page} de {lastPage}</p>
-							<div>
-								<button onClick={() => { if (page >= 2) setPage(page - 1) }}>
-									Anterior
-								</button>
-								<button onClick={() => { if (page < lastPage) setPage(page + 1) }}>
-									Siguiente
-								</button>
+						<>
+							<div className="paginations-buttons">
+								
+								<div className="limit-selector">
+									<div>
+										<span>Cantidad de elementos por página</span>
+										<select name="limit" onChange={(e) => {setLimit(Number(e.target.value));}} value={limit}>
+											{data?.length < 5 && <option value={data?.length}>{data?.length}</option>}
+											<option value="5"  >5</option>
+											<option value="10" >10</option>
+											<option value="25" >25</option>
+											<option value="50" >50</option>
+										</select>
+									</div>
+									<p>Página {page} de {lastPage}</p>
+								</div>
+								<div>
+									<button onClick={() => { if (page >= 2) setPage(page - 1) }} disabled={page <= 1}>
+										Anterior
+									</button>
+									<button onClick={() => { if (page < lastPage) setPage(page + 1) }} disabled={page == lastPage || page >= lastPage}>
+										Siguiente
+									</button>
+								</div>
 							</div>
+					
+						</>
+					)}
+
+					{enableSearch && (
+						<div className="search-registers-input">
+							<input type="text" name="search" value={search} placeholder="Buscar registros" onChange={(e) => {setSearch(e.target.value)}}/>
 						</div>
 					)}
 
@@ -89,7 +160,7 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 															"Sin elementos"
 														)
 													) : (
-														typeof row[key] == "string" ? `${row[key].slice(0, max_length)}...` : row[key]
+														typeof row[key] == "string" ? `${row[key].slice(0, max_length)}${row[key].length > max_length ? '...' : ''}` : row[key]
 													)}
 												</td>
 											))}
@@ -103,12 +174,22 @@ const AdminPanel = ({ data, titulo, texto, linkCrear, linkEditar, campos, onDele
 									))
 								) : (
 									<tr>
-										<td colSpan={Object.keys(campos).length + 1}>No hay registros</td>
+										<td colSpan={Object.keys(campos).length + 1} className="no-registers-table">No hay registros</td>
 									</tr>
 								)}
 							</tbody>
 						</table>
 					</div>
+					
+					{data?.length > 0 && (
+						<button 
+							className="button-download-excel"
+							onClick={() => {exportToExcel()}}
+							disabled={loadingDownload}
+						>
+							{loadingDownload ? "Descargando..." : "Descargar"}
+						</button>
+					)}
 				</>
 			)}
 		</section>

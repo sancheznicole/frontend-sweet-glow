@@ -3,12 +3,13 @@ import { useParams, Link } from "react-router-dom"
 import AdminFormEdit from "../../../../components/admin/AdminFormEdit"
 import { getUser, userUpdate } from "../../../../services/authService"
 import { useNavigate } from "react-router-dom"
+import Loader from "../../../../components/Loader"
 
 const EditUser = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
-
+  const [loadingData, setLoadingData] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [fieldErrors, setFieldErrors] = useState({})
@@ -139,6 +140,8 @@ const EditUser = () => {
 
         setError(error.message)
 
+      } finally{
+        setLoadingData(false)
       }
     }
 
@@ -218,6 +221,10 @@ const EditUser = () => {
 
   return (
 
+  loadingData ? (
+    <Loader text="Cargando informacion del usuario..."></Loader>
+  ) : (
+
     <div className="page-container">
 
       {!mostrarDatos && (
@@ -278,7 +285,7 @@ const EditUser = () => {
       </section>
 
     </div>
-
+    )
   )
 }
 

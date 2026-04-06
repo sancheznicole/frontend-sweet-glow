@@ -3,11 +3,13 @@ import { getUserData } from "../../services/authService";
 import { getAllGiftCards } from "../../services/giftCardService";
 import { getAllGiftGuides } from "../../services/giftGuideService"
 import axios from 'axios'
+import { useAuth } from "../../contexts/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 const API_URL = import.meta.env.VITE_API_URL
 const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
 
-const MONTOS_FIJOS = [20000, 50000, 100000, 200000]
+const MONTOS_FIJOS = [80000, 100000, 200000, 300000]
 
 const formatCOP = (n) =>
     new Intl.NumberFormat('en-US', {
@@ -78,9 +80,11 @@ const GiftGuideSection = () => {
 }
 
 const GiftCardPage = () => {
+
     const [usuario, setUsuario] = useState(null)
     const [montoSeleccionado, setMontoSeleccionado] = useState(null)
     const [montoCustom, setMontoCustom] = useState('')
+    const navigate = useNavigate()
     const [comprando, setComprando] = useState(false)
     const [misTarjetas, setMisTarjetas] = useState([])
     const [cargando, setCargando] = useState(true)
@@ -122,13 +126,16 @@ const GiftCardPage = () => {
         }
     }
 
+    console.log(usuario)
+
+    // ── Comprar tarjeta ───────────────────────────────────────────────────────
     const handleComprar = async () => {
         if (!montoFinal || montoFinal < 1000) {
             show('Ingresa un monto válido (mínimo $1.000)', 'error')
             return
         }
         if (!usuario) {
-            show('Debes iniciar sesión para obtener una tarjeta', 'error')
+            navigate("/login")
             return
         }
         try {
@@ -161,6 +168,8 @@ const GiftCardPage = () => {
     const handleAgregarAlCarrito = (tarjeta) => {
         console.log('🛒 Agregar al carrito — tarjeta:', tarjeta)
         show('Función pendiente de conectar con el carrito 🛒', 'success')
+        localStorage.setItem("gift-card-to-apply", JSON.stringify(tarjeta))
+        show('La tarjeta se agregará al carrito como descuento', 'success')
     }
 
     const tarjetaEsActiva = (t) => {
@@ -189,10 +198,10 @@ const GiftCardPage = () => {
                     </div>
 
                     <div className="gc-hero-form-col">
-                        <span className="gc-eyebrow">Sweet Glow · Tarjeta Regalo</span>
+                        {/* <span className="gc-eyebrow">Sweet Glow · Tarjeta Regalo</span> */}
                         <h1 className="gc-hero-title">
-                            El regalo perfecto<br />
-                            <em>siempre existe</em>
+                            El regalo perfecto
+                            siempre existe
                         </h1>
                         <p className="gc-hero-sub">
                             Regala libertad para elegir. Nuestra tarjeta regalo se asigna
@@ -223,11 +232,19 @@ const GiftCardPage = () => {
                             <input
                                 className="gc-input"
                                 type="number"
-                                min="1000"
+                                min="80000"
                                 placeholder="Ej: 75000"
                                 value={montoCustom}
                                 onChange={(e) => {
-                                    setMontoCustom(e.target.value)
+                                    let value = e.target.value
+
+                                    if (value.startsWith('-')) return
+
+                                    const numericValue = Number(value)
+
+                                    if (numericValue > 10000000) return
+
+                                    setMontoCustom(value)
                                     setMontoSeleccionado(null)
                                 }}
                             />
@@ -321,11 +338,21 @@ const GiftCardPage = () => {
 
                                         {activa && (
                                             <div className="gc-card-actions">
+                                                {/*
+                                                    TO-DO (compañera): reemplaza handleAgregarAlCarrito
+                                                    con tu función del servicio de carrito.
+                                                    La tarjeta `t` contiene:
+                                                      - t.id_tarjeta
+                                                      - t.monto
+                                                      - t.estado
+                                                      - t.fecha_expiracion
+                                                      - t.id_usuario
+                                                */}
                                                 <button
                                                     className="gc-btn-cart"
                                                     onClick={() => handleAgregarAlCarrito(t)}
                                                 >
-                                                    🛒 Agregar al carrito
+                                                    Agregar al carrito
                                                 </button>
                                             </div>
                                         )}

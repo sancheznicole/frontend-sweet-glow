@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react"
 import { getAllReferenceProducts, deleteReferenceProduct } from "../../../services/referenceProductsService"
 import AdminPanel from "../../../components/admin/AdminPanel"
+import Loader from "../../../components/Loader"
 
 const ReferenceProductsIndex = () => {
 
     const [data, setData] = useState([])
     const [page, setPage] = useState(1)
+    const [limit, setLimit] = useState(5)
     const [lastPage, setLastPage] = useState(undefined)
+    const [loading, setLoading] = useState(true)
+    const [search, setSearch] = useState('')
 
     const fields = {
         id_referencia: "ID",
@@ -18,7 +22,9 @@ const ReferenceProductsIndex = () => {
 
     async function getData() {
         try {
-            const res = await getAllReferenceProducts(page)
+            setLoading(true)
+
+            const res = await getAllReferenceProducts(page, limit, search)
             if (!res?.valid) {
                 console.log(res?.error)
                 return
@@ -27,12 +33,22 @@ const ReferenceProductsIndex = () => {
             setLastPage(res?.references?.last_page)
         } catch (error) {
             console.log(error?.message)
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         getData()
-    }, [page])
+    }, [page, limit])
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            getData()
+        }, 500)
+
+        return () => clearTimeout(delayDebounce)
+    }, [search])
 
     const onDelete = async (id) => {
         try {
@@ -45,19 +61,28 @@ const ReferenceProductsIndex = () => {
 
     return (
         <div>
-            <AdminPanel
-                data={data}
-                page={page}
-                lastPage={lastPage}
-                setPage={setPage}
-                campos={fields}
-                titulo={"Administración de referencias de productos"}
-                texto={"Administra las referencias de los productos"}
-                linkCrear={"/admin/referenciaProductos/crear"}
-                linkEditar={"/admin/referenciaProductos/editar"}
-                onDelete={onDelete}
-                getData={getData}
-            />
+            {loading ? (
+                <Loader text="Cargando referencia productos..."></Loader>
+            ) : (
+                <AdminPanel
+                    data={data}
+                    page={page}
+                    lastPage={lastPage}
+                    setPage={setPage}
+                    campos={fields}
+                    titulo={"Administración de referencias de productos"}
+                    texto={"Gestiona las referencias de los productos"}
+                    linkCrear={"/admin/referenciaProductos/crear"}
+                    linkEditar={"/admin/referenciaProductos/editar"}
+                    onDelete={onDelete}
+                    getData={getData}
+                    limit={limit}
+                    setLimit={setLimit}
+                    search={search}
+                    setSearch={setSearch}
+                    enableSearch={true}
+                />
+            )}
         </div>
     )
 }
