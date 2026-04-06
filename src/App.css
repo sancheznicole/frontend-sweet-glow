@@ -4795,3 +4795,16 @@ button{
     align-items: center;
     gap: 10px;
 }
+.user-cart-form-modified-data{
+    width: 100%;
+}
+.user-cart-form-modified-data div{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 5px;
+    width: 100%;
+}
+.user-cart-form-modified-data input, .user-cart-form-modified-data select{
+    padding: 5px;
+}

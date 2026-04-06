@@ -42,7 +42,13 @@ const CartPage = ({setShowCart = undefined, showCart = false}) => {
 
     useEffect(() => {
         if(isAuthenticated){
-            setShippingAdress(user?.direccion)
+            if(user?.direccion){
+                const parts = user.direccion.split(" / ")
+                const manualAddress = parts[parts.length - 1] // última parte
+
+                setShippingAdress(manualAddress)
+            }
+
             setPhone(user?.telefono)
         } 
     }, [user])
