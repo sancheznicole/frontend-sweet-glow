@@ -58,19 +58,26 @@ const SuccessPayment = () => {
 
     const handleDownload = async () => {
         try {
-            setLoadingDownload(true)
+            setLoadingDownload(true);
             const res = await fetch(`${API_URL}/factura/${id_factura}/pdf`);
-            const blob = await res.blob();
 
+            const contentType = res.headers.get('content-type');
+            if (!res.ok || contentType?.includes('application/json')) {
+                const errorData = await res.json();
+                console.error('Error del servidor:', errorData);
+                return;
+            }
+
+            const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
             a.download = `factura_${id_factura}.pdf`;
             a.click();
         } catch (error) {
-            console.log(error?.message)
+            console.log(error?.message);
         } finally {
-            setLoadingDownload(false)
+            setLoadingDownload(false);
         }
     };
 
