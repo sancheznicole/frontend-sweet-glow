@@ -23,6 +23,27 @@ export async function createPreference(invoice_id) {
     }
 }
 
+export async function createGFPreference(giftcardID) {
+    try {
+        if(!giftcardID) return { valid: false, error: "giftcardID not provided" }
+
+        const payload = {
+            giftcardID
+        }
+
+        const res = await axios.post(`${API_URL}/create-giftcard-preference/`, payload)
+
+        if (res?.status != 200) {
+            return { valid: false, error: res.data?.errors }
+        }
+
+        return { valid: true, preference: res?.data }
+
+    } catch (error) {
+        return { valid: false, error: error?.message }
+    }
+}
+
 export async function verifyPayment(payment_id, factura){
     try {
         if(!payment_id || !factura) return { valid: false, error: "Solicitud no procesable datos incompletos" }

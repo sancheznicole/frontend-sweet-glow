@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { getUserData } from "../../services/authService";
-import { getAllGiftCards } from "../../services/giftCardService";
-import axios from 'axios'
-import { useAuth } from "../../contexts/AuthContext"
+import { createGiftCard, getAllGiftCards } from "../../services/giftCardService";
 import { useNavigate } from "react-router-dom"
+import { createGFPreference } from '../../services/paymentService';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -85,8 +84,6 @@ const GiftCardPage = () => {
         }
     }
 
-    console.log(usuario)
-
     // ── Comprar tarjeta ───────────────────────────────────────────────────────
     const handleComprar = async () => {
         if (!montoFinal || montoFinal < 1000) {
@@ -107,15 +104,20 @@ const GiftCardPage = () => {
 
             const idUsuario = usuario?.id_usuario ?? usuario?.id ?? usuario?.user_id
 
-            await axios.post(
-                `${API_URL}/gift_cards`,
-                {
-                    monto: montoFinal,
-                    fecha_expiracion: fechaExpStr,
-                    id_usuario: idUsuario,
-                },
-                { headers: { Authorization: `Bearer ${token}` } }
-            )
+            let res = await createGiftCard(montoFinal, fechaExpStr, idUsuario)
+
+            if(!res?.valid){
+                show('No se pudo crear la tarjeta de regalo', 'error')
+                return
+            }
+
+            let preference = await createGFPreference(res?.tarjeta?.id_tarjeta)
+
+            if(!preference?.valid){
+                return
+            }
+
+            window.location.href = preference?.preference?.init_point
 
             show('¡Tarjeta regalo creada con éxito! ', 'success')
             setMontoSeleccionado(null)
@@ -142,6 +144,10 @@ const GiftCardPage = () => {
             const s = String(t.estado ?? '').toLowerCase().trim()
             return s === 'activa'
         }
+
+    const handleDeleteCard = async () => {
+
+    }
 
     return (
         <>
@@ -291,10 +297,12 @@ const GiftCardPage = () => {
                                 return (
                                     <div
                                         key={t.id_tarjeta}
-                                        className={`gc-user-card${activa ? ' gc-user-card--activa' : ' gc-user-card--usada'}`}
+                                        className={`gc-user-card${t?.status == "paid" ? ' gc-user-card--activa' : ' gc-user-card--usada'}`}
                                     >
-                                        <span className={`gc-badge${activa ? ' gc-badge--activa' : ' gc-badge--usada'}`}>
-                                            {activa ? '✦ Activa' : '✓ Usada'}
+                                        <span className={`gc-badge${t?.status == "paid" ? ' gc-badge--activa' : ' gc-badge--usada'}`}>
+                                            {activa && t?.status == "paid" ? ' ✦ Activa' : ''}
+                                            {t?.status == "unpaid" ? " No pagada" : ""}
+                                            {!activa ? " ✓ Usada" : ""}
                                         </span>
 
                                         <div className="gc-card-amount">
@@ -312,22 +320,25 @@ const GiftCardPage = () => {
 
                                         {activa && (
                                             <div className="gc-card-actions">
-                                                {/*
-                                                    TO-DO (compañera): reemplaza handleAgregarAlCarrito
-                                                    con tu función del servicio de carrito.
-                                                    La tarjeta `t` contiene:
-                                                      - t.id_tarjeta
-                                                      - t.monto
-                                                      - t.estado
-                                                      - t.fecha_expiracion
-                                                      - t.id_usuario
-                                                */}
-                                                <button
-                                                    className="gc-btn-cart"
-                                                    onClick={() => handleAgregarAlCarrito(t)}
-                                                >
-                                                    Agregar al carrito
-                                                </button>
+
+                                                {t?.status == "unpaid" ? ( 
+                                                    <button
+                                                        className="gc-btn-cart"
+                                                        disabled={t?.status != "paid" || t?.estado == "usada"}
+                                                        onClick={() => handleDeleteCard(t)}
+                                                    >
+                                                        Eliminar
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className="gc-btn-cart"
+                                                        disabled={t?.status != "paid" || t?.estado == "usada"}
+                                                        onClick={() => handleAgregarAlCarrito(t)}
+                                                    >
+                                                        Agregar al carrito
+                                                    </button>
+                                                )}
+
                                             </div>
                                         )}
                                     </div>

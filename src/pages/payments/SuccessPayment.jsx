@@ -149,6 +149,10 @@ const SuccessPayment = () => {
                             </div>
                             <div className='card-footer'>
                                 <p>Total: {parsePrice(Math.max(0, factura?.neto - factura?.descuento))}</p>
+
+                                <button onClick={() => navigate("/")}>
+                                    Volver al inicio
+                                </button>
                             </div>
                         </div>
                     

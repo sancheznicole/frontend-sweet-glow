@@ -144,3 +144,17 @@ export const usarGiftCard = async (id_tarjeta) => {
         return { valid: false, error: error?.response?.data?.error || error.message }
     }
 }
+
+
+export const changeToPaidGiftCard = async (id_tarjeta, payment_id, mp_status) => {
+    try {
+        const res = await axios.post(
+            `${API_URL}/gift_cards/paidGiftCard`,
+            {id_tarjeta, payment_id, mp_status},
+            { headers: getHeaders() }
+        )
+        return { valid: true, data: res.data }
+    } catch (error) {
+        return { valid: false, error: error?.response?.data?.error || error.message }
+    }
+}
