@@ -58,7 +58,6 @@ h1{
 *{
     margin: 0;
     padding: 0;
-    user-select: none;
 }
 body{
     background-color: #f9f1f4;
@@ -375,7 +374,7 @@ footer {
 
 .section-register {
     color: #393939;
-    width: 29%;
+    width: 31%;
     margin: 0 auto;
     margin-top: 35px;
     
@@ -1361,17 +1360,13 @@ footer {
     width: 100%;
     padding: 10px 14px;
     border-radius: 8px;
-    border: 1px solid var(--color-border-secondary, #ddd);
+    border: 1px solid #393939;
     font-size: 14px;
-    background: var(--color-background-primary, #fff);
+    background: #f9f1f4;
     color: var(--color-text-primary, #111);
     outline: none;
     transition: border-color 0.2s;
     box-sizing: border-box;
-}
-
-.input-busqueda:focus {
-    border-color: #c9a0a0;
 }
 
 /* Selección confirmada — todo apilado, sin salirse */
@@ -1416,17 +1411,25 @@ footer {
 }
 
 .estrella {
-    font-size: 28px;
+    font-size: 25px;
     color: transparent;
     -webkit-text-stroke: 2px #888;
     cursor: pointer;
     transition: color 0.15s ease, transform 0.1s ease;
     line-height: 1;
 }
+.estrella-rosa{
+    -webkit-text-stroke: 1px #b3848f;
+}
 
 .estrella.activa {
     color: #444;
     -webkit-text-stroke: 2px #444;
+}
+
+.activa-rosa{
+    color: #b3848f;
+    -webkit-text-stroke: 2px #b3848f;
 }
 
 .estrella:hover {
@@ -1513,7 +1516,6 @@ footer {
     left: 0;
     right: 0;
     padding: 20px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.45));
 }
 
 .category-card-nombre {
@@ -1522,7 +1524,6 @@ footer {
     font-weight: lighter;
     font-size: 22px;
     text-transform: uppercase;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 
 /* ════════════════════════════════════════════════════
@@ -1534,20 +1535,22 @@ footer {
 }
 
 .category-banner {
-    width: 100%;
-    height: 65vh;
+    width: 100vw;
+    height: 70vh;
     background-size: cover;
     background-position: center;
     background-color: #e7dae2;
     position: relative;
     margin-bottom: 36px;
     margin-top: -12vh;
+    left: 50%;
+    transform: translateX(-50%);
+    
 }
 
 .category-banner-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.00), rgba(0,0,0,0.25));
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -1557,29 +1560,23 @@ footer {
 .category-banner-volver {
     position: absolute;
     top: 24px;
-    left: 36px;
+    left: 50px;
     border-radius: 5px;
-    border: 1px solid white;
+    border: 1px solid #393939;
     padding: 8px 20px;
-    background: transparent;
     cursor: pointer;
     font-size: 14px;
-    color: white;
-    transition: all 300ms;
-}
-
-.category-banner-volver:hover {
-    background-color: white;
     color: #393939;
+    background-color: transparent;
+    transition: all 300ms;
 }
 
 .category-banner-titulo {
     font-family: Heading;
     font-weight: lighter;
-    font-size: 48px;
+    font-size: 40px;
     text-transform: uppercase;
     color: white;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
     margin: 0;
 }
 
@@ -1602,6 +1599,7 @@ footer {
 .filtro-grupo .campo-label {
     font-size: 13px;
     color: #393939;
+    
     font-weight: 500;
 }
 
@@ -1622,7 +1620,6 @@ footer {
 
 .producto-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(179, 132, 143, 0.2);
 }
 
 .producto-card-imagen {
@@ -2611,8 +2608,8 @@ button {
 }
 
 .gc-user-card--activa {
-    background: linear-gradient(135deg, #fde8ef 0%, #f5d2de 100%);
-    border: 1.5px solid #e8c5cf;
+    background: linear-gradient(135deg, #ffffff 0%, #efd7e5 100%);
+    border: 1px solid #393939;
 }
 
 .gc-user-card--usada {
@@ -2665,14 +2662,14 @@ button {
 .gc-card-meta {
     font-family: 'Jost', sans-serif;
     font-size: 13px;
-    color: #7a5a64;
+    color: #393939;
     line-height: 2;
     margin-bottom: 18px;
     font-weight: 300;
 }
 
 .gc-card-meta strong {
-    color: #5a3a44;
+    color: #393939;
     font-weight: 500;
 }
 
@@ -2697,8 +2694,7 @@ button {
     padding: 10px;
     border-radius: 6px;
     border: 1.5px solid #3a3a3a;
-    background: #3a3a3a;
-    color: white;
+    color: #393939;
     font-family: 'Jost', sans-serif;
     font-size: 12px;
     font-weight: 500;
@@ -2709,8 +2705,9 @@ button {
 }
 
 .gc-btn-cart:hover {
-    background: #222;
-    border-color: #222;
+    background: #393939;
+    border-color: #393939;
+    color: white;
 }
 
 /* ── Botón outline (redimir) ──────────────────────────────────── */
@@ -3085,7 +3082,7 @@ button {
     }
 
     .proyect-card:hover .hidden-content {
-        transform: translateY(-226%);
+        transform: translateY(-210%);
     }
 
     .proyect-card:hover .second-hidden-content {
@@ -3404,14 +3401,17 @@ button{
     justify-content: center; /* o flex-start */
     gap: 100px;
     display: flex;
-    align-items: center;
+    width: 100vw;
+    transform: translateX(-1.4%);
+    /* align-items: center; */
     max-height: 100vh;
-    margin-bottom: 200px;
+    margin-bottom: 20px;
     background-color: white;
 
     .details{
         width: 40%;
         padding: 10px;
+        margin-top: 50px;
 
         h1{
             text-transform: capitalize;
@@ -3423,18 +3423,18 @@ button{
         }
 
         .add-to-cart{
-            margin-left: -122px;
             width: 100%; /*cambiarlo*/
             display: grid;
-            grid-template-columns: auto auto; /* cantidad | botón */
-            gap: 50px;
+            grid-template-columns: repeat(4, 1fr); /* cantidad | botón */
+            gap: 20px;
             align-items: center;
 
             .quantity-buttons{
-                
+                grid-column: span 1;
                 font-size: 15px;
-                width: 137%; /* importante */
+                width: 100%; /* importante */
                 height: 38px;
+                border: 1px solid red;
                 border: 1px solid #393939;
                 border-radius: 3px;
                 
@@ -3463,17 +3463,18 @@ button{
                 margin-top: 15px;
                 width: 100%;
                 margin-top: 0;
+                grid-column: span 3;
 
                 button{
                     
                     grid-column: span 1; 
-                    width: 200%;
+                    width: 100%;
                     height: 40px;
                     font-size: 5px;
                     font-weight: bolder;
                     padding: 10px;
 
-                    min-width: 37%;
+                    /* min-width: 37%; */
                     border: 1px solid #393939;
                     background-color: #393939;
                     border-radius: 3px;
@@ -3503,7 +3504,7 @@ button{
         aspect-ratio: 1 / 1;
         position: relative;
         height: 50vh;
-        border: 1px solid black;
+        border: 1px solid #e7dae2;
         background-color: white;
 
         img{
@@ -3538,15 +3539,22 @@ button{
     position: relative;
 }
 .product-details .images-container .prev, .product-details .images-container .next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 200px;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 0px 10px;
     cursor: pointer;
     font-size: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 35px;
 }
 
 .product-details .images-container .prev {
@@ -3632,7 +3640,7 @@ button{
 .search-registers-input input{
     padding: 15px 10px;
     border: 1px solid #b3848f;
-    width: 100%;
+    width: 98.5%;
     font-size: 18px;
     outline: none;
     border-radius: 5px;
@@ -4152,7 +4160,6 @@ button{
 /* reseñas detalles del producto */
 .reviews-details-container{
     padding: 20px;
-    background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -4191,16 +4198,25 @@ button{
     color: white;
 }
 .reviews-details-container .highlight{
-    margin: 10px;
+    /* margin: 10px; */
+    margin: 0 auto;
+
 }
 .details-reviews-container{
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     width: 100%;
+    margin-top: 20px;
+}
+.review-card{
+    color: #b3848f;
+}
+.review-card p, .review-card h3{
+    color: #393939;
 }
 .estrellas-display-details{
-    margin: 10px;
+    margin: 10px 0px;
 }
 
 /* inscripciones regalo */
@@ -4323,7 +4339,7 @@ button{
     text-align: center;
 }
 .tags-container{
-    margin: 10px;
+    margin: 10px 0px;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -4436,4 +4452,16 @@ button{
     height: 100vh;
     background: rgba(204, 204, 204, 0.5);
     z-index: 11;
+}
+
+.link_elementos{
+    color: #393939 ;
+}
+.titulo-resenas{
+    margin-bottom: 0px;
+}
+.reviews-container-p-details{
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }

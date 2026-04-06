@@ -193,7 +193,7 @@ const ProductsDetails = () => {
                             <div className="details-menu-header">
                                 <h1>{product?.nombre}</h1>
                                 <button title="Agregar a la lista de deseos" onClick={() => {handleAddToWishList()}} className="button-add-to-wishlist">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-heart"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-heart"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
                                 </button>
                             </div>
                             {product?.stock == 0 ? (
@@ -203,18 +203,21 @@ const ProductsDetails = () => {
                             )}
                             <p>{brand?.nombre} - {category?.nombre}</p>
 
-                            <p>
-                                Reseñas ({reviews.length}) 
-                                <div className="estrellas-display estrellas-display-details">
-                                    {stars.map(s => {
-                                        if (reviewAverage >= s) {
-                                            return <span key={s} className="estrella activa">★</span>
-                                        } else if (reviewAverage >= s - 0.5) {
-                                            return <span key={s} className="estrella media">★</span>
-                                        } else {
-                                            return <span key={s} className="estrella">☆</span>
-                                        }
-                                    })}
+                            <p>Reseñas ({reviews.length}) </p>
+
+                            <p className="reviews-container-p-details">
+                                <div>
+                                    <div className="estrellas-display estrellas-display-details">
+                                        {stars.map(s => {
+                                            if (reviewAverage >= s) {
+                                                return <span key={s} className="estrella activa">★</span>
+                                            } else if (reviewAverage >= s - 0.5) {
+                                                return <span key={s} className="estrella media">★</span>
+                                            } else {
+                                                return <span key={s} className="estrella">☆</span>
+                                            }
+                                        })}
+                                    </div>
                                 </div>
 
                                 <p>({reviewAverage.toFixed(1)} / 5)</p>    
@@ -257,18 +260,20 @@ const ProductsDetails = () => {
                     {/* reseñas */}
                     <div className="reviews-details-container">
 
-                        {addReview ? (
-                            <div className="section-login">
+                        {isAuthenticated && (
+                            <div className="">
                                  <div>
-                                    <h1 className="titulo-por-h1">Reseñas</h1>
+                                    <h1 className="titulo-por-h1 titulo-resenas">Reseñas</h1>
                                 </div>
+
+                                <p className="highlight">Dejanos saber tu opinion sobre este producto. ¿De 1 a 5 que opinas del producto?</p>
 
                                 <div className="stepper-estrellas">
                                     <div className="estrellas-display">
                                         {stars.map(s => (
                                             <span
                                                 key={s}
-                                                className={`estrella ${s <= calificacion ? 'activa' : ''}`}
+                                                className={`estrella estrella-rosa ${s <= calificacion ? 'activa-rosa' : ''}`}
                                                 onClick={() => {
                                                     setCalificacion(s)
                                                     setStepErrors({})
@@ -300,47 +305,44 @@ const ProductsDetails = () => {
                                         {calificacion === 5 && 'Excelente'}
                                     </p>
                                 </div>
-                                <p className="highlight">Dejanos saber tu opinion sobre este producto</p>
-                                <p className="highlight">¿De 1 a 5 que opinas del producto?</p>
 
                                 {reviewError && (<p className="form-input-error">{reviewError}</p>)}
                             </div>
-                        ) : (
-                            reviews.length > 0 ? (
-                                <div className="details-reviews-container">
-                                    {reviews.map((r, index) => {
-                                        return (
-                                            <div key={index}>
-                                                <h2>{r?.usuario?.nombres} {r?.usuario?.apellidos}</h2>
-                                                <p>{`${'★'.repeat(r.resena)}${'☆'.repeat(5 - r.resena)} (${r.resena}/5)`}</p>
-                                                <h3>{r?.created_at.split("T")[0]}</h3>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            ) : (
-                                <div className="not-reviews-container">
-                                    <h1>Sin reseñas</h1>
-                                    <p>Parece que este producto no cuenta con reseñas, se el primero en agregar una</p>
-                                </div>
-                            )
                         )}
 
-                        <div>
-                            {addReview && (
-                                <button className="secondary-btn" onClick={() => {handleSendReview()}} disabled={loadingNewReview}>{loadingNewReview ? "Guardando..." : "Guardar"}</button>
-                            )}
-                            <button onClick={() => {handleChangeReviewsView()}}>{addReview ? "Cancelar" : "Agregar Reseña"}</button>
-                        </div>
+                        {isAuthenticated && (
+                            <button className="secondary-btn" onClick={() => {handleSendReview()}} disabled={loadingNewReview}>{loadingNewReview ? "Guardando..." : "Guardar"}</button>
+                        )}
+
+                        {!isAuthenticated && (<button onClick={() => {handleChangeReviewsView()}}>{addReview ? "Cancelar" : "Agregar Reseña"}</button>)}
+
+                        {reviews.length > 0 ? (
+                            <div className="details-reviews-container">
+                                {reviews.map((r, index) => {
+                                    return (
+                                        <div key={index} className="review-card">
+                                            <h2>{r?.usuario?.nombres} {r?.usuario?.apellidos}</h2>
+                                            <p>{`${'★'.repeat(r.resena)}${'☆'.repeat(5 - r.resena)} (${r.resena}/5)`}</p>
+                                            <h3>{r?.created_at.split("T")[0]}</h3>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        ) : (
+                            <div className="not-reviews-container">
+                                <h1>Sin reseñas</h1>
+                                <p>Parece que este producto no cuenta con reseñas, se el primero en agregar una</p>
+                            </div>
+                        )}
 
                     </div>
 
                     {/* productos  */}
-                    <div className="more-products-container">
+                    {/* <div className="more-products-container">
                         <h2 className="">Mas de nustros productos</h2>
                         <ProductsCards 
                         ></ProductsCards>
-                    </div>
+                    </div> */}
                 </>
             )}
         </div>

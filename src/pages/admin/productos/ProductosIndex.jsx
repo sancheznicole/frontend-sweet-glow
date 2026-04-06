@@ -12,7 +12,7 @@ const ProductosIndex = () => {
 	const [search, setSearch] = useState("")
 
 	const fields = {
-		id_producto: "Id producto",
+		id_producto: "ID",
 		nombre: "Nombre",
 		descripcion: "Descripción",
 		precio: "Precio",

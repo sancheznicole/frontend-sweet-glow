@@ -13,7 +13,7 @@ const ElementosCarritos = () => {
 	const [search, setSearch] = useState("")
 
 	const fields = {
-		id_elemento_carrito: "Id elemento carrito",
+		id_elemento_carrito: "ID",
 		producto: "Producto",
 		id_carrito: " Id carrito",
 		cantidad: "Cantidad",

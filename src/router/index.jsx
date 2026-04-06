@@ -24,7 +24,6 @@ import WishlistPage from "../pages/whishlist/WishlistPage"
 import LoginPage from "../pages/users/LoginPage"
 import RegisterPage from "../pages/users/RegisterPage"
 import ProfilePage from "../pages/users/ProfilePage"
-import SearchPage from "../pages/searcher/SearchPage"
 import TermsPage from "../pages/terms/TermsPage"
 import PrivacyPoliciesPage from "../pages/terms/PrivacyPoliciesPage"
 import ReturnsPolicyPage from "../pages/terms/ReturnsPolicyPage"
@@ -445,8 +444,6 @@ export const router = createBrowserRouter([
       { path: '/payment/success', element: <SuccessPayment /> },
       { path: '/payment/pending', element: <PendingPayment /> },
       { path: '/payment/failed', element: <FailedPayment /> },
-
-      { path: 'search', element: <SearchPage /> },
 
       { path: 'terms', element: <TermsPage/> },
 

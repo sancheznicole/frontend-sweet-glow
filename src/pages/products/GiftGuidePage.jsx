@@ -166,7 +166,7 @@ const GiftCardPage = () => {
                             <div className="gc-card-visual-bottom">
                                 <span className="gc-card-visual-label">e-gift card</span>
                                 <span className="gc-card-visual-amount">
-                                    {montoFinal ? formatCOP(montoFinal) : '✦'}
+                                    {montoFinal ? formatCOP(montoFinal) : '𐙚'} 
                                 </span>
                             </div>
                         </div>
@@ -275,7 +275,7 @@ const GiftCardPage = () => {
 
                     {cargando ? (
                         <div className="gc-empty">
-                            <span className="gc-empty-icon">✦</span>
+                            <span className="gc-empty-icon">𐙚</span>
                             <p>Cargando tarjetas...</p>
                         </div>
                     ) : misTarjetas.length === 0 ? (
@@ -300,7 +300,7 @@ const GiftCardPage = () => {
                                         className={`gc-user-card${activa ? ' gc-user-card--activa' : ' gc-user-card--usada'}`}
                                     >
                                         <span className={`gc-badge${activa ? ' gc-badge--activa' : ' gc-badge--usada'}`}>
-                                            {activa ? '✦ Activa' : '✓ Usada'}
+                                            {activa ? '𐙚 Activa' : '✓ Usada'}
                                         </span>
 
                                         <div className="gc-card-amount">

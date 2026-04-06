@@ -7,10 +7,10 @@ const API_URL = import.meta.env.VITE_API_URL
 const SOTAGE_URL = import.meta.env.VITE_STORAGE_URL
 
 const CATEGORY_BANNERS = {
-    1:  '/assets/kylie.jpeg',
-    2:  '/assets/banner.jpeg',
+    1:  '/assets/categoryMakeup.webp',
+    2:  '/assets/olaplex-top.jpg',
     3: '/assets/cuidadoPiel.jpeg',
-    4: '/assets/cosmic.jpeg',
+    4: '/assets/missDiortwo.webp',
 }
 
 const CategoryProducts = ({ categoria, onVolver }) => {
@@ -57,7 +57,7 @@ const CategoryProducts = ({ categoria, onVolver }) => {
                 style={{ backgroundImage: bannerImg ? `url(${bannerImg})` : 'none' }}
             >
                 <div className="category-banner-overlay">
-                    <button className="category-banner-volver" onClick={onVolver}>← Volver</button>
+                    <button className="category-banner-volver" onClick={onVolver}>Volver</button>
                     <h1 className="category-banner-titulo">{categoria.nombre}</h1>
                 </div>
             </div>
