@@ -3,7 +3,7 @@ import axios from "axios"
 const API_URL = import.meta.env.VITE_API_URL
 const STORAGE_URL = import.meta.env.VITE_STORAGE_URL
 
-export async function getAllImages(page = 1) {
+export async function getAllImages(page = 1, limit = 5, search = "") {
     try {
         const res = await axios.get(`${API_URL}/images?page=${page}`)
         if (res?.status !== 200) return { valid: false, error: res.data?.errors }
