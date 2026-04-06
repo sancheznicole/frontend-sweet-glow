@@ -38,7 +38,7 @@ const MobilesMenu = ({ isTransparent, bgWhite, fixed, isAuthenticated, user }) =
             <header id="header" className={`${bgWhite == true ? 'bg-white' : ''} ${ isTransparent == true ? '' : 'short-header' } ${ fixed == true ? 'fixed' : 'page-container' }`}>
                 <div className="mobile-main-container">
                     <ul>
-                        <li>
+                        <li className="header-mobile-title-container">
                             <Link to={"/"} title="Sweet glow pagina de inicio">
                                 <h1 className="title">
                                     SWEET GLOW
